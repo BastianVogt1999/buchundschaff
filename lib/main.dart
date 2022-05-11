@@ -13,8 +13,6 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-//pommes rot weiß
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     ThemeData lightTheme = ThemeData(
