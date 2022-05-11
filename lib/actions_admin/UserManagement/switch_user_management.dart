@@ -1,13 +1,9 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_admin/UserManagement/all_user.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_admin/UserManagement/user_operations.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_user/timer/choose_date.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_user/timer/current_date.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
-
-Company Compcopy = Company.empty();
 
 class SwitchUserManagement extends StatefulWidget {
   Company company;

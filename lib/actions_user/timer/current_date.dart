@@ -61,7 +61,9 @@ class _AutomatedDateState extends State<AutomatedDate> {
                     RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15)),
                   )),
-              onPressed: _updateTime(),
+              onPressed: () {
+                _updateTime();
+              },
               child: Text(
                 "Aktualisieren",
                 style: TextStyle(color: primaryColor, fontSize: 16),

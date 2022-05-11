@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/statistic.dart';
 
 TextEditingController startTimeController = TextEditingController();
+TextEditingController endTimeController = TextEditingController();
+TextEditingController dateController = TextEditingController();
+TextEditingController blankController = TextEditingController();
 const backgroundColor = Color(0xFFC0C0C0);
 bool startTimeEditable = false;
 bool endTimeEditable = false;
@@ -32,7 +35,7 @@ class EditStats_State extends State<EditStats> {
       const accentColor = Color(0xffffffff);
 
       const errorColor = Color(0xffEF4444);
-
+      inputController.text = text;
       editEditable(String text) {
         setState(() {
           switch (text) {
@@ -44,12 +47,6 @@ class EditStats_State extends State<EditStats> {
               break;
             case "Tag":
               dateEditable = true;
-              break;
-            case "User":
-              nameEditable = true;
-              break;
-            case "ID":
-              idEditable = true;
               break;
           }
         });
@@ -88,7 +85,7 @@ class EditStats_State extends State<EditStats> {
                         style:
                             const TextStyle(fontSize: 14, color: Colors.black),
                         decoration: InputDecoration(
-                          label: Text(text),
+                          label: Text(hint),
                           labelStyle: const TextStyle(color: primaryColor),
                           // prefixIcon: Icon(Icons.email),
                           filled: true,
@@ -170,14 +167,14 @@ class EditStats_State extends State<EditStats> {
             children: [
               TextInputs(startTimeController, "Startzeit", statistic.startTime,
                   context, startTimeEditable),
-              TextInputs(startTimeController, "Stoppzeit", statistic.endTime,
+              TextInputs(endTimeController, "Stoppzeit", statistic.endTime,
                   context, endTimeEditable),
-              TextInputs(startTimeController, "Tag", statistic.date, context,
-                  dateEditable),
-              TextInputs(startTimeController, "User", statistic.user_name,
-                  context, nameEditable),
-              TextInputs(startTimeController, "ID", statistic.statistic_id,
-                  context, idEditable),
+              TextInputs(
+                  dateController, "Tag", statistic.date, context, dateEditable),
+              TextInputs(blankController, "User", statistic.user_name, context,
+                  nameEditable),
+              TextInputs(blankController, "ID", statistic.statistic_id, context,
+                  idEditable),
               SizedBox(height: 10),
               Container(
                 height: 40,

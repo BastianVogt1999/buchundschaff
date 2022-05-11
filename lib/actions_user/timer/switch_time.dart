@@ -63,7 +63,7 @@ class TabBarAndTabViewsState extends State<TabBarAndTabViews>
   @override
   void dispose() {
     super.dispose();
-    _tabController.dispose();
+    // _tabController.dispose();
   }
 
   @override
