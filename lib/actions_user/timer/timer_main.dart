@@ -3,6 +3,7 @@ import 'dart:async';
 import "package:intl/intl.dart";
 
 import 'package:flutter/material.dart';
+import 'package:itm_ichtrinkmehr_flutter/global_methods.dart';
 import 'package:lottie/lottie.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_user/timer/stopwatchv2.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_user/timer/switch_time.dart';
@@ -12,17 +13,20 @@ import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
 import 'package:itm_ichtrinkmehr_flutter/web_db/insert_statements.dart';
 import 'package:itm_ichtrinkmehr_flutter/web_db/update_statements.dart';
 
-StreamController<UpdateableStatistic> streamController =
-    StreamController<UpdateableStatistic>();
-Stream stream = streamController.stream.asBroadcastStream();
 
+  StreamController<UpdateableStatistic> streamController =StreamController<UpdateableStatistic>();
+ Stream stream = streamController.stream.asBroadcastStream();
 InsertStatements insertStatements = InsertStatements();
 Statistic statistic = Statistic.empty();
 UpdateStatements updateStatements = UpdateStatements();
+GlobalMethods globalmethods = GlobalMethods();
 
 class Timer_main extends StatefulWidget {
+  
+
   User user;
   Company company;
+ 
   Timer_main(this.user, this.company);
 
   @override
@@ -30,6 +34,7 @@ class Timer_main extends StatefulWidget {
 }
 
 class _Timer_mainState extends State<Timer_main> {
+
   bool flag = true;
   late Stream<int> timerStream;
   late StreamSubscription<int> timerSubscription;
@@ -58,13 +63,13 @@ class _Timer_mainState extends State<Timer_main> {
   }
 
   setTimeAtStart(int d, Statistic updateableStatistic) async {
-    print("Poggers");
+
 
     if (d == 1) {
       statistic.endTime = _formatter.format(DateTime.now());
       statistic.date = _formatterDate.format(DateTime.now());
       statistic.countedTime =
-          substractTimeString(statistic.startTime, statistic.endTime);
+          globalmethods.substractTimeString(statistic.startTime, statistic.endTime);
 
       //  DateTime begin = DateTime.parse(statistic.endTime);
 
@@ -77,6 +82,9 @@ class _Timer_mainState extends State<Timer_main> {
       });
     }
     if (d == 0) {
+       setState(() {
+    timerStart = _formatter.format(DateTime.now());
+      });
       timerStart = _formatter.format(DateTime.now());
       /*setState(() {
         if (startcopy == "00:00:00") {
@@ -85,6 +93,7 @@ class _Timer_mainState extends State<Timer_main> {
           timerStart = startcopy;
         }
       });*/
+      print("User input");
       statistic.startTime = timerStart;
       statistic.date = _formatterDate.format(DateTime.now());
       statistic.statistic_id =
@@ -93,49 +102,12 @@ class _Timer_mainState extends State<Timer_main> {
     statistic.startTime = timerStart;
   }
 
-  String substractTimeString(String startTime, String endTime) {
-    print("startTime: " + startTime);
-    print("endTime: " + endTime);
-    String result = "";
-
-    List<String> startTimeArrayString = statistic.startTime.split(":");
-    List<String> endTimeArrayString = statistic.endTime.split(":");
-
-    List<int> startTimeArrayInt = <int>[];
-    List<int> endTimeArrayInt = <int>[];
-
-//parse all String to int
-    for (int i = 0; i < 3; i++) {
-      startTimeArrayInt.add(int.parse(startTimeArrayString[i]));
-      endTimeArrayInt.add(int.parse(endTimeArrayString[i]));
-    }
-
-//substract Seconds
-
-    int seconds = endTimeArrayInt[2] - startTimeArrayInt[2];
-
-    int minutes = (endTimeArrayInt[1] - startTimeArrayInt[1]) * 60;
-
-    int hours = (endTimeArrayInt[0] - startTimeArrayInt[0]) * 3600;
-
-    if (seconds < 0) {
-      seconds = seconds + 60;
-      minutes - 1;
-    }
-    if (minutes < 0) {
-      minutes = minutes + 60;
-      hours - 1;
-    }
-    if (hours < 0) {
-      hours = 0;
-    }
-
-    result = (seconds + minutes + hours).toString();
-    return result;
-  }
+  
 
   @override
   Widget build(BuildContext context) {
+    
+print("controllerMain: " + streamController.toString());
     return FutureBuilder(
         future: _getStatsFromServer(user, company),
         builder: (context, dataSnapshot) {
@@ -200,7 +172,7 @@ _getStatsFromServer(User user, Company company) async {
   try {
     Statistic stat = await selectStatements.selectStatOfUserO(user, company);
 
-    print("user: " + stat.user_name);
+
     return stat;
   } catch (Exception) {
     print("Error while getting Data");

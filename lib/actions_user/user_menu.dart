@@ -1,13 +1,17 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_admin/container_admin.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_user/container_user.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_user/show_stats/stats_main.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_user/timer/timer_main.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
+import 'package:itm_ichtrinkmehr_flutter/values/statistic.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
 
 class UserMenu extends StatefulWidget {
   UserMenu(this.company, this.user);
+
 
   Company company;
   User user;
@@ -17,6 +21,7 @@ class UserMenu extends StatefulWidget {
 
 class UserMenuState extends State<UserMenu> {
   UserMenuState(this.company, this.user);
+
   Company company;
   User user;
 

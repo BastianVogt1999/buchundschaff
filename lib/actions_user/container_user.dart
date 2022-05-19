@@ -10,12 +10,17 @@ import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/statistic.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
 
+  StreamController<String> streamControllerUserInput =StreamController<String>();
+ Stream stream = streamControllerUserInput.stream.asBroadcastStream();
+
 class ContainerUser extends StatefulWidget {
   final User user;
   final Company company;
   final int selectedIndex;
+  
 
-  const ContainerUser(this.user, this.company, this.selectedIndex);
+
+   ContainerUser(this.user, this.company, this.selectedIndex);
 
   @override
   State<ContainerUser> createState() =>
@@ -23,6 +28,7 @@ class ContainerUser extends StatefulWidget {
 }
 
 class _ContainerUserState extends State<ContainerUser> {
+
   User user = User.empty();
   int selectedIndex;
   Company company;
@@ -88,6 +94,7 @@ class _ContainerUserState extends State<ContainerUser> {
       drawer: UserMenu(
         company,
         user,
+        
       ),
     );
   }
