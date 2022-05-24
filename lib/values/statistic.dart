@@ -1,22 +1,22 @@
 class Statistic {
   String statistic_id;
-  String user_name;
+  List<String> user;
   String startTime;
   String endTime;
   String countedTime;
   String date;
   String isrunning;
 
-  Statistic(this.statistic_id, this.user_name, this.startTime, this.endTime,
+  Statistic(this.statistic_id, this.user, this.startTime, this.endTime,
       this.countedTime, this.date, this.isrunning);
 
-  Statistic.empty() : this("", "", "", "", "", "", "");
+  Statistic.empty() : this("", List.empty(), "", "", "", "", "");
 }
 
 class UserAsMap {
   UserAsMap(
       {required this.statistic_id,
-      required this.user_name,
+      required this.user,
       required this.startTime,
       required this.endTime,
       required this.countedTime,
@@ -26,7 +26,7 @@ class UserAsMap {
   UserAsMap.fromJson(Map<String, Object> json)
       : this(
           statistic_id: json['statistic_id'] as String,
-          user_name: json['user_name'] as String,
+          user: json['user'] as List<String>,
           startTime: json['startTime'] as String,
           endTime: json['endTime'] as String,
           countedTime: json['countedTime'] as String,
@@ -35,7 +35,7 @@ class UserAsMap {
         );
 
   final String statistic_id;
-  final String user_name;
+  List<String> user;
   String startTime;
   String endTime;
   String countedTime;
@@ -45,7 +45,7 @@ class UserAsMap {
   Map<String, Object> toJson() {
     return {
       'statistic_id': statistic_id,
-      'user_name': user_name,
+      'user': user,
       'startTime': startTime,
       'endTime': endTime,
       'countedTime': countedTime,

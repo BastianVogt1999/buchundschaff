@@ -22,7 +22,7 @@ class ContainerAdmin extends StatefulWidget {
 
 final List _pages = [
   DayStatsAdmin(),
-  FullStatsAdmin(),
+  FullStatsAdmin(user, company),
   UserManagement(company),
 ];
 
