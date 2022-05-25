@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_admin/UserManagement/user_operations/add_user.dart';
+import 'package:itm_ichtrinkmehr_flutter/global_methods.dart';
 import 'package:itm_ichtrinkmehr_flutter/intro/unternehmen_seingabe.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
@@ -7,10 +8,10 @@ import 'package:itm_ichtrinkmehr_flutter/web_db/select_statements.dart';
 import 'package:lottie/lottie.dart';
 
 SelectStatements selectStatements = SelectStatements();
-
+GlobalMethods globalmethods = GlobalMethods();
 _getUserServer(Company company) {
   try {
-    return selectStatements.selectUserOfCompany(company);
+    return selectStatements.selectAllUserOfCompany(company);
   } catch (Exception) {
     print("Error while getting Data");
   }
@@ -32,16 +33,7 @@ class _allUserState extends State<allUser> {
         if (snapshot.connectionState == ConnectionState.done) {
 // If we got an error
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Column(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(top: 16),
-                  child: Center(
-                    child: Lottie.asset("assets/worker.json"),
-                  ),
-                )
-              ],
-            );
+             return globalmethods.loadingScreen();
           } else if (snapshot.hasData) {
 // Extracting data from snapshot object
             final data = snapshot.data as List<User>;

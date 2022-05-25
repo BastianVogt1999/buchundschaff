@@ -15,7 +15,7 @@ class HomeButton extends StatelessWidget {
       backgroundColor: Color(0xEA0091B5),
       onPressed: () {
         Navigator.push(context,
-            MaterialPageRoute(builder: (context) => RoleInput(user, company)));
+            MaterialPageRoute(builder: (context) => RoleInput( company)));
       },
       child: Icon(
         Icons.home_outlined,

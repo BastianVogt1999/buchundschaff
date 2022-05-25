@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_admin/admin_menu.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_admin/container_admin.dart';
@@ -5,12 +7,18 @@ import 'package:itm_ichtrinkmehr_flutter/actions_user/container_user.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_user/user_menu.dart';
 
 import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
+import 'package:itm_ichtrinkmehr_flutter/values/statistic.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
+
+
+
 
 class cusCar extends StatefulWidget {
   final User user;
+  Stream stream;
+  StreamController streamController;
   final Company company;
-  const cusCar(this.user, this.company) : super();
+   cusCar(this.user, this.company, this.stream, this.streamController);
 
   @override
   _CustomCarouselFB2State createState() =>
@@ -28,12 +36,23 @@ class _CustomCarouselFB2State extends State<cusCar> {
   late PageController _pageController;
   int _position = 0;
 
+  
+
+
+
+
   @override
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: 0, viewportFraction: .7);
+        stream.listen((UpdateableStatistic) {
+  setNewTime();
+    });
   }
 
+setNewTime(){
+
+}
   @override
   Widget build(BuildContext context) {
     List<Widget> cards = [
@@ -159,6 +178,7 @@ class CardFb1 extends StatelessWidget {
 
   pressedRole(bool isAdmin, BuildContext context, User user, Company company) {
     if (isAdmin) {
+      if(user.is_admin == "true"){
       Navigator.push(
           context,
           MaterialPageRoute(
@@ -166,6 +186,10 @@ class CardFb1 extends StatelessWidget {
                     company,
                     user,
                   )));
+      }
+      else{
+        print("kein Admin");
+      }
     } else {
       Navigator.push(
           context,
@@ -173,6 +197,7 @@ class CardFb1 extends StatelessWidget {
               builder: (context) => UserMenu(
                     company,
                     user,
+        
                   )));
     }
   }

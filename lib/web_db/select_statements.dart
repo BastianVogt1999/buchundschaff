@@ -48,6 +48,7 @@ class SelectStatements {
         .get()
         .then((QuerySnapshot querySnapshot) {
       for (var doc in querySnapshot.docs) {
+        print(doc["user_name"]);
         Statistic value = Statistic(
           doc["statistic_id"],
           doc["user_name"],
@@ -71,7 +72,7 @@ class SelectStatements {
     return statFinal;
   }
 
-  Future<List<User>> selectUserOfCompany(Company company) async {
+  Future<List<User>> selectAllUserOfCompany(Company company) async {
     List<User> userList = <User>[];
 
     company.company_code = company.company_code.toString();
@@ -93,4 +94,24 @@ class SelectStatements {
 
     return userList;
   }
+    Future<User> selectOneUserOfCompany(Company company, String user_name) async {
+    User user = User.empty();
+
+    await FirebaseFirestore.instance
+        .collection('/AllProjects/' + company.company_name + '/UserInProject')
+        .where('user_name', isEqualTo: user_name)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+         
+      for (var doc in querySnapshot.docs) {
+          user = User(
+          doc["user_name"],
+          doc["user_code"],
+          doc["isAdmin"],
+        );
+      }
+    });
+return user;
+  }
 }
+

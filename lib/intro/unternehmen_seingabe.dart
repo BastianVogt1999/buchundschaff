@@ -12,7 +12,7 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    user.user_name = "Dieter";
+
     company.company_name = "testCompany 2204";
 
     return Scaffold(
@@ -64,6 +64,6 @@ class LoginPage extends StatelessWidget {
 
   entered_code(BuildContext context) {
     Navigator.push(context,
-        MaterialPageRoute(builder: (context) => RoleInput(user, company)));
+        MaterialPageRoute(builder: (context) => RoleInput(company)));
   }
 }

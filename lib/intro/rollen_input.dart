@@ -1,23 +1,61 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:itm_ichtrinkmehr_flutter/actions_user/timer/timer_main.dart';
 import 'package:itm_ichtrinkmehr_flutter/intro/carrousel_intro.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
 import 'package:itm_ichtrinkmehr_flutter/web_db/insert_statements.dart';
+import 'package:itm_ichtrinkmehr_flutter/web_db/select_statements.dart';
+import 'package:lottie/lottie.dart';
 
 InsertStatements insertStatements = InsertStatements();
+SelectStatements selectStatements = SelectStatements();
 
-class RoleInput extends StatelessWidget {
-  TextEditingController userCodeController = TextEditingController();
+  StreamController<String> streamControllerUserInput =StreamController<String>();
+ Stream stream = streamControllerUserInput.stream.asBroadcastStream();
+ 
 
-  final User user;
-  final Company company;
-  RoleInput(this.user, this.company);
+ class RoleInput extends StatefulWidget {
+   RoleInput(this.company);
+ 
+  Company company;
+   @override
+   State<RoleInput> createState() => _RoleInputState(company);
+ }
+ 
+ class _RoleInputState extends State<RoleInput> {
+   TextEditingController userCodeController = TextEditingController();
+ 
+ User user = User.empty();
+   Company company;
+  _RoleInputState(this.company);
+
+
+
   @override
   Widget build(BuildContext context) {
+        return FutureBuilder(
+        future: getUserFromServer(company),
+        builder: (context, dataSnapshot) {
+          List<Widget> children;
+          if (dataSnapshot.connectionState == ConnectionState.waiting) {
+           return globalmethods.loadingScreen();
+          } else {
+            if (dataSnapshot.error != null) {
+              return Center(
+                child: Text('An error occured'),
+              );
+            } else {
+              final data = dataSnapshot.data as List<User>;
+              for(int i = 0; i<data.length; i++){
+if (data[i].user_name== "Dieter"){
+  user = data[i];
+}
+              }
     return Scaffold(
       appBar: AppBar(
-        title:
-            const Text("Flutter Bricks", style: TextStyle(color: Colors.white)),
+    
         backgroundColor: Color(0xff4338CA),
         actions: [
           IconButton(
@@ -91,8 +129,14 @@ class RoleInput extends StatelessWidget {
       ),
     );
   }
+          }});}
 
   entered_user_code(BuildContext context) {}
 
   static InsertStatements() {}
 }
+
+getUserFromServer(Company company) async {
+  
+  return await selectStatements.selectAllUserOfCompany(company);
+ }

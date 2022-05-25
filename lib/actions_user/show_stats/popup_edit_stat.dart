@@ -1,10 +1,15 @@
+
 import 'package:flutter/material.dart';
+import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/statistic.dart';
+import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
+import 'package:itm_ichtrinkmehr_flutter/web_db/update_statements.dart';
 
 TextEditingController startTimeController = TextEditingController();
 TextEditingController endTimeController = TextEditingController();
 TextEditingController dateController = TextEditingController();
 TextEditingController blankController = TextEditingController();
+UpdateStatements updateStatements = UpdateStatements();
 const backgroundColor = Color(0xFFC0C0C0);
 bool startTimeEditable = false;
 bool endTimeEditable = false;
@@ -14,15 +19,19 @@ bool idEditable = false;
 
 class EditStats extends StatefulWidget {
   final Statistic statistic;
-  const EditStats(this.statistic);
+  User user;
+  Company company;
+   EditStats(this.statistic, this.user, this.company);
 
   @override
-  State<EditStats> createState() => EditStats_State(statistic);
+  State<EditStats> createState() => EditStats_State(statistic, user, company);
 }
 
 class EditStats_State extends State<EditStats> {
   final Statistic statistic;
-  EditStats_State(this.statistic);
+  User user;
+  Company company;
+  EditStats_State(this.statistic, this.user, this.company);
   final primaryColor = const Color(0xff4338CA);
   final accentColor = const Color(0xffffffff);
 
@@ -185,7 +194,7 @@ class EditStats_State extends State<EditStats> {
                     radius: 10,
                     child: IconButton(
                       color: Colors.white,
-                      onPressed: () {},
+                      onPressed: () {editStatiticInServer(company, statistic);},
                       icon: Icon(
                         Icons.save,
                       ),
@@ -196,5 +205,14 @@ class EditStats_State extends State<EditStats> {
         ),
       ),
     );
+  }
+
+  editStatiticInServer(Company company, Statistic statistic){
+    try{
+updateStatements.updateStatistic(company, statistic);
+    }
+    catch(Exception){
+      print("Failure during update of Statistic");
+    }
   }
 }

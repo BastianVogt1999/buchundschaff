@@ -9,10 +9,28 @@ class DeleteStatements {
     var database = FirebaseFirestore.instance.collection(
         '/AllProjects/' + company.company_name + '/StatisticsInProject');
 
-    print(statistic.statistic_id);
+
     database
         .doc(statistic.statistic_id)
         .delete()
-        .catchError((error) => print("Failed to delete Stat: $error"));
+        .catchError((error) => print("Failed to delete Statistic : $error"));
+  }
+
+  deleteUser(Company company, User user) {
+    var database = FirebaseFirestore.instance.collection(
+        '/AllProjects/' + company.company_name + '/UserInProject');
+    database
+        .doc(user.user_name)
+        .delete()
+        .catchError((error) => print("Failed to delete User: $error"));
+  }
+
+    deleteCompany(Company company) {
+    var database = FirebaseFirestore.instance.collection(
+        '/AllProjects/');
+    database
+        .doc(company.company_name)
+        .delete()
+        .catchError((error) => print("Failed to delete Company: $error"));
   }
 }

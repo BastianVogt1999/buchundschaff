@@ -61,7 +61,7 @@ class _StopwatchPageState extends State<StopwatchPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Statistic data = await _getStatsFromServer(user, company);
+    
 
     List<IconValues> buttonIcons = [
       IconValues(Icons.play_circle, 0, Colors.green),
@@ -123,10 +123,16 @@ class _StopwatchPageState extends State<StopwatchPage> {
     }
 
 //if Timer is already running
-    if (statistic.user_name != "") {
+    if (statisticInput.user_name != "") {
       buttonIndex = 1;
       setState(() {
         buttonIndex = 1;
+      });
+    }
+    else{
+       buttonIndex = 0;
+      setState(() {
+        buttonIndex = 0;
       });
     }
     return Column(

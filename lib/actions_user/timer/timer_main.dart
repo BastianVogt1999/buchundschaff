@@ -16,6 +16,7 @@ import 'package:itm_ichtrinkmehr_flutter/web_db/update_statements.dart';
 
   StreamController<UpdateableStatistic> streamController =StreamController<UpdateableStatistic>();
  Stream stream = streamController.stream.asBroadcastStream();
+
 InsertStatements insertStatements = InsertStatements();
 Statistic statistic = Statistic.empty();
 UpdateStatements updateStatements = UpdateStatements();
@@ -113,16 +114,7 @@ print("controllerMain: " + streamController.toString());
         builder: (context, dataSnapshot) {
           List<Widget> children;
           if (dataSnapshot.connectionState == ConnectionState.waiting) {
-            return Column(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(top: 16),
-                  child: Center(
-                    child: Lottie.asset("assets/worker.json"),
-                  ),
-                )
-              ],
-            );
+        return globalmethods.loadingScreen();
           } else {
             if (dataSnapshot.error != null) {
               return Center(
