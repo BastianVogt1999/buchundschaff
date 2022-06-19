@@ -5,6 +5,7 @@ import 'package:itm_ichtrinkmehr_flutter/actions_admin/admin_menu.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_admin/container_admin.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_user/container_user.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_user/user_menu.dart';
+import 'package:itm_ichtrinkmehr_flutter/intro/rollen_input.dart';
 
 import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/statistic.dart';
@@ -13,23 +14,25 @@ import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
 
 
 
+
 class cusCar extends StatefulWidget {
-  final User user;
+
   Stream stream;
   StreamController streamController;
-  final Company company;
-   cusCar(this.user, this.company, this.stream, this.streamController);
+
+   cusCar(this.stream, this.streamController);
 
   @override
   _CustomCarouselFB2State createState() =>
-      _CustomCarouselFB2State(user, company);
+      _CustomCarouselFB2State(stream, streamController);
 }
 
 class _CustomCarouselFB2State extends State<cusCar> {
-  User user;
-  Company company;
+ 
+  Stream stream;
+  StreamController streamController;
 
-  _CustomCarouselFB2State(this.user, this.company);
+  _CustomCarouselFB2State(this.stream, this.streamController);
 
   final double carouselItemMargin = 16;
 
@@ -38,21 +41,12 @@ class _CustomCarouselFB2State extends State<cusCar> {
 
   
 
-
-
-
   @override
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: 0, viewportFraction: .7);
-        stream.listen((UpdateableStatistic) {
-  setNewTime();
-    });
   }
 
-setNewTime(){
-
-}
   @override
   Widget build(BuildContext context) {
     List<Widget> cards = [
@@ -60,17 +54,19 @@ setNewTime(){
         text: "Anmelden als User",
         imageUrl: "assets/worker_icon.png",
         subtitle: "",
-        isAdmin: false,
-        user: user,
-        company: company,
+        isAdmin: "false",
+        stream: stream,
+        streamControllerUserInput: streamControllerUserInput,
+
       ),
       CardFb1(
         text: "Anmelden als Admin",
         imageUrl: "assets/admin_icon.png",
         subtitle: "Erweiterte Funktionen",
-        isAdmin: true,
-        user: user,
-        company: company,
+        isAdmin: "true",
+           stream: stream,
+        streamControllerUserInput: streamControllerUserInput,
+
       ),
     ];
 
@@ -107,23 +103,25 @@ class CardFb1 extends StatelessWidget {
   final String text;
   final String imageUrl;
   final String subtitle;
-  final bool isAdmin;
-  final User user;
-  final Company company;
+  final String isAdmin;
+  final Stream stream;
+  final StreamController streamControllerUserInput;
 
   const CardFb1(
       {required this.text,
       required this.imageUrl,
       required this.subtitle,
       required this.isAdmin,
-      required this.user,
-      required this.company});
+          required this.stream,
+      required this.streamControllerUserInput,
+  });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        pressedRole(isAdmin, context, user, company);
+        streamControllerUserInput.add(isAdmin);
+  
       },
       child: Container(
         width: 250,
@@ -176,29 +174,5 @@ class CardFb1 extends StatelessWidget {
     );
   }
 
-  pressedRole(bool isAdmin, BuildContext context, User user, Company company) {
-    if (isAdmin) {
-      if(user.is_admin == "true"){
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => AdminMenu(
-                    company,
-                    user,
-                  )));
-      }
-      else{
-        print("kein Admin");
-      }
-    } else {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => UserMenu(
-                    company,
-                    user,
-        
-                  )));
-    }
-  }
+
 }

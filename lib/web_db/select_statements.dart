@@ -1,5 +1,6 @@
 import "package:intl/intl.dart";
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:itm_ichtrinkmehr_flutter/actions_user/timer/timer_main.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/statistic.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
@@ -18,19 +19,73 @@ class SelectStatements {
         .collection(
             '/AllProjects/' + company.company_name + '/StatisticsInProject')
         .where('date', isEqualTo: currentDate)
-        .where('user_name', isEqualTo: user.user_name)
+        //  .where('user_name', isEqualTo: user.user_name)
+        .get()
+        .then((QuerySnapshot querySnapshot) async {
+      for (var doc in querySnapshot.docs) {
+        Statistic value = Statistic.empty();
+        value.date = doc["date"];
+        value.statistic_id = doc["statistic_id"];
+        value.startTime = doc["startTime"];
+        value.endTime = doc["endTime"];
+        value.countedTime = doc["countedTime"];
+        value.isrunning = doc["isrunning"];
+
+        List<String> users = <String>[];
+
+        await FirebaseFirestore.instance
+            .collection('/AllProjects/' +
+                company.company_name +
+                '/StatisticsInProject/' +
+                value.statistic_id +
+                "/User")
+            .get()
+            .then((QuerySnapshot insideSnapshot) {
+          for (var docS in insideSnapshot.docs) {
+            String curValue = docS["user_name"];
+            users.add(curValue);
+          }
+        });
+        value.user = users;
+        statisticList.add(value);
+      }
+    });
+
+    return statisticList;
+  }
+
+  Future<List<Statistic>> selectAllStats(Company company) async {
+    List<Statistic> statisticList = <Statistic>[];
+
+    await FirebaseFirestore.instance
+        .collection(
+            '/AllProjects/' + company.company_name + '/StatisticsInProject')
+        .orderBy("startTime")
         .get()
         .then((QuerySnapshot querySnapshot) {
       for (var doc in querySnapshot.docs) {
-        Statistic value = Statistic(
-          doc["statistic_id"],
-          doc["user_name"],
-          doc["startTime"],
-          doc["endTime"],
-          doc["countedTime"],
-          doc["date"],
-          doc["isrunning"],
-        );
+        Statistic value = Statistic.empty();
+        value.date = doc["date"];
+        value.statistic_id = doc["statistic_id"];
+        value.startTime = doc["startTime"];
+        value.endTime = doc["endTime"];
+        value.countedTime = doc["countedTime"];
+        value.isrunning = doc["isrunning"];
+
+        List<String> users = <String>[];
+        FirebaseFirestore.instance
+            .collection('/AllProjects/' +
+                company.company_name +
+                '/StatisticsInProject/' +
+                value.statistic_id +
+                "/User")
+            .get()
+            .then((QuerySnapshot insideSnapshot) {
+          for (var docS in insideSnapshot.docs) {
+            users.add(docS["user_name"]);
+          }
+          value.user = users;
+        });
         statisticList.add(value);
       }
     });
@@ -44,31 +99,47 @@ class SelectStatements {
     await FirebaseFirestore.instance
         .collection(
             '/AllProjects/' + company.company_name + '/StatisticsInProject')
-        .where('user_name', isEqualTo: user.user_name)
+        .where('isrunning', isEqualTo: "true")
         .get()
         .then((QuerySnapshot querySnapshot) {
       for (var doc in querySnapshot.docs) {
-        print(doc["user_name"]);
-        Statistic value = Statistic(
-          doc["statistic_id"],
-          doc["user_name"],
-          doc["startTime"],
-          doc["endTime"],
-          doc["countedTime"],
-          doc["date"],
-          doc["isrunning"],
-        );
+        Statistic value = Statistic.empty();
+        value.statistic_id = doc["statistic_id"];
+        value.date = doc["date"];
+        value.startTime = doc["startTime"];
+        value.endTime = doc["endTime"];
+        value.countedTime = doc["countedTime"];
+        value.isrunning = doc["isrunning"];
+
+        List<String> users = <String>[];
+        FirebaseFirestore.instance
+            .collection('/AllProjects/' +
+                company.company_name +
+                '/StatisticsInProject/' +
+                value.statistic_id +
+                "/User")
+            .get()
+            .then((QuerySnapshot insideSnapshot) {
+          for (var doc in insideSnapshot.docs) {
+            print("Schnitzel");
+            users.add(doc["user_name"]);
+          }
+          value.user = users;
+        });
         statisticList.add(value);
       }
     });
 
     Statistic statFinal = Statistic.empty();
     for (int i = 0; i < statisticList.length; i++) {
-      if (statisticList[i].isrunning == "true") {
-        statFinal = statisticList[i];
+      for (int j = 0; j < statisticList[i].user.length; j++) {
+        if (statisticList[i].user[j] == user.user_name) {
+          statFinal = statisticList[i];
+        }
       }
     }
 
+    print("run " + statFinal.isrunning);
     return statFinal;
   }
 
@@ -94,12 +165,12 @@ class SelectStatements {
 
     return userList;
   }
-    Future<User> selectOneUserOfCompany(Company company, String user_name) async {
+    Future<User> selectOneUserOfCompany(Company company, String user_code) async {
     User user = User.empty();
 
     await FirebaseFirestore.instance
         .collection('/AllProjects/' + company.company_name + '/UserInProject')
-        .where('user_name', isEqualTo: user_name)
+        .where('user_code', isEqualTo: user_code)
         .get()
         .then((QuerySnapshot querySnapshot) {
          

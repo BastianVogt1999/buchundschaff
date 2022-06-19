@@ -123,7 +123,7 @@ class _StopwatchPageState extends State<StopwatchPage> {
     }
 
 //if Timer is already running
-    if (statisticInput.user_name != "") {
+    if (statisticInput.isrunning != "") {
       buttonIndex = 1;
       setState(() {
         buttonIndex = 1;

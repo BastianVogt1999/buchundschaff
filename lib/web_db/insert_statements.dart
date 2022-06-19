@@ -51,7 +51,6 @@ class InsertStatements {
         .set(
           {
             'statistic_id': statisticId.toString(),
-            'user_name': user.user_name,
             'startTime': statistic.startTime,
             'endTime': statistic.endTime,
             'countedTime': statistic.countedTime,
@@ -62,6 +61,15 @@ class InsertStatements {
         .then((value) => print("Stat Added"))
         .catchError((error) => print("Failed to add user: $error"));
 
+    var database = FirebaseFirestore.instance.collection('/AllProjects/' +
+        company.company_name +
+        '/StatisticsInProject/' +
+        statisticId.toString() +
+        '/User');
+
+    database.doc(user.user_name).set({
+      'user_name': user.user_name,
+    });
     return statisticId.toString();
   }
 }

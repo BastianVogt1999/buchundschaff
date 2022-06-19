@@ -41,7 +41,6 @@ class _Stats_mainState extends State<Stats_main> {
       Company company,
       Statistic statistic,
     ) {
-<<<<<<< HEAD
       Color color = const Color(0xFF4338CA);
       return Container(
           height: 80,
@@ -133,62 +132,6 @@ class _Stats_mainState extends State<Stats_main> {
                   ),
                 ]))
           ]));
-=======
-      Color color = Color(0xFF4338CA);
-      return Card(
-        child: ListTile(
-            title: Column(children: [
-              Text("Datum: " + statistic.date),
-              Divider(),
-              Text("Startzeit: " + statistic.startTime),
-              Divider(),
-              Text("Endzeit: " + statistic.endTime),
-              Divider(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text("User: "),
-                  SizedBox(
-                      height: 80,
-                      width: 150,
-                      child: ListView.builder(
-                          itemCount: statistic.user.length,
-                          padding: EdgeInsets.all(5),
-                          itemBuilder: (BuildContext context, int index) {
-                            return Container(
-                                padding: EdgeInsets.all(5),
-                                child: Text((index + 1).toString() +
-                                    " " +
-                                    statistic.user[index]));
-                          }))
-                ],
-              ),
-              Divider(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text("Timer läuft: "),
-                  Icon(statistic.isrunning == "true"
-                      ? Icons.check_box
-                      : Icons.close_rounded),
-                ],
-              ),
-            ]),
-            trailing: IconButton(
-              onPressed: () {
-                deleteStatements.deleteStatistic(company, user, statistic);
-                updateWidget();
-              },
-              icon: Icon(Icons.more_vert),
-            )),
-        elevation: 8,
-        shadowColor: Colors.green,
-        margin: EdgeInsets.all(20),
-        shape: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(color: Colors.green, width: 1)),
-      );
->>>>>>> 27790788245379a6295b935cd9163d19b8a8c097
     }
 
     widgetBuilded = FutureBuilder(

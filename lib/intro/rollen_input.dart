@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_user/timer/timer_main.dart';
@@ -8,6 +9,9 @@ import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
 import 'package:itm_ichtrinkmehr_flutter/web_db/insert_statements.dart';
 import 'package:itm_ichtrinkmehr_flutter/web_db/select_statements.dart';
 import 'package:lottie/lottie.dart';
+
+import '../actions_admin/admin_menu.dart';
+import '../actions_user/user_menu.dart';
 
 InsertStatements insertStatements = InsertStatements();
 SelectStatements selectStatements = SelectStatements();
@@ -27,12 +31,58 @@ SelectStatements selectStatements = SelectStatements();
  class _RoleInputState extends State<RoleInput> {
    TextEditingController userCodeController = TextEditingController();
  
- User user = User.empty();
+
    Company company;
   _RoleInputState(this.company);
 
+  @override
+  void initState() {
+    super.initState();
+
+    stream.listen((String) {
+      pressedRole(
+          String);
+    });
+  }
 
 
+  pressedRole(String adminPressed) async {
+User user = await selectStatements.selectOneUserOfCompany(company, userCodeController.text);
+
+if(user.user_name != ""){
+
+
+    if (adminPressed == "true") {
+      if(user.is_admin == "true"){
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => AdminMenu(
+                    company,
+                    user,
+                  )));
+      }
+      else{
+        print("kein Admin");
+      }
+    } else {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => UserMenu(
+                    company,
+                    user,
+        
+                  )));
+    }
+  }
+   else{
+    print("Code falsch");
+  }
+  }
+ 
+
+  
   @override
   Widget build(BuildContext context) {
         return FutureBuilder(
@@ -49,9 +99,6 @@ SelectStatements selectStatements = SelectStatements();
             } else {
               final data = dataSnapshot.data as List<User>;
               for(int i = 0; i<data.length; i++){
-if (data[i].user_name== "Dieter"){
-  user = data[i];
-}
               }
     return Scaffold(
       appBar: AppBar(
@@ -109,19 +156,10 @@ if (data[i].user_name== "Dieter"){
                 ),
                 controller: userCodeController,
               ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: IconButton(
-                  icon: Icon(Icons.info_outline),
-                  onPressed: () {
-                    entered_user_code(context);
-                    print("oh");
-                  },
-                ),
-              ),
+       
               SizedBox(
                 height: 300,
-                child: cusCar(user, company),
+                child: cusCar(stream, streamControllerUserInput),
               )
             ],
           ),
@@ -131,9 +169,6 @@ if (data[i].user_name== "Dieter"){
   }
           }});}
 
-  entered_user_code(BuildContext context) {}
-
-  static InsertStatements() {}
 }
 
 getUserFromServer(Company company) async {

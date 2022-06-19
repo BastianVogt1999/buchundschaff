@@ -164,7 +164,6 @@ _getStatsFromServer(User user, Company company) async {
   try {
     Statistic stat = await selectStatements.selectStatOfUserO(user, company);
 
-
     return stat;
   } catch (Exception) {
     print("Error while getting Data");
