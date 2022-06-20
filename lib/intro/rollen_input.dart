@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:html';
+
 
 import 'package:flutter/material.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_user/timer/timer_main.dart';
@@ -63,7 +63,11 @@ if(user.user_name != ""){
                   )));
       }
       else{
-        print("kein Admin");
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+    backgroundColor: Colors.red,
+    content: Text("Du bist kein Admin"),
+    duration: Duration(milliseconds: 2500),
+  ));
       }
     } else {
       Navigator.push(
@@ -77,7 +81,11 @@ if(user.user_name != ""){
     }
   }
    else{
-    print("Code falsch");
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+    backgroundColor: Colors.red,
+    content: Text("User mit angegebenen Code nicht gefunden"),
+    duration: Duration(milliseconds: 2500),
+  ));
   }
   }
  

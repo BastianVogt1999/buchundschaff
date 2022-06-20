@@ -22,6 +22,6 @@ class _SwitchUserManagementState extends State<SwitchUserManagement>
   Widget build(BuildContext context) {
     return Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Padding(padding: EdgeInsets.all(6), child: allUser()));
+        child: Padding(padding: EdgeInsets.all(6), child: allUser(company)));
   }
 }

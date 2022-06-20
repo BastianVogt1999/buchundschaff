@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_admin/UserManagement/user_operations/add_user.dart';
 import 'package:itm_ichtrinkmehr_flutter/global_methods.dart';
-import 'package:itm_ichtrinkmehr_flutter/intro/unternehmen_seingabe.dart';
+import 'package:itm_ichtrinkmehr_flutter/intro/unternehmens_eingabe.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
 import 'package:itm_ichtrinkmehr_flutter/web_db/select_statements.dart';
@@ -18,13 +18,16 @@ _getUserServer(Company company) {
 }
 
 class allUser extends StatefulWidget {
-  const allUser();
-
+   allUser(this.company);
+  Company company;
   @override
-  State<allUser> createState() => _allUserState();
+  State<allUser> createState() => _allUserState(company);
 }
 
 class _allUserState extends State<allUser> {
+  Company company;
+
+  _allUserState(this.company);
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_admin/admin_menu.dart';
 import 'package:itm_ichtrinkmehr_flutter/common_actions/home_button.dart';
-import 'package:itm_ichtrinkmehr_flutter/intro/unternehmen_seingabe.dart';
+import 'package:itm_ichtrinkmehr_flutter/intro/unternehmens_eingabe.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
 
@@ -20,17 +20,18 @@ class ContainerAdmin extends StatefulWidget {
       _ContainerAdminState(company, user, selectedIndex);
 }
 
-final List _pages = [
-  DayStatsAdmin(),
-  FullStatsAdmin(user, company),
-  UserManagement(company),
-];
+
 
 class _ContainerAdminState extends State<ContainerAdmin> {
+  
   User user;
   Company company;
   int selectedIndex;
   _ContainerAdminState(this.company, this.user, this.selectedIndex);
+
+
+
+
 
   onItemTapped(int index) {
     setState(
@@ -42,6 +43,12 @@ class _ContainerAdminState extends State<ContainerAdmin> {
 
   @override
   Widget build(BuildContext context) {
+    final List _pages = [
+  DayStatsAdmin(),
+  FullStatsAdmin(user, company),
+  UserManagement(company),
+];
+
     return Scaffold(
         appBar: AppBar(
           title: Text(user.user_name, style: TextStyle(color: Colors.white)),

@@ -6,9 +6,7 @@ class Company {
 
   Company.empty() : this("", "");
 
-  String getUserName() {
-    return company_name;
-  }
+ 
 }
 
 class UserAsMap {
