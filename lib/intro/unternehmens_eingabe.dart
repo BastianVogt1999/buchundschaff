@@ -9,27 +9,25 @@ import 'package:itm_ichtrinkmehr_flutter/web_db/select_statements.dart';
 SelectStatements selectStatements = SelectStatements();
 GlobalMethods globalMethods = GlobalMethods();
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
+  LoginPage({Key? key}) : super(key: key);
+
+  @override
+  State<LoginPage> createState() => LoginPage_state();
+}
+
+class LoginPage_state extends State<LoginPage> {
+ 
   TextEditingController companyNameController = TextEditingController();
+ bool pwdVisibility = false;
 
   @override
   Widget build(BuildContext context) {
-       return FutureBuilder(
-        future: selectStatements.selectCompany(companyNameController.text),
-        builder: (context, dataSnapshot) {
-          List<Widget> children;
-          if (dataSnapshot.connectionState == ConnectionState.waiting) {
-           return globalMethods.loadingScreen();
-          } else {
-            if (dataSnapshot.error != null) {
-              return Center(
-                child: Text('An error occured'),
-              );
-            } else {
-              final data = dataSnapshot.data as Company;
-            
+    
     return Scaffold(
         body: Container(
+
+          //background
             padding: const EdgeInsets.all(10.0),
             width: double.infinity,
             height: double.infinity,
@@ -43,42 +41,140 @@ class LoginPage extends StatelessWidget {
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+
+                      //Input Company-Code
                   TextFormField(
-                    autofocus: false,
-                    cursorColor: Theme.of(context).colorScheme.secondary,
-                    keyboardType: TextInputType.text,
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                    decoration: InputDecoration(
-                      hintText: 'Unternehmenscode eingeben',
-                      hintStyle: TextStyle(
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-                      contentPadding:
-                          EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(32.0)),
-                      fillColor: Theme.of(context).colorScheme.secondary,
-                    ),
-                    controller: companyNameController,
-                  ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: IconButton(
-                      icon: Icon(Icons.info_outline),
-                      onPressed: () {
-                        entered_code(context, data);
-                      },
-                    ),
-                  ),
+      controller: companyNameController,
+      obscureText: !pwdVisibility,
+      decoration: InputDecoration(
+        hintText: "Unternehmenscode",
+
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.white,
+            width: 1,
+          ),
+          borderRadius: BorderRadius.circular(25.0),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.red,
+            width: 1,
+          ),
+          borderRadius: BorderRadius.circular(25.0),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.red,
+            width: 1,
+          ),
+          borderRadius: BorderRadius.circular(25.0),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.white,
+            width: 1,
+          ),
+          borderRadius: BorderRadius.circular(25.0),
+        ),
+        suffixIcon: InkWell(
+          onTap: () => setState(
+            () => pwdVisibility = !pwdVisibility,
+          ),
+          child: Icon(
+            pwdVisibility
+                ? Icons.visibility_outlined
+                : Icons.visibility_off_outlined,
+            color: Colors.white,
+            size: 18,
+          ),
+        ),
+      ),
+      validator: (val) {
+        if (val!.isEmpty) {
+          return 'Required';
+        }
+        return null;
+      },
+    ),
+
+    //
+    SizedBox(height: 30),
+
+    //Button weiter
+    OutlinedButton(
+        onPressed: () {
+  
+                        entered_code(context, companyNameController.text);
+        },
+        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          Text(
+            "Weiter",
+            style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w300,
+                color: Colors.white),
+          ),
+          Icon(Icons.arrow_forward, color:Colors.white)
+        ]),
+        style: ButtonStyle(
+            side: MaterialStateProperty.all(
+                BorderSide(color: Colors.white, width: 1.4)),
+            padding: MaterialStateProperty.all(
+                EdgeInsets.symmetric(vertical: 20, horizontal: 50)),
+            shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(40))))),
+      ),
+          
                 ]))));
             }
-          }});
-  }
+          }
+  
 
-  entered_code(BuildContext context, Company company) {
+  entered_code(BuildContext context, String company_code) async {
+
+    
+ Company company = Company.empty();
+try{
+  company = await selectStatements.selectCompany(company_code);
+}
+catch(Exception){
+print("error");
+}
+
+if(company.company_name!= ""){
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => RoleInput(company)));
-  }
 }
+else{
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+    backgroundColor: Colors.red,
+    content: Text("Unternehmen mit angegebenen Code nicht gefunden"),
+    duration: Duration(milliseconds: 2500),
+  ));
+}
+
+  
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

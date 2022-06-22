@@ -49,6 +49,8 @@ SelectStatements selectStatements = SelectStatements();
   pressedRole(String adminPressed) async {
 User user = await selectStatements.selectOneUserOfCompany(company, userCodeController.text);
 
+
+
 if(user.user_name != ""){
 
 
@@ -90,24 +92,13 @@ if(user.user_name != ""){
   }
  
 
-  
+bool valuefirst = false;  
+
   @override
   Widget build(BuildContext context) {
-        return FutureBuilder(
-        future: getUserFromServer(company),
-        builder: (context, dataSnapshot) {
-          List<Widget> children;
-          if (dataSnapshot.connectionState == ConnectionState.waiting) {
-           return globalmethods.loadingScreen();
-          } else {
-            if (dataSnapshot.error != null) {
-              return Center(
-                child: Text('An error occured'),
-              );
-            } else {
-              final data = dataSnapshot.data as List<User>;
-              for(int i = 0; i<data.length; i++){
-              }
+     bool pwdVisibility = false;
+
+
     return Scaffold(
       appBar: AppBar(
     
@@ -145,25 +136,84 @@ if(user.user_name != ""){
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              TextFormField(
-                autofocus: false,
-                cursorColor: Theme.of(context).colorScheme.secondary,
-                keyboardType: TextInputType.text,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
-                decoration: InputDecoration(
-                  hintText: 'User-Code eingeben',
-                  hintStyle: TextStyle(
-                    color: Colors.white,
-                  ),
-                  contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(32.0)),
-                  fillColor: Theme.of(context).colorScheme.secondary,
-                ),
-                controller: userCodeController,
-              ),
+                     TextFormField(
+      controller: userCodeController,
+      obscureText: !pwdVisibility,
+      decoration: InputDecoration(
+        hintText: "User-Code",
+
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.white,
+            width: 1,
+          ),
+          borderRadius: BorderRadius.circular(25.0),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.red,
+            width: 1,
+          ),
+          borderRadius: BorderRadius.circular(25.0),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.red,
+            width: 1,
+          ),
+          borderRadius: BorderRadius.circular(25.0),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.white,
+            width: 1,
+          ),
+          borderRadius: BorderRadius.circular(25.0),
+        ),
+        suffixIcon: InkWell(
+          onTap: () => setState(
+            () => pwdVisibility = !pwdVisibility,
+          ),
+          child: Icon(
+            pwdVisibility
+                ? Icons.visibility_outlined
+                : Icons.visibility_off_outlined,
+            color: Colors.white,
+            size: 18,
+          ),
+        ),
+      ),
+      validator: (val) {
+        if (val!.isEmpty) {
+          return 'Required';
+        }
+        return null;
+      },
+    ),
+            SizedBox(height: 10),
+                 
+                 
+             
+                        /** Checkbox Widget **/
+                        SizedBox(height: 40 ,child:
+                          CheckboxListTile(  
+    
+                  title: const Text('Angemeldet bleiben'),  
+           
+                  value: this.valuefirst,  
+                  onChanged: (value) {  
+                        setState(() {  
+                    if(valuefirst){
+                      valuefirst = false;
+                    }
+                    else{
+                      valuefirst = true;
+                    }
+                        });  
+                  },  
+                ),  
+                   
+                    ), 
        
               SizedBox(
                 height: 300,
@@ -175,8 +225,7 @@ if(user.user_name != ""){
       ),
     );
   }
-          }});}
-
+          
 }
 
 getUserFromServer(Company company) async {
