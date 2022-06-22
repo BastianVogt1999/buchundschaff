@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:itm_ichtrinkmehr_flutter/global_methods.dart';
 import 'package:lottie/lottie.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_user/timer/stopwatchv2.dart';
-import 'package:itm_ichtrinkmehr_flutter/actions_user/timer/switch_time.dart';
+
 import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/statistic.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
@@ -21,6 +21,8 @@ InsertStatements insertStatements = InsertStatements();
 Statistic statistic = Statistic.empty();
 UpdateStatements updateStatements = UpdateStatements();
 GlobalMethods globalmethods = GlobalMethods();
+
+int doubleChecker = 0;
 
 class Timer_main extends StatefulWidget {
   
@@ -42,12 +44,14 @@ class _Timer_mainState extends State<Timer_main> {
   User user;
   Company company;
 
+List<User> currentWorker = [];
   _Timer_mainState(this.user, this.company);
 
   String timerStart = "00:00:00";
   String startcopy = "00:00:00";
   final _formatter = DateFormat('HH:mm:ss');
   final _formatterDate = DateFormat('dd:MM:yyyy');
+
 
   @override
   void initState() {
@@ -94,21 +98,76 @@ class _Timer_mainState extends State<Timer_main> {
           timerStart = startcopy;
         }
       });*/
-      print("User input");
+     
+
       statistic.startTime = timerStart;
       statistic.date = _formatterDate.format(DateTime.now());
+
+      if(doubleChecker == 0){
+
+      
       statistic.statistic_id =
           insertStatements.insertNewStatistic(company, user, statistic);
+
+doubleChecker++;
+          }
     }
     statistic.startTime = timerStart;
   }
 
-  
 
   @override
   Widget build(BuildContext context) {
+
+currentWorker.add(user);
+Widget addUserDisplay =  Container(height: 200, child:
+                  ListView.builder(
+                              itemCount: currentWorker.length,
+                    padding: EdgeInsets.all(5),
+
+      itemBuilder: (BuildContext context, int index) {
+        return
+         Column(children: [
+Container(
+  
+
+          height: 60,
+          color: Colors.white,
+          child:
+         
+           ListTile(
     
-print("controllerMain: " + streamController.toString());
+          leading: Icon(Icons.verified_user),
+
+          title: Text(currentWorker[index].user_name),
+       
+          trailing: 
+          Column(
+            
+            children:  [
+              IconButton(onPressed: (){}, icon: Icon(Icons.add),),
+                IconButton(onPressed: (){
+                  currentWorker.remove(index);
+                setState(() {
+             
+                  }
+
+                  );
+                }, icon: Icon(Icons.delete),),
+              
+             
+            ],
+          ),
+          
+           )),
+        
+                    SizedBox(height:10), ],);
+                  
+      }),
+);
+          
+        
+
     return FutureBuilder(
         future: _getStatsFromServer(user, company),
         builder: (context, dataSnapshot) {
@@ -122,15 +181,14 @@ print("controllerMain: " + streamController.toString());
               );
             } else {
               final data = dataSnapshot.data as Statistic;
-
               return SizedBox(
                 height: double.infinity,
                 child: Column(children: [
                   Divider(height: 20),
-                  SizedBox(
-                    height: 355,
-                    child: TabBarAndTabViews(timeSwitchFunction: setStartTime),
-                  ),
+
+                addUserDisplay,
+
+                Divider(height: 20),
                   SizedBox(
                       height: 80,
                       child: Scaffold(
