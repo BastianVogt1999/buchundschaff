@@ -7,6 +7,23 @@ import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
 
 class SelectStatements {
 
+  Future<List<String>> selectUserOfStat(String statistic_id, Company company ) async {
+    List<String> userList = <String>[];
+
+      await FirebaseFirestore.instance.collection(
+        '/AllProjects/' + company.company_name + '/StatisticsInProject' + statistic_id + "User")
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      for (var doc in querySnapshot.docs) {
+        
+        userList.add(doc["user_name"]);
+      }
+    });
+
+    return userList;
+  }
+
+
   Future<Company> selectCompany(String companyCode) async {
         Company company = Company.empty();
 
@@ -204,5 +221,7 @@ return company;
     });
 return user;
   }
+
+  
 }
 

@@ -39,7 +39,7 @@ class InsertStatements {
     });
   }
 
-  insertNewStatistic(Company company, User user, Statistic statistic) {
+  insertNewStatistic(Company company, List<User> userList, Statistic statistic) {
     var databaseUser = FirebaseFirestore.instance.collection(
         '/AllProjects/' + company.company_name + '/StatisticsInProject');
 
@@ -67,9 +67,12 @@ class InsertStatements {
         statisticId.toString() +
         '/User');
 
-    database.doc(user.user_name).set({
-      'user_name': user.user_name,
+for(int i = 0; i<userList.length; i++){
+    database.doc(userList[i].user_name).set({
+      'user_name': userList[i].user_name,
     });
+
+}
     return statisticId.toString();
   }
 }
