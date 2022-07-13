@@ -10,8 +10,7 @@ import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/statistic.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
 
-  StreamController<String> streamControllerUserInput =StreamController<String>();
- Stream stream = streamControllerUserInput.stream.asBroadcastStream();
+
 
 class ContainerUser extends StatefulWidget {
   final User user;

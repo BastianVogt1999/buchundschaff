@@ -39,7 +39,7 @@ class InsertStatements {
     });
   }
 
-  insertNewStatistic(Company company, User user, Statistic statistic) {
+  insertNewStatistic(Company company, List<User> userList, Statistic statistic) {
     var databaseUser = FirebaseFirestore.instance.collection(
         '/AllProjects/' + company.company_name + '/StatisticsInProject');
 
@@ -51,7 +51,6 @@ class InsertStatements {
         .set(
           {
             'statistic_id': statisticId.toString(),
-            'user_name': user.user_name,
             'startTime': statistic.startTime,
             'endTime': statistic.endTime,
             'countedTime': statistic.countedTime,
@@ -62,6 +61,18 @@ class InsertStatements {
         .then((value) => print("Stat Added"))
         .catchError((error) => print("Failed to add user: $error"));
 
+    var database = FirebaseFirestore.instance.collection('/AllProjects/' +
+        company.company_name +
+        '/StatisticsInProject/' +
+        statisticId.toString() +
+        '/User');
+
+for(int i = 0; i<userList.length; i++){
+    database.doc(userList[i].user_name).set({
+      'user_name': userList[i].user_name,
+    });
+
+}
     return statisticId.toString();
   }
 }

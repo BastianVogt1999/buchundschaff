@@ -7,6 +7,7 @@ import 'package:itm_ichtrinkmehr_flutter/values/statistic.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
 import 'package:itm_ichtrinkmehr_flutter/web_db/delete_statements.dart';
 import 'package:itm_ichtrinkmehr_flutter/web_db/select_statements.dart';
+import 'package:lottie/lottie.dart';
 
 SelectStatements selectStatements = SelectStatements();
 DeleteStatements deleteStatements = DeleteStatements();
@@ -108,7 +109,7 @@ class _Stats_mainState extends State<Stats_main> {
                         onPressed: () {
                           deleteStatements.deleteStatistic(
                               company, user, statistic);
-                          print("delete");
+               
                           updateWidget();
                         }),
                   ),
@@ -125,8 +126,8 @@ class _Stats_mainState extends State<Stats_main> {
                           showDialog<Dialog>(
                               context: context,
                               builder: (BuildContext context) =>
-                                  EditStats(statistic));
-                          print("details");
+                                  EditStats(statistic, user, company));
+       
                         }),
                   ),
                 ]))
@@ -134,24 +135,20 @@ class _Stats_mainState extends State<Stats_main> {
     }
 
     widgetBuilded = FutureBuilder(
-      builder: (context, snapshot) {
-// Checking if future is resolved
-        if (snapshot.connectionState == ConnectionState.done) {
-// If we got an error
-          if (snapshot.hasError) {
-            return Center(
-              child: Text(
-                '${snapshot.error} while getting drinks occured',
-                style: TextStyle(fontSize: 18),
-              ),
-            );
+        future: _getStatsFromServer(company, user),
+        builder: (context, dataSnapshot) {
+          List<Widget> children;
+          if (dataSnapshot.connectionState == ConnectionState.waiting) {
+               return globalmethods.loadingScreen();
+          } else {
+            if (dataSnapshot.error != null) {
+              return Center(
+                child: Text('An error occured'),
+              );
+            } else {
 
-// if we got our data
-          } else if (snapshot.hasData) {
-// Extracting data from snapshot object
-            final data = snapshot.data as List<Statistic>;
-
-            return Scrollbar(
+                  final data = dataSnapshot.data as List<Statistic>;
+    return  Scrollbar(
                 child: ListView.builder(
                     itemCount: data.length,
                     padding: EdgeInsets.all(5),
@@ -164,18 +161,14 @@ class _Stats_mainState extends State<Stats_main> {
                             data[index],
                           ));
                     }));
+            }
           }
-        }
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      },
-      future: _getStatsFromServer(
-          Company("testCompany 2204", "1234"), User("Dieter", "1234", "false")),
-    );
+        });
+      
+    
 
     return widgetBuilded;
-  }
+  
 }
 
 _getStatsFromServer(
@@ -186,6 +179,7 @@ _getStatsFromServer(
     List<Statistic> allDrinks =
         await selectStatements.selectStatsOfUserOnDate(user, company);
 
+
     return allDrinks;
   } catch (Exception) {
     print("Error while getting Data");
@@ -193,3 +187,7 @@ _getStatsFromServer(
 }
 
 deleteStatistic(User user, Statistic statistic, BuildContext context) {}
+
+}
+
+

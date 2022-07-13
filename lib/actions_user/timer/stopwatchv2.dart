@@ -44,6 +44,7 @@ class _StopwatchPageState extends State<StopwatchPage> {
 
   _StopwatchPageState(
       this.streamSetStartTime, this.user, this.company, this.statisticInput);
+      
   @override
   void initState() {
     super.initState();
@@ -61,7 +62,19 @@ class _StopwatchPageState extends State<StopwatchPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Statistic data = await _getStatsFromServer(user, company);
+    //if Timer is already running
+    if (statisticInput.isrunning != "") {
+      buttonIndex = 1;
+      setState(() {
+        buttonIndex = 1;
+      });
+    }
+    else{
+       buttonIndex = 0;
+      setState(() {
+        buttonIndex = 0;
+      });
+    }
 
     List<IconValues> buttonIcons = [
       IconValues(Icons.play_circle, 0, Colors.green),
@@ -74,9 +87,11 @@ class _StopwatchPageState extends State<StopwatchPage> {
 
     _StartStopButton(Statistic statistic) {
       //switch button index: 0 (not running)
+
+      
       if (buttonIndex == 0) {
         //Veränderung Button
-
+    buttonIndex = 1;
         print("Timer started");
         setState(() {
           buttonIndex = 1;
@@ -87,7 +102,7 @@ class _StopwatchPageState extends State<StopwatchPage> {
           NowTime = DateTime.now().millisecondsSinceEpoch.toInt();
           RunState = 1;
         });
-        streamSetStartTime.add(UpdateableStatistic(0, statistic));
+     //   streamSetStartTime.add(UpdateableStatistic(0, statistic));
       } else {
         print("Timer stopped");
         //Veränderung Button
@@ -101,7 +116,7 @@ class _StopwatchPageState extends State<StopwatchPage> {
           StartTime = 0;
           NowTime = 0;
         });
-        streamSetStartTime.add(UpdateableStatistic(1, statistic));
+    //   streamSetStartTime.add(UpdateableStatistic(1, statistic));
       }
     }
 
@@ -122,13 +137,7 @@ class _StopwatchPageState extends State<StopwatchPage> {
       );
     }
 
-//if Timer is already running
-    if (statistic.user_name != "") {
-      buttonIndex = 1;
-      setState(() {
-        buttonIndex = 1;
-      });
-    }
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
