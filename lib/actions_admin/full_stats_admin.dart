@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:itm_ichtrinkmehr_flutter/global_methods.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/statistic.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
 import 'package:itm_ichtrinkmehr_flutter/web_db/delete_statements.dart';
 import 'package:itm_ichtrinkmehr_flutter/web_db/select_statements.dart';
 
+import '../actions_user/show_stats/popup_edit_stat.dart';
+import '../actions_user/show_stats/popup_full_stats.dart';
+import '../actions_user/show_stats/stats_main.dart';
+
 SelectStatements selectStatements = SelectStatements();
 DeleteStatements deleteStatements = DeleteStatements();
+GlobalMethods globalMethods = GlobalMethods();
 
 class FullStatsAdmin extends StatefulWidget {
   FullStatsAdmin(this.user, this.company);
@@ -21,69 +27,210 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
   Company company;
 
   _FullStatsAdminState(this.user, this.company);
+
+List <Statistic> currentStats = [];
   Widget widgetBuilded = Container();
   updateWidget() {
+    
     setState(() {
-      widgetBuilded = widgetBuilded;
+      currentStats = currentStats;
     });
   }
 
+List<Category> spaltenNamen = [
+   Category("Startzeit", true),
+   Category("Endzeit", false),
+   Category("Datum", false),
+   Category("Zeitspanne", false),
+
+];
+
   @override
   Widget build(BuildContext context) {
+
     Widget CustomListTile(
       User user,
       Company company,
       Statistic statistic,
+      int index,
     ) {
       Color color = const Color(0xFF4338CA);
-      return Card(
-        child: ListTile(
-            title: Column(children: [
-              Text("Datum: " + statistic.date),
-              Divider(),
-              Text("Name: " + user.user_name),
-              Divider(),
-              Text("Uhrzeit: " + statistic.startTime),
-              Divider(),
-              Text("Kommentar: " + statistic.endTime),
-            ]),
-            trailing: IconButton(
-              onPressed: () {
-                deleteStatistic(company, user, statistic);
-                updateWidget();
-              },
-              icon: Icon(Icons.more_vert),
-            )),
-        elevation: 8,
-        shadowColor: Colors.green,
-        margin: EdgeInsets.all(20),
-        shape: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(color: Colors.green, width: 1)),
-      );
+      return Container(
+          height: 80,
+          color: Colors.white,
+          child: Row(children: [
+            SizedBox(
+                width: (MediaQuery.of(context).size.width / 10) * 3,
+                child: Center(
+                    child: Column(children: const [
+                  SizedBox(height: 5),
+                  Text(
+                    "Startzeit: ",
+                    textScaleFactor: 1,
+                  ),
+                  Text(
+                    "Stoppzeit: ",
+                    textScaleFactor: 1,
+                  ),
+                  Text(
+                    "Zeitspanne: ",
+                    textScaleFactor: 1,
+                  )
+                ]))),
+            SizedBox(
+                width: (MediaQuery.of(context).size.width / 10) * 2,
+                child: Center(
+                    child: Column(children: [
+                  SizedBox(height: 5),
+                  Text(
+                    statistic.startTime,
+                    textScaleFactor: 1,
+                  ),
+                  Text(
+                    statistic.endTime,
+                    textScaleFactor: 1,
+                  ),
+                  Text(
+                   globalMethods.outputCountedTime(statistic.countedTime),
+                    textScaleFactor: 1,
+                  )
+                ]))),
+            SizedBox(
+                width: (MediaQuery.of(context).size.width / 10) * 4,
+                child: Row(children: [
+                  CircleAvatar(
+                    radius: 20,
+                    backgroundColor: Colors.amber,
+                    child: IconButton(
+                        color: Colors.black,
+                        padding: const EdgeInsets.all(2),
+                        iconSize: 20,
+                        icon: const Icon(Icons.edit),
+                        onPressed: () {
+                              showDialog<Dialog>(
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  EditStats(statistic, user, company));
+                        }),
+                  ),
+                  SizedBox(width: 10),
+                  CircleAvatar(
+                    radius: 20,
+                    backgroundColor: Colors.amber,
+                    child: IconButton(
+                        color: Colors.black,
+                        padding: const EdgeInsets.all(2),
+                        iconSize: 20,
+                        icon: const Icon(Icons.delete),
+                        onPressed: () async {
+                        await  deleteStatements.deleteStatistic(
+                              company, user, statistic);
+               
+                          currentStats.removeAt(index);
+                          updateWidget();
+                        }),
+                  ),
+                  SizedBox(width: 10),
+                  CircleAvatar(
+                    radius: 20,
+                    backgroundColor: Colors.amber,
+                    child: IconButton(
+                        color: Colors.black,
+                        padding: const EdgeInsets.all(2),
+                        iconSize: 20,
+                        icon: const Icon(Icons.menu),
+                        onPressed: () {
+                          showDialog<Dialog>(
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  FullStats(statistic));
+       
+                        }),
+                  ),
+                ]))
+          ]));
     }
 
+
+Widget spaltenCards(Category category){
+
+return Container(height: 50,color: category.isSelected
+                      ? Colors.white
+                      : Colors.black, width: MediaQuery.of(context).size.width/spaltenNamen.length, child:
+   OutlinedButton(
+    
+        onPressed: () {
+
+
+currentStats.sort((a, b) => a.countedTime.length.compareTo(b.countedTime.length));
+updateWidget();
+
+
+          setState(() {
+            
+         
+          for(int i = 0; i<spaltenNamen.length; i++){
+              if(spaltenNamen[i].title != category.title){
+                  spaltenNamen[i].isSelected = false;
+              }
+category.isSelected = true;
+          }
+           });
+
+  
+                      
+        },
+     child: Text(category.title,
+              style: TextStyle(
+                  color: category.isSelected
+                      ? Colors.black
+                      : Colors.grey)),
+
+       
+        style: ButtonStyle(
+      
+   
+            padding: MaterialStateProperty.all(
+                EdgeInsets.symmetric(vertical:  10, horizontal: 5)),
+            shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(2))))),
+      ) );
+  }
     widgetBuilded = FutureBuilder(
-      builder: (context, snapshot) {
-// Checking if future is resolved
-        if (snapshot.connectionState == ConnectionState.done) {
-// If we got an error
-          if (snapshot.hasError) {
-            return Center(
-              child: Text(
-                '${snapshot.error} while getting drinks occured',
-                style: TextStyle(fontSize: 18),
-              ),
-            );
+        future: _getStatsFromServer(company, user),
+        builder: (context, dataSnapshot) {
+          List<Widget> children;
+          if (dataSnapshot.connectionState == ConnectionState.waiting) {
+               return globalMethods.loadingScreen(context);
+          } else {
+            if (dataSnapshot.error != null) {
+              return Center(
+                child: Text('An error occured'),
+              );
+            } else {
 
-// if we got our data
-          } else if (snapshot.hasData) {
-// Extracting data from snapshot object
-            final data = snapshot.data as List<Statistic>;
+                  currentStats  = dataSnapshot.data as List<Statistic>;
+                  
+    return  Container(height:MediaQuery.of(context).size.height, child:
+    Column(children: [
+        Container(height:50,color: Colors.black, child:
+        Row(children: [
+            spaltenCards(spaltenNamen[0]),
+            spaltenCards(spaltenNamen[1]),
+            spaltenCards(spaltenNamen[2]),
+            spaltenCards(spaltenNamen[3]),
+        ],),),
 
-            return Scrollbar(
+
+
+ 
+
+Container(height:MediaQuery.of(context).size.height-200, child:
+
+    Scrollbar(
+      
                 child: ListView.builder(
-                    itemCount: data.length,
+                    itemCount: currentStats.length,
                     padding: EdgeInsets.all(5),
                     itemBuilder: (BuildContext context, int index) {
                       return Container(
@@ -91,21 +238,20 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
                           child: CustomListTile(
                             user,
                             company,
-                            data[index],
+                            currentStats[index],
+                            index
                           ));
-                    }));
+                    })),
+    )],))
+                    ;
+            }
           }
-        }
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      },
-      future: _getStatsFromServer(
-          Company("testCompany 2204", "1234"), User("Dieter", "1234", "false")),
-    );
+        });
+      
+    
 
     return widgetBuilded;
-  }
+  
 }
 
 _getStatsFromServer(
@@ -113,7 +259,9 @@ _getStatsFromServer(
   User user,
 ) async {
   try {
-    List<Statistic> allDrinks = await selectStatements.selectAllStats(company);
+    List<Statistic> allDrinks =
+        await selectStatements.selectAllStats(company);
+
 
     return allDrinks;
   } catch (Exception) {
@@ -121,6 +269,8 @@ _getStatsFromServer(
   }
 }
 
-deleteStatistic(Company company, User user, Statistic statistic) {
-  deleteStatements.deleteStatistic(company, user, statistic);
+deleteStatistic(User user, Statistic statistic, BuildContext context) {}
+
 }
+
+

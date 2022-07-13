@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_user/day_stats.dart';
+import 'package:itm_ichtrinkmehr_flutter/actions_user/messages_user.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_user/show_stats/stats_main.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_user/timer/timer_main.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_user/user_menu.dart';
@@ -46,8 +47,9 @@ class _ContainerUserState extends State<ContainerUser> {
   Widget build(BuildContext context) {
     final List _pages = [
       Timer_main(user, company),
-      //DayStats(),
+
       Stats_main(user, company),
+      MessagesUser(company, user),
     ];
 
     return Scaffold(
@@ -81,7 +83,7 @@ class _ContainerUserState extends State<ContainerUser> {
           ),
           Container(
             height: 50,
-            alignment: Alignment.bottomCenter,
+            alignment: Alignment.bottomRight,
             child: HomeButton(
               context,
               user,

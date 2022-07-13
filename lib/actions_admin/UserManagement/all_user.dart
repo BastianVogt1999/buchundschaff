@@ -36,7 +36,7 @@ class _allUserState extends State<allUser> {
         if (snapshot.connectionState == ConnectionState.done) {
 // If we got an error
           if (snapshot.connectionState == ConnectionState.waiting) {
-             return globalmethods.loadingScreen();
+             return globalmethods.loadingScreen(context);
           } else if (snapshot.hasData) {
 // Extracting data from snapshot object
             final data = snapshot.data as List<User>;

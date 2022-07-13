@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_admin/admin_menu.dart';
+import 'package:itm_ichtrinkmehr_flutter/actions_admin/send_messages.dart';
 import 'package:itm_ichtrinkmehr_flutter/common_actions/home_button.dart';
 import 'package:itm_ichtrinkmehr_flutter/intro/unternehmens_eingabe.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
@@ -47,6 +48,7 @@ class _ContainerAdminState extends State<ContainerAdmin> {
   DayStatsAdmin(),
   FullStatsAdmin(user, company),
   UserManagement(company),
+  SendMessages(company, user),
 ];
 
     return Scaffold(
@@ -72,10 +74,10 @@ class _ContainerAdminState extends State<ContainerAdmin> {
             ),
           ),
           child: Column(children: [
-            SizedBox(height: 600, child: _pages[selectedIndex]),
+            SizedBox(height: 650, child: _pages[selectedIndex]),
             Container(
               height: 50,
-              alignment: Alignment.bottomCenter,
+              alignment: Alignment.bottomRight,
               child: HomeButton(context, user, company),
             ),
           ]),

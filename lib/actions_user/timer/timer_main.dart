@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import "package:intl/intl.dart";
-
+import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:flutter/material.dart';
+import 'package:itm_ichtrinkmehr_flutter/actions_user/timer/stopwatch.dart';
 import 'package:itm_ichtrinkmehr_flutter/global_methods.dart';
+import 'package:itm_ichtrinkmehr_flutter/web_db/select_statements.dart';
 import 'package:lottie/lottie.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_user/timer/stopwatchv2.dart';
 
@@ -13,16 +15,25 @@ import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
 import 'package:itm_ichtrinkmehr_flutter/web_db/insert_statements.dart';
 import 'package:itm_ichtrinkmehr_flutter/web_db/update_statements.dart';
 
-StreamController<UpdateableStatistic> streamController =
-    StreamController<UpdateableStatistic>();
-Stream stream = streamController.stream.asBroadcastStream();
 
 InsertStatements insertStatements = InsertStatements();
 Statistic statistic = Statistic.empty();
 UpdateStatements updateStatements = UpdateStatements();
+SelectStatements selectStatements = SelectStatements();
 GlobalMethods globalmethods = GlobalMethods();
-
+bool timeAlreadyRunning = false;
 int doubleChecker = 0;
+ bool running = false;
+
+
+class IconValues {
+  IconData icon_value;
+  int itemIndex;
+
+  Color color;
+  IconValues(this.icon_value, this.itemIndex, this.color);
+}
+
 
 class Timer_main extends StatefulWidget {
   User user;
@@ -35,36 +46,51 @@ class Timer_main extends StatefulWidget {
 }
 
 class _Timer_mainState extends State<Timer_main> {
-  bool flag = true;
-  late Stream<int> timerStream;
-  late StreamSubscription<int> timerSubscription;
+
   User user;
   Company company;
+
 
   List<User> currentWorker = [];
   _Timer_mainState(this.user, this.company);
 
   String timerStart = "00:00:00";
   String startcopy = "00:00:00";
-  final _formatter = DateFormat('HH:mm:ss');
   final _formatterDate = DateFormat('dd:MM:yyyy');
 
   bool firstStarted = true;
+     
+
+  final _formatter = DateFormat('HH:mm:ss');
+    var StartTime = 0;
+  var NowTime = 0;
+late StopWatchTimer _stopWatchTimer;
+ var displayTime = "00:00:00";
+
 
 List<User> allUser = [];
-  @override
-  void initState() {
-    super.initState();
 
-    stream.listen((UpdateableStatistic) {
-      setTimeAtStart(
-          UpdateableStatistic.index, UpdateableStatistic.updateableStatistic);
-    });
+ @override
+  void initState() {
+    _stopWatchTimer = StopWatchTimer(
+  mode: StopWatchMode.countUp,
+  onChange: (value) => displayTime = StopWatchTimer.getDisplayTime(value),
+  onChangeRawSecond: (value) => print('onChangeRawSecond $value'),
+  onChangeRawMinute: (value) => print('onChangeRawMinute $value'),
+);
+    super.initState();
+  }
+
+  @override
+  void dispose() async {
+    super.dispose();
+    await _stopWatchTimer.dispose();  // Need to call dispose function.
   }
 
   setStartTime(String startTime) {
     startcopy = startTime;
   }
+
 
   setTimeAtStart(int d, Statistic updateableStatistic) async {
     if (d == 1) {
@@ -78,15 +104,15 @@ List<User> allUser = [];
       //final difference = begin.difference(end).inSeconds;
       // statistic.countedTime = difference.toString();
       updateStatements.updateStatisticState(company, user, statistic);
-      setState(() {
+      /*setState(() {
         timerStart = "00:00:00";
         startcopy = "00:00:00";
-      });
+      });*/
+
+      doubleChecker = 0;
     }
-    if (d == 0) {
-      setState(() {
-        timerStart = _formatter.format(DateTime.now());
-      });
+    else if (d == 0) {
+
       timerStart = _formatter.format(DateTime.now());
       /*setState(() {
         if (startcopy == "00:00:00") {
@@ -95,6 +121,11 @@ List<User> allUser = [];
           timerStart = startcopy;
         }
       });*/
+      if (startcopy == "00:00:00") {
+          timerStart = _formatter.format(DateTime.now());
+        } else {
+          timerStart = startcopy;
+        }
 
       statistic.startTime = timerStart;
       statistic.date = _formatterDate.format(DateTime.now());
@@ -106,18 +137,134 @@ List<User> allUser = [];
         doubleChecker++;
       }
     }
+
+
     statistic.startTime = timerStart;
   }
 
   @override
   Widget build(BuildContext context) {
+   
+    timeAlreadyRunning = false;
+  
+  String formatTime(String formatTime){
+    int time = int.parse(formatTime);
+    if(time<=60){
+      int seconds = time%60;
+      if(seconds.toString().length > 1){
+return "00:00"+ ":"+formatTime;
+      }
+      else{
+        return "00:00"+ ":0"+formatTime;
+      }
+      
+    }
+    else if(time<=3600){
+      int minute = time~/60;
+      int seconds = time%60;
+      if(minute.toString().length > 1 && seconds.toString().length > 1){
+return "00:"+ minute.toString() + ":" + seconds.toString();
+      }
+      else if(minute.toString().length == 1 && seconds.toString().length > 1){
+return "00:0"+ minute.toString() + ":" + seconds.toString();
+      }
+         else if(minute.toString().length > 1 && seconds.toString().length == 1){
+return "00:"+ minute.toString() + ":0" + seconds.toString();
+      }
+      else{
+        return "00:"+ minute.toString() + ":" + seconds.toString();
+      }
+      
+    }
+    else if(time>3600){
+       int minute = time~/3600;
+      int seconds = time%3600;
+      int hours = time~/60;
 
+      return hours.toString() + ":" + minute.toString() + ":" + seconds.toString();
+    }
+    return "";
+    
+  }
+    var DiffTime =
+        DateTime.fromMillisecondsSinceEpoch(NowTime - StartTime).toUtc();
+
+    //if Timer is already running
+    
+    /* if (statisticInput.isrunning != "") {
+      buttonIndex = 1;
+      setState(() {
+        buttonIndex = 1;
+      });
+    }
+    else{
+       buttonIndex = 0;
+      setState(() {
+        buttonIndex = 0;
+      });
+    }*/
+
+  
  int _value = 1;
 
 if(firstStarted){
     currentWorker.add(user);
     firstStarted = false;
 }
+    _StartStopButton(Statistic statistic) {
+      //switch button index: 0 (not running)
+
+      if (!running) {
+        
+        print("Timer started");
+       setState(() {
+
+        //Veränderung Button
+
+         running = true;
+        });
+        //Veränderung Text-Status
+      setState(() {  
+          StartTime = DateTime.now().millisecondsSinceEpoch.toInt();
+          NowTime = DateTime.now().millisecondsSinceEpoch.toInt();
+          
+        });
+      _stopWatchTimer.onExecute.add(StopWatchExecute.start);
+        setTimeAtStart(0, statistic);
+      } else {
+        print("Timer stopped");
+        //Veränderung Button
+        
+        setState(() {
+
+        //Veränderung Text-Status
+        running = false;
+          
+          StartTime = 0;
+          NowTime = 0;
+        });
+     _stopWatchTimer.onExecute.add(StopWatchExecute.stop);
+     _stopWatchTimer.onExecute.add(StopWatchExecute.reset);
+       setTimeAtStart(1, statistic);
+      }
+    }
+
+       Widget buttonWidget() {
+      return Container(
+        color: running ? Color.fromARGB(255, 241, 151, 151) : Color.fromARGB(255, 229, 241, 233),
+        height: 50, width: MediaQuery.of(context).size.width, child:
+      GestureDetector(
+        onTap: 
+            () {
+          _StartStopButton(statistic);
+        },
+        child: Icon(
+          running ? Icons.stop_circle : Icons.play_circle_fill,
+          size: 45,
+          color: running ? Colors.red : Colors.green,
+        ),
+      ));
+    }
 
 
   
@@ -127,7 +274,7 @@ if(firstStarted){
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       child: Container(
         width: MediaQuery.of(context).size.width / 1.5,
-        height: MediaQuery.of(context).size.height / 2,
+        height: MediaQuery.of(context).size.height / 2.2,
         decoration: BoxDecoration(
        
             boxShadow: [
@@ -143,7 +290,7 @@ if(firstStarted){
           itemBuilder: (BuildContext context, int index) {
             return Container(
 
-      width: 200,
+      width: MediaQuery.of(context).size.width,
       child: Column(children: [
       AspectRatio(
         aspectRatio: 208 / 71,
@@ -205,14 +352,17 @@ if(firstStarted){
     );
   }
     Widget addUserDisplay = Container(
-      height: 380,
-      child: ListView.builder(
+      height: MediaQuery.of(context).size.height / 2.6,
+      child: 
+   
+             ListView.builder(
           itemCount: currentWorker.length,
           itemBuilder: (BuildContext context, int index) {
-            return Column(
+            return SingleChildScrollView(child:
+            Column(
               children: [
                 Container(
-                    height: 60,
+                    height: MediaQuery.of(context).size.height /13,
                     color: Colors.white,
                     child: ListTile(
                       leading:     IconButton(
@@ -227,61 +377,98 @@ showDialog<Dialog>(context: context, builder: (BuildContext context) => showDial
                           ),
                       title: Row(children: [Text(currentWorker[index].user_name),
                       SizedBox(width: 10),
-                    ]),
+              ]),
                       trailing: 
                           IconButton(
                             iconSize: 30,
                             onPressed: () {
                               currentWorker.removeAt(index);
-                              setState(() {});
+                              setState(() {currentWorker = currentWorker;});
                             },
                             icon: Icon(Icons.delete),
                              color: Colors.red,
-                          ),
+                        ),
             
                     ),
                 ),
-                SizedBox(height: 10),
+                SizedBox(height: MediaQuery.of(context).size.height/ 30),
               ],
-            );
-          }),
-    );
+            ));
+          }));
+           
 
-    return FutureBuilder(
+Widget stopWatch(){
+            return  FutureBuilder(
         future: _getStatsFromServer(user, company),
         builder: (context, dataSnapshot) {
-    List<Widget> children;
-          if (dataSnapshot.connectionState == ConnectionState.waiting) {
-            return globalmethods.loadingScreen();
-          } else {
-            if (dataSnapshot.error != null) {
-              return Center(
-                child: Text('An error occured'),
-              );
-            } else {
-              final data = dataSnapshot.data as Statistic;
-              return SizedBox(
-                height: double.infinity,
-                child: Column(children: [
-                  Divider(height: 20),
-                  FutureBuilder(
-        future: selectStatements.selectAllUserOfCompany(company),
-        builder: (context, dataSnapshot) {
 
           if (dataSnapshot.connectionState == ConnectionState.waiting) {
-            return globalmethods.loadingScreen();
+            return Container();
           } else {
             if (dataSnapshot.error != null) {
               return Center(
                 child: Text('An error occured'),
               );
             } else {
-              allUser = dataSnapshot.data as List<User>;
-              return addUserDisplay;
-            }}}),
+          
+                  return      SizedBox(
+                    height: 150,
+                    child:  Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+      StreamBuilder<int>(
+  stream: _stopWatchTimer.secondTime,
+  initialData: 0,
+  builder: (context, snap) {
+    final value = snap.data;
+    print('Listen every minute. $value');
+    return Column(
+      children: <Widget>[
+        Padding(
+            padding: const EdgeInsets.all(8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+              
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: Text(
+                    formatTime(value.toString()),
+                    
+                    style: TextStyle(
+                        fontSize: 30,
+                        fontFamily: 'Helvetica',
+                        fontWeight: FontWeight.bold
+                    ),
+                  ),
+                ),
+              ],
+            )
+        ),
+      ],
+    );
+  },
+),
+        SizedBox(height: 10),
+
+        
+      ],
+    )
+                  );
+                 }}});
+}
+
+//main Frontend
+
+              return SizedBox(
+                height: MediaQuery.of(context).size.height,
+                child: Column(children: [
+                  Divider(height: 20),
+    addUserDisplay,
                   Divider(height: 20),
                   SizedBox(
-                      height: 80,
+                      height: MediaQuery.of(context).size.height / 8,
                       child: Scaffold(
                           body: Center(
                               child: Column(
@@ -297,24 +484,22 @@ showDialog<Dialog>(context: context, builder: (BuildContext context) => showDial
                           )
                         ],
                       )))),
-                  SizedBox(
-                    height: 150,
-                    child: StopwatchPage(streamController, user, company, data),
-                  ),
+                          
+        stopWatch(),
+          buttonWidget(),
                 ]),
               );
             }
-          }
-        });
-  }
-}
 
 _getStatsFromServer(User user, Company company) async {
   try {
     Statistic stat = await selectStatements.selectStatOfUserO(user, company);
+    allUser = await selectStatements.selectAllUserOfCompany(company);
+    if(stat.isrunning == "true"){}
+    timeAlreadyRunning = true;
 
-    return stat;
   } catch (Exception) {
     print("Error while getting Data");
   }
+}
 }

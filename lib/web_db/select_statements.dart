@@ -2,6 +2,7 @@ import "package:intl/intl.dart";
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_user/timer/timer_main.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
+import 'package:itm_ichtrinkmehr_flutter/values/message.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/statistic.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
 
@@ -222,6 +223,29 @@ return company;
 return user;
   }
 
+  Future<List<Message>> selectAllMessages(Company company) async {
+    List<Message> messageList = <Message>[];
+
+    await FirebaseFirestore.instance
+        .collection(
+            '/AllProjects/' + company.company_name + '/Messages')
+        .orderBy("date")
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      for (var doc in querySnapshot.docs) {
+        Message value = Message.empty();
+        value.message_id= doc["message_id"];
+        value.user_name = doc["user_name"];
+        value.message_text = doc["message_text"];
+        value.date = doc["date"];
+        value.time = doc["time"];
+
+        messageList.add(value);
+      }
+    });
+
+    return messageList;
+  }
   
 }
 

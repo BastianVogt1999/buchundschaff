@@ -5,6 +5,8 @@ import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/statistic.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
 
+import '../values/message.dart';
+
 class InsertStatements {
   void insertNewUser(Company company, User user) {
     var databaseUser = FirebaseFirestore.instance
@@ -67,12 +69,35 @@ class InsertStatements {
         statisticId.toString() +
         '/User');
 
+
 for(int i = 0; i<userList.length; i++){
+  print(userList[i].user_name);
     database.doc(userList[i].user_name).set({
       'user_name': userList[i].user_name,
     });
 
 }
     return statisticId.toString();
+  }
+
+    void insertNewMessage(Company company, Message message) {
+    var databaseUser = FirebaseFirestore.instance
+        .collection('/AllProjects/' + company.company_name + '/Messages');
+
+    Random random = Random();
+    int messageId = random.nextInt(10000);
+    databaseUser
+        .doc(messageId.toString())
+        .set(
+          {
+            'message_id':messageId.toString(),
+            'user_name': message.user_name,
+            'message_text': message.message_text,
+            'date': message.date,
+            'time': message.time,
+          },
+        )
+        .then((value) => print("User Added"))
+        .catchError((error) => print("Failed to add user: $error"));
   }
 }

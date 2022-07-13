@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_admin/container_admin.dart';
+import 'package:itm_ichtrinkmehr_flutter/actions_admin/send_messages.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_user/container_user.dart';
+import 'package:itm_ichtrinkmehr_flutter/actions_user/messages_user.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_user/show_stats/stats_main.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_user/timer/timer_main.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
@@ -42,6 +44,8 @@ class UserMenuState extends State<UserMenu> {
       Timer_main(user, company),
       //DayStats(),
       Stats_main(user, company),
+      MessagesUser(company, user),
+   
     ];
 
     return Drawer(
@@ -80,12 +84,12 @@ class UserMenuState extends State<UserMenu> {
                   MenuItem(
                     text: 'Benachrichtigungen',
                     icon: Icons.notifications_outlined,
-                    onClicked: () => onItemTapped(3),
+                    onClicked: () => onItemTapped(2),
                   ),
                   MenuItem(
                     text: 'Einstellungen',
                     icon: Icons.settings,
-                    onClicked: () => onItemTapped(4),
+                    onClicked: () => onItemTapped(3),
                   ),
                   Divider(color: Colors.white70),
                   const SizedBox(height: 8),

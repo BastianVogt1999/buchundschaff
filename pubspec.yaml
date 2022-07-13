@@ -49,6 +49,7 @@ dependencies:
   fluttertoast: ^8.0.8
 
   jiffy: ^5.0.0
+  stop_watch_timer: ^1.5.0
 
   image_picker: ^0.8.0+4
 

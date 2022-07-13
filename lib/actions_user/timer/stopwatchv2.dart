@@ -63,7 +63,8 @@ class _StopwatchPageState extends State<StopwatchPage> {
   @override
   Widget build(BuildContext context) {
     //if Timer is already running
-    if (statisticInput.isrunning != "") {
+    
+    /* if (statisticInput.isrunning != "") {
       buttonIndex = 1;
       setState(() {
         buttonIndex = 1;
@@ -74,7 +75,7 @@ class _StopwatchPageState extends State<StopwatchPage> {
       setState(() {
         buttonIndex = 0;
       });
-    }
+    }*/
 
     List<IconValues> buttonIcons = [
       IconValues(Icons.play_circle, 0, Colors.green),
@@ -88,7 +89,6 @@ class _StopwatchPageState extends State<StopwatchPage> {
     _StartStopButton(Statistic statistic) {
       //switch button index: 0 (not running)
 
-      
       if (buttonIndex == 0) {
         //Veränderung Button
     buttonIndex = 1;
@@ -102,7 +102,7 @@ class _StopwatchPageState extends State<StopwatchPage> {
           NowTime = DateTime.now().millisecondsSinceEpoch.toInt();
           RunState = 1;
         });
-     //   streamSetStartTime.add(UpdateableStatistic(0, statistic));
+        streamSetStartTime.add(UpdateableStatistic(0, statistic));
       } else {
         print("Timer stopped");
         //Veränderung Button
@@ -116,7 +116,7 @@ class _StopwatchPageState extends State<StopwatchPage> {
           StartTime = 0;
           NowTime = 0;
         });
-    //   streamSetStartTime.add(UpdateableStatistic(1, statistic));
+       streamSetStartTime.add(UpdateableStatistic(1, statistic));
       }
     }
 

@@ -48,7 +48,7 @@ class LoginPage_state extends State<LoginPage> {
       obscureText: !pwdVisibility,
       decoration: InputDecoration(
         hintText: "Unternehmenscode",
-
+hintStyle: TextStyle(color: Colors.white),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(
             color: Colors.white,
