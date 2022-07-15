@@ -229,7 +229,7 @@ return user;
     await FirebaseFirestore.instance
         .collection(
             '/AllProjects/' + company.company_name + '/Messages')
-        .orderBy("date")
+        .orderBy("time")
         .get()
         .then((QuerySnapshot querySnapshot) {
       for (var doc in querySnapshot.docs) {

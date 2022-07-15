@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:itm_ichtrinkmehr_flutter/global_methods.dart';
 import 'package:itm_ichtrinkmehr_flutter/intro/rollen_input.dart';
+import 'package:itm_ichtrinkmehr_flutter/values/colors.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
 import 'package:itm_ichtrinkmehr_flutter/web_db/select_statements.dart';
 
 SelectStatements selectStatements = SelectStatements();
 GlobalMethods globalMethods = GlobalMethods();
+WhiteMode whiteMode = WhiteMode();
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key}) : super(key: key);
@@ -32,10 +34,7 @@ class LoginPage_state extends State<LoginPage> {
             width: double.infinity,
             height: double.infinity,
             decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/background.jpg'),
-                fit: BoxFit.cover,
-              ),
+              color: whiteMode.backgroundColor,
             ),
             child: Center(
                 child: Column(
@@ -48,10 +47,10 @@ class LoginPage_state extends State<LoginPage> {
       obscureText: !pwdVisibility,
       decoration: InputDecoration(
         hintText: "Unternehmenscode",
-hintStyle: TextStyle(color: Colors.white),
+hintStyle: TextStyle(color: whiteMode.textColor),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(
-            color: Colors.white,
+            color: whiteMode.textColor,
             width: 1,
           ),
           borderRadius: BorderRadius.circular(25.0),
@@ -72,7 +71,7 @@ hintStyle: TextStyle(color: Colors.white),
         ),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(
-            color: Colors.white,
+            color: whiteMode.textColor,
             width: 1,
           ),
           borderRadius: BorderRadius.circular(25.0),
@@ -85,7 +84,7 @@ hintStyle: TextStyle(color: Colors.white),
             pwdVisibility
                 ? Icons.visibility_outlined
                 : Icons.visibility_off_outlined,
-            color: Colors.white,
+            color: whiteMode.textColor,
             size: 18,
           ),
         ),
@@ -103,6 +102,7 @@ hintStyle: TextStyle(color: Colors.white),
 
     //Button weiter
     OutlinedButton(
+      
         onPressed: () {
   
                         entered_code(context, companyNameController.text);
@@ -113,17 +113,19 @@ hintStyle: TextStyle(color: Colors.white),
             style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w300,
-                color: Colors.white),
+                color: whiteMode.backgroundColor),
           ),
-          Icon(Icons.arrow_forward, color:Colors.white)
+          Icon(Icons.arrow_forward, color:whiteMode.backgroundColor)
         ]),
-        style: ButtonStyle(
-            side: MaterialStateProperty.all(
-                BorderSide(color: Colors.white, width: 1.4)),
-            padding: MaterialStateProperty.all(
-                EdgeInsets.symmetric(vertical: 20, horizontal: 50)),
-            shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(40))))),
+        
+        style: OutlinedButton.styleFrom(
+          backgroundColor: whiteMode.textColor,
+           shape: const RoundedRectangleBorder(borderRadius: 
+   BorderRadius.all(Radius.circular(40))),
+   padding: 
+                EdgeInsets.symmetric(vertical: 20, horizontal: 50),
+          
+        )
       ),
           
                 ]))));

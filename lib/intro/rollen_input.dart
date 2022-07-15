@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_user/timer/timer_main.dart';
 import 'package:itm_ichtrinkmehr_flutter/intro/carrousel_intro.dart';
+import 'package:itm_ichtrinkmehr_flutter/values/colors.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
 import 'package:itm_ichtrinkmehr_flutter/web_db/insert_statements.dart';
@@ -15,6 +16,7 @@ import '../actions_user/user_menu.dart';
 
 InsertStatements insertStatements = InsertStatements();
 SelectStatements selectStatements = SelectStatements();
+WhiteMode whiteMode = WhiteMode();
 
   StreamController<String> streamControllerUserInput =StreamController<String>();
  Stream stream = streamControllerUserInput.stream.asBroadcastStream();
@@ -102,12 +104,12 @@ bool valuefirst = false;
     return Scaffold(
       appBar: AppBar(
     
-        backgroundColor: Color(0xff4338CA),
+        backgroundColor: whiteMode.cardColor,
         actions: [
           IconButton(
-            icon: const Icon(
+            icon:  Icon(
               Icons.share,
-              color: Color(0xffffffff),
+              color: whiteMode.textColor,
             ),
             onPressed: () {
               insertStatements.insertNewCompany(Company("12", "asas"));
@@ -115,9 +117,9 @@ bool valuefirst = false;
           )
         ],
         leading: IconButton(
-          icon: const Icon(
+          icon:  Icon(
             Icons.keyboard_arrow_left,
-            color: Color(0xffffffff),
+            color: whiteMode.textColor,
           ),
           onPressed: () {},
         ),
@@ -126,12 +128,8 @@ bool valuefirst = false;
         padding: const EdgeInsets.all(10.0),
         width: double.infinity,
         height: double.infinity,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/background.jpg'),
-            fit: BoxFit.cover,
-          ),
-        ),
+     color: whiteMode.backgroundColor,
+        
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -139,12 +137,15 @@ bool valuefirst = false;
                      TextFormField(
       controller: userCodeController,
       obscureText: !pwdVisibility,
+      
       decoration: InputDecoration(
+        
         hintText: "User-Code",
+        hintStyle: TextStyle(color: whiteMode.textColor),
 
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(
-            color: Colors.white,
+            color: whiteMode.textColor,
             width: 1,
           ),
           borderRadius: BorderRadius.circular(25.0),
@@ -165,7 +166,7 @@ bool valuefirst = false;
         ),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(
-            color: Colors.white,
+            color: whiteMode.textColor,
             width: 1,
           ),
           borderRadius: BorderRadius.circular(25.0),
@@ -178,7 +179,7 @@ bool valuefirst = false;
             pwdVisibility
                 ? Icons.visibility_outlined
                 : Icons.visibility_off_outlined,
-            color: Colors.white,
+            color: whiteMode.textColor,
             size: 18,
           ),
         ),

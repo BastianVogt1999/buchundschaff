@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:itm_ichtrinkmehr_flutter/global_methods.dart';
+import 'package:itm_ichtrinkmehr_flutter/values/colors.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/message.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
@@ -7,6 +8,7 @@ import 'package:itm_ichtrinkmehr_flutter/web_db/select_statements.dart';
 
 SelectStatements selectStatements = SelectStatements();
 GlobalMethods globalMethods = GlobalMethods();
+WhiteMode whiteMode  = WhiteMode();
 class MessagesUser extends StatefulWidget {
   Company company;
   User user;
@@ -28,26 +30,27 @@ class _MessagesUserState extends State<MessagesUser> {
     
     decoratedTextBox(Message message){
       return Container(
-        
+padding: EdgeInsets.all(5),
                alignment: Alignment.center,
        width: MediaQuery.of(context).size.width /1.8,
           decoration: BoxDecoration(
             
-               color: Colors.white,
-              border: Border.all(width: 2,color: Colors.blueAccent),
+               color: whiteMode.cardColor,
+              border: Border.all(width: 2,color: whiteMode.abstractColor),
               borderRadius: BorderRadius.all(Radius.circular(10)),
             ),
             child: 
             Column(children: [
-              Text(message.user_name, style: TextStyle(fontSize: 12),  textAlign: TextAlign.center),
+              Text(message.user_name, style: TextStyle(fontSize: 12, color: whiteMode.textColor),  textAlign: TextAlign.center),
               Divider(),
-            Text(message.message_text, style: TextStyle(fontSize: 25),  textAlign: TextAlign.center),
+            Text(message.message_text, style: TextStyle(fontSize: 25, color: whiteMode.textColor),  textAlign: TextAlign.center),
             Divider(),
 Container(
         
+
                alignment: Alignment.centerRight,
                child:
-            Text(message.time, style: TextStyle(fontSize: 12),  textAlign: TextAlign.right),
+            Text(message.time, style: TextStyle(fontSize: 12, color: whiteMode.textColor),  textAlign: TextAlign.right),
 ),
             SizedBox(height:MediaQuery.of(context).size.height /40)
      ],),
@@ -70,7 +73,7 @@ Container(
 
                   allMessages = dataSnapshot.data as List<Message>;
 
-return SizedBox( height: MediaQuery.of(context).size.height /1.8,
+return Container( padding: EdgeInsets.all(10), height: MediaQuery.of(context).size.height /1.8,
      child: ListView.builder(
           itemCount: allMessages.length,
           itemBuilder: (BuildContext context, int index) {

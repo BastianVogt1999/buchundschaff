@@ -3,6 +3,7 @@ import 'package:itm_ichtrinkmehr_flutter/actions_admin/admin_menu.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_admin/send_messages.dart';
 import 'package:itm_ichtrinkmehr_flutter/common_actions/home_button.dart';
 import 'package:itm_ichtrinkmehr_flutter/intro/unternehmens_eingabe.dart';
+import 'package:itm_ichtrinkmehr_flutter/values/colors.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
 
@@ -10,6 +11,7 @@ import 'UserManagement/manage_user.dart';
 import 'day_stats_admin.dart';
 import 'full_stats_admin.dart';
 
+WhiteMode whiteMode = WhiteMode();
 class ContainerAdmin extends StatefulWidget {
   Company company;
   User user;
@@ -51,29 +53,20 @@ class _ContainerAdminState extends State<ContainerAdmin> {
   SendMessages(company, user),
 ];
 
-    return Scaffold(
-        appBar: AppBar(
-          title: Text(user.user_name, style: TextStyle(color: Colors.white)),
-          backgroundColor: Color(0xff4338CA),
-          flexibleSpace: Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Color(0xff4338CA), Color(0xff6D28D9)],
-                stops: [0.5, 1.0],
-              ),
-            ),
-          ),
+  return Scaffold(
+      appBar: AppBar(
+        foregroundColor: whiteMode.textColor,
+        title: Text(user.user_name, style: TextStyle(color: whiteMode.textColor)),
+        backgroundColor: whiteMode.cardColor
+  
+      ),
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: BoxDecoration(
+      color: whiteMode.backgroundColor
         ),
-        body: Container(
-          width: double.infinity,
-          height: double.infinity,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/background.jpg'),
-              fit: BoxFit.cover,
-            ),
-          ),
-          child: Column(children: [
+        child:  Column(children: [
             SizedBox(height: 650, child: _pages[selectedIndex]),
             Container(
               height: 50,

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_admin/container_admin.dart';
+import 'package:itm_ichtrinkmehr_flutter/values/colors.dart';
 
 import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
+
+WhiteMode whiteMode = WhiteMode();
 
 class AdminMenu extends StatefulWidget {
   AdminMenu(this.company, this.user);
@@ -32,7 +35,7 @@ class _nameState extends State<AdminMenu> {
   Widget build(BuildContext context) {
     return Drawer(
       child: Material(
-        color: Color(0xff4338CA),
+        color: whiteMode.backgroundColor,
         child: ListView(
           children: <Widget>[
             Container(
@@ -66,8 +69,8 @@ class _nameState extends State<AdminMenu> {
                     onClicked: () => onItemTapped(2),
                   ),
                   const SizedBox(height: 8),
-                  Divider(color: Colors.white70),
-                       const SizedBox(height: 8),
+                  Divider(color: whiteMode.textColor),
+                   const     SizedBox(height: 8),
                   MenuItem(
                     text: 'Nachricht versenden',
                     icon: Icons.notification_add,
@@ -84,7 +87,7 @@ class _nameState extends State<AdminMenu> {
                     icon: Icons.settings,
                     onClicked: () => onItemTapped(5),
                   ),
-                  Divider(color: Colors.white70),
+                  Divider(color: whiteMode.textColor),
                   const SizedBox(height: 8),
                   MenuItem(
                     text: 'Über uns',
@@ -114,13 +117,12 @@ class MenuItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const color = Colors.white;
-    const hoverColor = Colors.white70;
+ 
 
     return ListTile(
-      leading: Icon(icon, color: color),
-      title: Text(text, style: TextStyle(color: color)),
-      hoverColor: hoverColor,
+      leading: Icon(icon, color: whiteMode.textColor),
+      title: Text(text, style: TextStyle(color: whiteMode.textColor)),
+      hoverColor: whiteMode.abstractColor	,
       onTap: onClicked,
     );
   }
@@ -132,27 +134,26 @@ class SearchFieldDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const color = Colors.white;
-
     return TextField(
-      style: TextStyle(color: color, fontSize: 14),
+      style: TextStyle(color: whiteMode.textColor.withOpacity(0.5), fontSize: 14),
       decoration: InputDecoration(
         contentPadding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-        hintText: 'Search',
-        hintStyle: TextStyle(color: color),
+        hintText: 'Suchen',
+        hintStyle: TextStyle(color: whiteMode.textColor.withOpacity(0.5)),
         prefixIcon: Icon(
           Icons.search,
-          color: color,
+          color: whiteMode.textColor.withOpacity(0.5),
           size: 20,
         ),
         filled: true,
-        fillColor: Colors.white12,
+        fillColor: whiteMode.cardColor,
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15),
-          borderSide: BorderSide(color: color.withOpacity(0.7)),
+          borderSide: BorderSide(color: whiteMode.textColor.withOpacity(0.7)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15),
-          borderSide: BorderSide(color: color.withOpacity(0.7)),
+          borderSide: BorderSide(color: whiteMode.textColor.withOpacity(0.7)),
         ),
       ),
     );

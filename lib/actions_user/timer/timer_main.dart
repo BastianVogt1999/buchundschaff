@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import "package:intl/intl.dart";
+import 'package:itm_ichtrinkmehr_flutter/values/colors.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:flutter/material.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_user/timer/stopwatch.dart';
@@ -21,6 +22,7 @@ Statistic statistic = Statistic.empty();
 UpdateStatements updateStatements = UpdateStatements();
 SelectStatements selectStatements = SelectStatements();
 GlobalMethods globalmethods = GlobalMethods();
+WhiteMode whiteMode = WhiteMode();
 bool timeAlreadyRunning = false;
 int doubleChecker = 0;
  bool running = false;
@@ -251,7 +253,7 @@ if(firstStarted){
 
        Widget buttonWidget() {
       return Container(
-        color: running ? Color.fromARGB(255, 241, 151, 151) : Color.fromARGB(255, 229, 241, 233),
+        color: running ? Color.fromARGB(255, 241, 151, 151) : Color.fromARGB(255, 157, 240, 171),
         height: 50, width: MediaQuery.of(context).size.width, child:
       GestureDetector(
         onTap: 
@@ -285,11 +287,12 @@ if(firstStarted){
                   color: Colors.grey.withOpacity(.6)),
             ]),
         child: 
+
     ListView.builder(
           itemCount: allUser.length,
           itemBuilder: (BuildContext context, int index) {
             return Container(
-
+padding: EdgeInsets.all(10),
       width: MediaQuery.of(context).size.width,
       child: Column(children: [
       AspectRatio(
@@ -325,7 +328,7 @@ if(firstStarted){
 
                            
             },
-            splashColor: Colors.lightBlue,
+            splashColor: whiteMode.cardColor,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(36)),
             padding: const EdgeInsets.all(0.0),
           
@@ -336,7 +339,7 @@ if(firstStarted){
                   alignment: Alignment.center,
                   child:  Text(allUser[index].user_name,
                     style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.w300)))),
+                        color: whiteMode.backgroundColor, fontWeight: FontWeight.w300)))),
             ),
           ),
           SizedBox(height:10),
@@ -363,7 +366,7 @@ if(firstStarted){
               children: [
                 Container(
                     height: MediaQuery.of(context).size.height /13,
-                    color: Colors.white,
+                    color: whiteMode.abstractColor,
                     child: ListTile(
                       leading:     IconButton(
                             iconSize: 40,
@@ -375,7 +378,7 @@ showDialog<Dialog>(context: context, builder: (BuildContext context) => showDial
                             icon: Icon(Icons.add_circle),
                             color: Colors.green,
                           ),
-                      title: Row(children: [Text(currentWorker[index].user_name),
+                      title: Row(children: [Text(currentWorker[index].user_name, style: TextStyle(color: whiteMode.backgroundColor ),),
                       SizedBox(width: 10),
               ]),
                       trailing: 
@@ -412,7 +415,7 @@ Widget stopWatch(){
             } else {
           
                   return      SizedBox(
-                    height: 150,
+                    height: 100,
                     child:  Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -461,29 +464,31 @@ Widget stopWatch(){
 
 //main Frontend
 
-              return SizedBox(
+              return Container(
+                padding: EdgeInsets.all(10),
                 height: MediaQuery.of(context).size.height,
                 child: Column(children: [
                   Divider(height: 20),
     addUserDisplay,
                   Divider(height: 20),
-                  SizedBox(
+                  Container(
+                    color: whiteMode.abstractColor,
                       height: MediaQuery.of(context).size.height / 8,
-                      child: Scaffold(
-                          body: Center(
+                    
+                      child: Center(
                               child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Text(
                             'Startzeit',
-                            style: TextStyle(fontSize: 25),
+                            style: TextStyle(fontSize: 25, color: whiteMode.backgroundColor),
                           ),
                           Text(
                             timerStart,
-                            style: TextStyle(fontSize: 30),
+                            style: TextStyle(fontSize: 30, color: whiteMode.backgroundColor),
                           )
                         ],
-                      )))),
+                      ))),
                           
         stopWatch(),
           buttonWidget(),

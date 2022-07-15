@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:itm_ichtrinkmehr_flutter/intro/rollen_input.dart';
+import 'package:itm_ichtrinkmehr_flutter/values/colors.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
 
+WhiteMode whiteMode = WhiteMode();
 class HomeButton extends StatelessWidget {
   final BuildContext context;
   final User user;
@@ -12,7 +14,7 @@ class HomeButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
-      backgroundColor: Color(0xEA0091B5),
+      backgroundColor: whiteMode.abstractColor,
       onPressed: () {
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => RoleInput( company)));
