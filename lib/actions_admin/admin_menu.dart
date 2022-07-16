@@ -21,14 +21,12 @@ class _nameState extends State<AdminMenu> {
   User user;
 
   onItemTapped(int index) {
-    setState(
-      () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => ContainerAdmin(company, user, index)));
-      },
-    );
+    setState(() {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ContainerAdmin(company, user, index)));
+    });
   }
 
   @override
@@ -70,7 +68,7 @@ class _nameState extends State<AdminMenu> {
                   ),
                   const SizedBox(height: 8),
                   Divider(color: whiteMode.textColor),
-                   const     SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   MenuItem(
                     text: 'Nachricht versenden',
                     icon: Icons.notification_add,
@@ -78,21 +76,16 @@ class _nameState extends State<AdminMenu> {
                   ),
                   const SizedBox(height: 8),
                   MenuItem(
-                    text: 'Benachrichtigungen',
-                    icon: Icons.notifications_outlined,
-                    onClicked: () => onItemTapped(4),
-                  ),
-                  MenuItem(
                     text: 'Einstellungen',
                     icon: Icons.settings,
-                    onClicked: () => onItemTapped(5),
+                    onClicked: () => onItemTapped(4),
                   ),
                   Divider(color: whiteMode.textColor),
                   const SizedBox(height: 8),
                   MenuItem(
                     text: 'Über uns',
                     icon: Icons.info,
-                    onClicked: () => onItemTapped(6),
+                    onClicked: () => onItemTapped(5),
                   ),
                 ],
               ),
@@ -117,12 +110,10 @@ class MenuItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
- 
-
     return ListTile(
       leading: Icon(icon, color: whiteMode.textColor),
       title: Text(text, style: TextStyle(color: whiteMode.textColor)),
-      hoverColor: whiteMode.abstractColor	,
+      hoverColor: whiteMode.abstractColor,
       onTap: onClicked,
     );
   }
@@ -135,7 +126,8 @@ class SearchFieldDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     const color = Colors.white;
     return TextField(
-      style: TextStyle(color: whiteMode.textColor.withOpacity(0.5), fontSize: 14),
+      style:
+          TextStyle(color: whiteMode.textColor.withOpacity(0.5), fontSize: 14),
       decoration: InputDecoration(
         contentPadding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
         hintText: 'Suchen',
