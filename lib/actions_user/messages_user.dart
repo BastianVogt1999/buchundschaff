@@ -8,7 +8,8 @@ import 'package:itm_ichtrinkmehr_flutter/web_db/select_statements.dart';
 
 SelectStatements selectStatements = SelectStatements();
 GlobalMethods globalMethods = GlobalMethods();
-WhiteMode whiteMode  = WhiteMode();
+WhiteMode whiteMode = WhiteMode();
+
 class MessagesUser extends StatefulWidget {
   Company company;
   User user;
@@ -20,81 +21,87 @@ class MessagesUser extends StatefulWidget {
 }
 
 class _MessagesUserState extends State<MessagesUser> {
-
   _MessagesUserState(this.company, this.user);
   Company company;
   User user;
   List<Message> allMessages = [];
   @override
   Widget build(BuildContext context) {
-    
-    decoratedTextBox(Message message){
+    decoratedTextBox(Message message) {
       return Container(
-padding: EdgeInsets.all(5),
-               alignment: Alignment.center,
-       width: MediaQuery.of(context).size.width /1.8,
-          decoration: BoxDecoration(
-            
-               color: whiteMode.cardColor,
-              border: Border.all(width: 2,color: whiteMode.abstractColor),
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            ),
-            child: 
-            Column(children: [
-              Text(message.user_name, style: TextStyle(fontSize: 12, color: whiteMode.textColor),  textAlign: TextAlign.center),
-              Divider(),
-            Text(message.message_text, style: TextStyle(fontSize: 25, color: whiteMode.textColor),  textAlign: TextAlign.center),
+        padding: EdgeInsets.all(5),
+        alignment: Alignment.center,
+        width: MediaQuery.of(context).size.width / 1.8,
+        decoration: BoxDecoration(
+          color: whiteMode.cardColor,
+          border: Border.all(width: 2, color: whiteMode.abstractColor),
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Column(
+          children: [
+            Text(message.user_name,
+                style: TextStyle(fontSize: 12, color: whiteMode.textColor),
+                textAlign: TextAlign.center),
             Divider(),
-Container(
-        
-
-               alignment: Alignment.centerRight,
-               child:
-            Text(message.time, style: TextStyle(fontSize: 12, color: whiteMode.textColor),  textAlign: TextAlign.right),
-),
-            SizedBox(height:MediaQuery.of(context).size.height /40)
-     ],),
+            Text(message.message_text,
+                style: TextStyle(fontSize: 25, color: whiteMode.textColor),
+                textAlign: TextAlign.center),
+            Divider(),
+            Container(
+              alignment: Alignment.centerRight,
+              child: Text(message.time,
+                  style: TextStyle(fontSize: 12, color: whiteMode.textColor),
+                  textAlign: TextAlign.right),
+            ),
+            SizedBox(height: MediaQuery.of(context).size.height / 40)
+          ],
+        ),
       );
     }
-
 
     Widget messagesBuilder = FutureBuilder(
         future: selectStatements.selectAllMessages(company),
         builder: (context, dataSnapshot) {
           List<Widget> children;
           if (dataSnapshot.connectionState == ConnectionState.waiting) {
-               return globalMethods.loadingScreen(context);
+            return globalMethods.loadingScreen(context);
           } else {
             if (dataSnapshot.error != null) {
               return Center(
                 child: Text('An error occured'),
               );
             } else {
+              allMessages = dataSnapshot.data as List<Message>;
 
-                  allMessages = dataSnapshot.data as List<Message>;
+              return SizedBox(
+                  child: ListView.builder(
+                      itemCount: allMessages.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            child: Column(children: [
+                              Align(
+                                alignment: Alignment.topRight,
+                                child: decoratedTextBox(allMessages[index]),
+                              ),
+                              SizedBox(height: 10),
+                            ]));
+                      }));
+            }
+          }
+        });
 
-return Container( padding: EdgeInsets.all(10), height: MediaQuery.of(context).size.height /1.8,
-     child: ListView.builder(
-          itemCount: allMessages.length,
-          itemBuilder: (BuildContext context, int index) {
-            return SizedBox(
-
-      width: MediaQuery.of(context).size.width,
-      child: Column(children: [
-        Align(alignment: Alignment.topRight, child:
-          decoratedTextBox(allMessages[index]),
-        ),
-          SizedBox(height:10),
-      ])
-      );
-      }
-      )
-      );
-            }}});
-
-
-    return Container(child: messagesBuilder);
+    return Container(
+        padding: EdgeInsets.all(10),
+        height: MediaQuery.of(context).size.height,
+        child: Column(children: [
+          Container(
+              child: messagesBuilder,
+              height: MediaQuery.of(context).size.height / 1.2),
+          Container(
+            height: MediaQuery.of(context).size.height / 26,
+            color: whiteMode.abstractColor,
+          ),
+        ]));
   }
 }
-
-

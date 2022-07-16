@@ -1,6 +1,5 @@
 import 'dart:async';
 
-
 import 'package:flutter/material.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_admin/admin_menu.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_admin/container_admin.dart';
@@ -13,16 +12,13 @@ import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/statistic.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
 
-
 WhiteMode whiteMode = WhiteMode();
 
-
 class cusCar extends StatefulWidget {
-
   Stream stream;
   StreamController streamController;
 
-   cusCar(this.stream, this.streamController);
+  cusCar(this.stream, this.streamController);
 
   @override
   _CustomCarouselFB2State createState() =>
@@ -30,7 +26,6 @@ class cusCar extends StatefulWidget {
 }
 
 class _CustomCarouselFB2State extends State<cusCar> {
- 
   Stream stream;
   StreamController streamController;
 
@@ -41,17 +36,23 @@ class _CustomCarouselFB2State extends State<cusCar> {
   late PageController _pageController;
   int _position = 0;
 
-  
-
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(initialPage: 0, viewportFraction: .7);
+    _pageController = PageController(initialPage: 1, viewportFraction: .7);
   }
 
   @override
   Widget build(BuildContext context) {
     List<Widget> cards = [
+      CardFb1(
+        text: "Anmelden als Admin",
+        imageUrl: Icons.admin_panel_settings,
+        subtitle: "Erweiterte Funktionen",
+        isAdmin: "true",
+        stream: stream,
+        streamControllerUserInput: streamControllerUserInput,
+      ),
       CardFb1(
         text: "Anmelden als User",
         imageUrl: Icons.supervised_user_circle,
@@ -59,16 +60,14 @@ class _CustomCarouselFB2State extends State<cusCar> {
         isAdmin: "false",
         stream: stream,
         streamControllerUserInput: streamControllerUserInput,
-
       ),
       CardFb1(
-        text: "Anmelden als Admin",
-        imageUrl: Icons.admin_panel_settings,
-        subtitle: "Erweiterte Funktionen",
+        text: "Anmelden als Developeer",
+        imageUrl: Icons.developer_board,
+        subtitle: "Developer Funktionen",
         isAdmin: "true",
-           stream: stream,
+        stream: stream,
         streamControllerUserInput: streamControllerUserInput,
-
       ),
     ];
 
@@ -109,13 +108,13 @@ class CardFb1 extends StatelessWidget {
   final Stream stream;
   final StreamController streamControllerUserInput;
 
-  const CardFb1(
-      {required this.text,
-      required this.imageUrl,
-      required this.subtitle,
-      required this.isAdmin,
-          required this.stream,
-      required this.streamControllerUserInput,
+  const CardFb1({
+    required this.text,
+    required this.imageUrl,
+    required this.subtitle,
+    required this.isAdmin,
+    required this.stream,
+    required this.streamControllerUserInput,
   });
 
   @override
@@ -123,14 +122,13 @@ class CardFb1 extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         streamControllerUserInput.add(isAdmin);
-  
       },
       child: Container(
         width: 250,
         height: 230,
         padding: const EdgeInsets.all(30.0),
         decoration: BoxDecoration(
-          color: whiteMode.cardColor,
+          color: whiteMode.textColor,
           borderRadius: BorderRadius.circular(12.5),
           boxShadow: [
             BoxShadow(
@@ -145,15 +143,15 @@ class CardFb1 extends StatelessWidget {
             SizedBox(
               height: 100,
               child: Icon(
-                 imageUrl,
-                 color: whiteMode.backgroundColor,
+                imageUrl,
+                color: whiteMode.backgroundColor,
                 size: 100,
               ),
             ),
             const Spacer(),
             Text(text,
                 textAlign: TextAlign.center,
-                style:  TextStyle(
+                style: TextStyle(
                   color: whiteMode.backgroundColor,
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
@@ -164,8 +162,8 @@ class CardFb1 extends StatelessWidget {
             Text(
               subtitle,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                  color: Colors.black54,
+              style: TextStyle(
+                  color: whiteMode.backgroundColor,
                   fontWeight: FontWeight.normal,
                   fontSize: 10),
             ),
@@ -177,6 +175,4 @@ class CardFb1 extends StatelessWidget {
       ),
     );
   }
-
-
 }

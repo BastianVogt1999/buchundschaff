@@ -18,10 +18,8 @@ class ContainerUser extends StatefulWidget {
   final User user;
   final Company company;
   final int selectedIndex;
-  
 
-
-   ContainerUser(this.user, this.company, this.selectedIndex);
+  ContainerUser(this.user, this.company, this.selectedIndex);
 
   @override
   State<ContainerUser> createState() =>
@@ -29,7 +27,6 @@ class ContainerUser extends StatefulWidget {
 }
 
 class _ContainerUserState extends State<ContainerUser> {
-
   User user = User.empty();
   int selectedIndex;
   Company company;
@@ -54,40 +51,21 @@ class _ContainerUserState extends State<ContainerUser> {
 
     return Scaffold(
       appBar: AppBar(
-        foregroundColor: whiteMode.textColor,
-        title: Text(user.user_name, style: TextStyle(color: whiteMode.textColor)),
-        backgroundColor: whiteMode.cardColor
-  
-      ),
+          actions: [HomeButton(context, user, company)],
+          foregroundColor: whiteMode.textColor,
+          backgroundColor: whiteMode.cardColor),
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: BoxDecoration(
-      color: whiteMode.backgroundColor
+        decoration: BoxDecoration(color: whiteMode.backgroundColor),
+        child: Container(
+          child: _pages[selectedIndex],
         ),
-        child: Column(children: [
-          SizedBox(
-            height: 650,
-            child: Container(
-              child: _pages[selectedIndex],
-            ),
-          ),
-          SizedBox(
-        
-            child: HomeButton(
-              context,
-              user,
-              company,
-            ),
-          ),
-        ]),
       ),
       drawer: UserMenu(
         company,
         user,
-        
       ),
     );
   }
 }
-
