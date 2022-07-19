@@ -1,24 +1,33 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_admin/UserManagement/user_operations/add_user.dart';
 import 'package:itm_ichtrinkmehr_flutter/global_methods.dart';
 import 'package:itm_ichtrinkmehr_flutter/intro/unternehmens_eingabe.dart';
+import 'package:itm_ichtrinkmehr_flutter/values/colors.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
+import 'package:itm_ichtrinkmehr_flutter/values/statistic.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
 import 'package:itm_ichtrinkmehr_flutter/web_db/select_statements.dart';
+import 'package:itm_ichtrinkmehr_flutter/web_db/update_statements.dart';
 import 'package:lottie/lottie.dart';
+import 'package:sizer/sizer.dart';
+import 'package:flutter/services.dart';
 
 SelectStatements selectStatements = SelectStatements();
 GlobalMethods globalmethods = GlobalMethods();
-_getUserServer(Company company) {
-  try {
-    return selectStatements.selectAllUserOfCompany(company);
-  } catch (Exception) {
-    print("Error while getting Data");
-  }
-}
+UpdateStatements updateStatements = UpdateStatements();
+
+WhiteMode whiteMode = WhiteMode();
+List<User> currentUser = [];
+
+TextEditingController searchField = TextEditingController();
+TextEditingController controllerUserName = TextEditingController();
+List<TextEditingController> controllerUserEdit = [];
+List<bool> sizeOfUserEditFields = [];
 
 class allUser extends StatefulWidget {
-   allUser(this.company);
+  allUser(this.company);
   Company company;
   @override
   State<allUser> createState() => _allUserState(company);
@@ -26,137 +35,373 @@ class allUser extends StatefulWidget {
 
 class _allUserState extends State<allUser> {
   Company company;
+  bool shownAddUser = false;
+  bool checkBoxUserIsAdminSelected = false;
+  late StreamController<List<User>> currentStream =
+      StreamController<List<User>>();
+
+  Future<void> closeStream() => currentStream.close();
+
+  @override
+  void initState() {
+    super.initState();
+    currentStream = StreamController<List<User>>();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    closeStream();
+  }
 
   _allUserState(this.company);
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      builder: (context, snapshot) {
-// Checking if future is resolved
-        if (snapshot.connectionState == ConnectionState.done) {
-// If we got an error
-          if (snapshot.connectionState == ConnectionState.waiting) {
-             return globalmethods.loadingScreen(context);
-          } else if (snapshot.hasData) {
-// Extracting data from snapshot object
-            final data = snapshot.data as List<User>;
-
-            return Scrollbar(
-                child: SizedBox(
-                    height: MediaQuery.of(context).size.height,
-                    child: Column(children: [
-                      Divider(height: 20),
-                      SizedBox(
-                        height: 50,
-                        child: RoundedSearchInput(),
+    Widget editUserName(User user, int index) {
+      //Edit Card
+      return Container(
+          height: sizeOfUserEditFields[index] ? 24.h : 0,
+          child: Column(
+            children: [
+              Container(
+                width: 80.w,
+                color: whiteMode.cardColor,
+                child: ListTile(
+                  title: TextField(
+                    controller: controllerUserEdit[index],
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      hintText: controllerUserEdit[index].text,
+                      hintStyle: const TextStyle(
+                          color: Colors.grey, fontWeight: FontWeight.w300),
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 8.0, horizontal: 20.0),
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(45.0)),
                       ),
-                      Divider(height: 20),
-                      SizedBox(
-                          height: 400,
-                          child: ListView.builder(
-                              itemCount: data.length,
-                              itemBuilder: (context, index) {
-                                return Card(
-                                    child: Padding(
-                                  padding: EdgeInsets.all(10),
-                                  child: ListTile(
-                                    title: Text(
-                                      data[index].user_name,
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                      ),
-                                    ),
-                                    leading: CircleAvatar(
-                                      backgroundColor: Colors.white,
-                                      child: Text(
-                                        data[index].user_name[0],
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                    //trailing: Text("\$ ${stocksList[index].price}"),
-                                  ),
-                                ));
-                              })),
-                      Divider(height: 20),
-                      ListTile(
-                        tileColor: Colors.white,
-                        onTap: () {
-                          // Call this in a function
-                          showDialog<Dialog>(
-                              context: context,
-                              builder: (BuildContext context) =>
-                                  DialogAddUser(company));
-                        },
-                        title: Text(
-                          "User hinzufügen",
-                          style: TextStyle(
-                            fontSize: 20,
-                          ),
-                        ),
-                        leading: Icon(
-                          Icons.add,
-                        ),
-                        //trailing: Text("\$ ${stocksList[index].price}"),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey, width: 1.0),
+                        borderRadius: BorderRadius.all(Radius.circular(45.0)),
                       ),
-                    ])));
-          }
-        }
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      },
-      future: _getUserServer(company),
-    );
-  }
-}
+                    ),
+                  ),
+                  trailing: IconButton(
+                    icon: Icon(Icons.save),
+                    iconSize: 30,
+                    onPressed: () async {
+                      String value =
+                          await updateStatements.updateUser(company, user);
 
-TextEditingController searchField = TextEditingController();
+                      if (value == "1") {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          backgroundColor: Colors.red,
+                          content: Text("Fehler beim Update"),
+                          duration: Duration(milliseconds: 2500),
+                        ));
+                      } else {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          backgroundColor: Colors.green,
+                          content: Text("Operation erfolgreich"),
+                          duration: Duration(milliseconds: 2500),
+                        ));
+                        setState(() {});
+                      }
+                    },
+                  ),
+                ),
+              ),
+              SizedBox(height: (0.5).h),
+              Container(
+                  width: 80.w,
+                  color: whiteMode.cardColor,
+                  child: ListTile(
+                    title: Text("User-Code: " + user.user_code),
+                  )),
+              SizedBox(height: (0.5).h),
+              Container(
+                  width: 80.w,
+                  color: whiteMode.cardColor,
+                  child: ListTile(
+                    title: Text("Adminrechte: " +
+                        (user.is_admin == "true" ? "ja" : "nein")),
+                    trailing: IconButton(
+                        icon: Icon(Icons.admin_panel_settings),
+                        color:
+                            user.is_admin == "true" ? Colors.green : Colors.red,
+                        iconSize: 30,
+                        onPressed: () async {
+                          await updateStatements.updateUserAdminRight(
+                              company, user);
+                          setState(() {});
+                        }),
+                  )),
+            ],
+          ));
+    }
 
-class RoundedSearchInput extends StatelessWidget {
-  const RoundedSearchInput();
+    _getUserServer() async {
+      List<User> allUser =
+          await selectStatements.selectAllUserOfCompany(company);
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(boxShadow: [
-        BoxShadow(
-            offset: const Offset(12, 26),
-            blurRadius: 50,
-            spreadRadius: 0,
-            color: Colors.grey.withOpacity(.1)),
-      ]),
-      child: TextField(
-        controller: searchField,
-        onChanged: (value) {
-          //Do something wi
-        },
-        decoration: InputDecoration(
-          prefixIcon: Icon(
-            Icons.search,
-            color: Colors.grey[500],
-          ),
-          filled: true,
-          fillColor: Colors.white,
-          hintText: "user suchen",
-          hintStyle:
-              const TextStyle(color: Colors.grey, fontWeight: FontWeight.w300),
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
-          border: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(45.0)),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey, width: 1.0),
-            borderRadius: BorderRadius.all(Radius.circular(45.0)),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey, width: 1.5),
-            borderRadius: BorderRadius.all(Radius.circular(45.0)),
+      for (int i = 0; i < allUser.length; i++) {
+        sizeOfUserEditFields.add(false);
+        controllerUserEdit
+            .add(TextEditingController(text: allUser[i].user_name));
+      }
+
+      currentUser = allUser;
+      currentStream.add(allUser);
+    }
+
+    // ignore: non_constant_identifier_names
+    Widget RoundedSearchInput() {
+      return Container(
+        decoration: BoxDecoration(boxShadow: [
+          BoxShadow(
+              offset: const Offset(12, 26),
+              blurRadius: 50,
+              spreadRadius: 0,
+              color: Colors.grey.withOpacity(.1)),
+        ]),
+        child: TextField(
+          controller: searchField,
+          onSubmitted: (value) {},
+          onChanged: (value) {
+            List<User> newUsers = [];
+
+            if (searchField.text == "") {
+            } else {
+              for (int i = 0; i < currentUser.length; i++) {
+                if (currentUser[i]
+                    .user_name
+                    .toLowerCase()
+                    .contains(value.toLowerCase())) {
+                  newUsers.add(currentUser[i]);
+                }
+              }
+            }
+
+            setState(() {
+              currentUser = newUsers;
+            });
+          },
+          decoration: InputDecoration(
+            prefixIcon: Icon(
+              Icons.search,
+              color: Colors.grey[500],
+            ),
+            filled: true,
+            fillColor: Colors.white,
+            hintText: "user suchen",
+            hintStyle: const TextStyle(
+                color: Colors.grey, fontWeight: FontWeight.w300),
+            contentPadding:
+                const EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
+            border: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(45.0)),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey, width: 1.0),
+              borderRadius: BorderRadius.all(Radius.circular(45.0)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey, width: 1.5),
+              borderRadius: BorderRadius.all(Radius.circular(45.0)),
+            ),
           ),
         ),
-      ),
+      );
+    }
+
+    _getUserServer();
+
+    Widget addUser() {
+      return Container(
+          height: shownAddUser ? 40.h : 0.h,
+          child: Column(children: [
+            Container(
+              width: 80.w,
+              color: whiteMode.cardColor,
+              child: ListTile(
+                  title: Text(
+                    "Admin-Rechte: ",
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  trailing: IconButton(
+                    icon: Icon(checkBoxUserIsAdminSelected
+                        ? Icons.check_box
+                        : Icons.crop_square_sharp),
+                    onPressed: () {
+                      setState(() {
+                        checkBoxUserIsAdminSelected
+                            ? checkBoxUserIsAdminSelected = false
+                            : checkBoxUserIsAdminSelected = true;
+                      });
+                    },
+                  )),
+            ),
+            SizedBox(height: 1.h),
+            Container(
+              width: 80.w,
+              color: whiteMode.cardColor,
+              child: ListTile(
+                title: TextField(
+                  controller: controllerUserName,
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    hintText: "User-Name",
+                    hintStyle: const TextStyle(
+                        color: Colors.grey, fontWeight: FontWeight.w300),
+                    contentPadding: const EdgeInsets.symmetric(
+                        vertical: 8.0, horizontal: 20.0),
+                    border: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(45.0)),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey, width: 1.0),
+                      borderRadius: BorderRadius.all(Radius.circular(45.0)),
+                    ),
+                  ),
+                ),
+                trailing: IconButton(
+                  icon: Icon(Icons.save, size: 30),
+                  onPressed: () {
+                    User newUser = User.empty();
+                    newUser.user_name = controllerUserName.text;
+                    newUser.is_admin = checkBoxUserIsAdminSelected.toString();
+
+                    insertStatements.insertNewUser(company, newUser);
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      backgroundColor: Colors.green,
+                      content: Text("User hinzugefügt"),
+                      duration: Duration(milliseconds: 2500),
+                    ));
+                    setState(() {
+                      controllerUserName.text = "";
+                      checkBoxUserIsAdminSelected = false;
+                      shownAddUser = false;
+                    });
+                  },
+                ),
+              ),
+            ),
+          ]));
+    }
+
+    Widget CurrentUserWidget() {
+      return AnimatedSize(
+          curve: Curves.easeIn,
+          duration: Duration(seconds: 1),
+          child: Container(
+              color: whiteMode.backgroundColor,
+              height: !shownAddUser ? 60.h : 40.h,
+              child: ListView.builder(
+                  itemCount: currentUser.length,
+                  itemBuilder: (context, index) {
+                    return AnimatedSize(
+                        curve: Curves.easeIn,
+                        duration: Duration(milliseconds: 500),
+                        child: Container(
+                            height: sizeOfUserEditFields[index] ? 33.h : 9.h,
+                            child: Column(
+                              children: [
+                                //User Card
+                                Card(
+                                    color: whiteMode.abstractColor,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(2),
+                                      child: ListTile(
+                                        title: Text(
+                                          currentUser[index].user_name,
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                          ),
+                                        ),
+                                        leading: CircleAvatar(
+                                            backgroundColor:
+                                                whiteMode.backgroundColor,
+                                            child: Icon(
+                                              Icons.person,
+                                              color: whiteMode.abstractColor,
+                                            )),
+                                        trailing: IconButton(
+                                          icon: !sizeOfUserEditFields[index]
+                                              ? Icon(Icons
+                                                  .mode_edit_outline_outlined)
+                                              : Icon(Icons.arrow_right),
+                                          iconSize: 30,
+                                          color: whiteMode.backgroundColor,
+                                          onPressed: () {
+                                            setState(() {
+                                              sizeOfUserEditFields[index]
+                                                  ? sizeOfUserEditFields[
+                                                      index] = false
+                                                  : sizeOfUserEditFields[
+                                                      index] = true;
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                    )),
+
+                                editUserName(currentUser[index], index)
+                              ],
+                            )));
+                  })));
+    }
+
+    return StreamBuilder(
+      stream: currentStream.stream,
+      builder: (context, snapshot) {
+// Checking if future is resolved
+        return snapshot.hasData
+            ? SingleChildScrollView(
+                physics: BouncingScrollPhysics(),
+                child: SizedBox(
+                    child: Column(children: [
+                  Divider(height: 20),
+                  SizedBox(
+                    height: 50,
+                    child: RoundedSearchInput(),
+                  ),
+                  Divider(height: 20),
+                  CurrentUserWidget(),
+                  Divider(height: 4.h),
+                  Container(
+                    color: whiteMode.abstractColor,
+                    child: ListTile(
+                      tileColor: whiteMode.abstractColor,
+                      onTap: () {
+                        setState(
+                          () {
+                            shownAddUser
+                                ? shownAddUser = false
+                                : shownAddUser = true;
+                          },
+                        );
+                      },
+                      title: Text(
+                        !shownAddUser ? "User hinzufügen" : "Abbrechen",
+                        style: TextStyle(
+                            fontSize: 20, color: whiteMode.backgroundColor),
+                      ),
+                      leading: Icon(
+                        !shownAddUser ? Icons.add : Icons.close,
+                        color: whiteMode.backgroundColor,
+                      ),
+                      //trailing: Text("\$ ${stocksList[index].price}"),
+                    ),
+                  ),
+                  addUser()
+                ])))
+            : Center(
+                child: CircularProgressIndicator(),
+              );
+      },
     );
   }
 }

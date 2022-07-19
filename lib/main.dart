@@ -1,7 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:itm_ichtrinkmehr_flutter/intro/carrousel_intro.dart';
 
+import 'package:itm_ichtrinkmehr_flutter/intro/carrousel_intro.dart';
+import 'package:sizer/sizer.dart';
 import 'intro/unternehmens_eingabe.dart';
 
 Future<void> main() async {
@@ -48,9 +49,11 @@ class MyApp extends StatelessWidget {
         backgroundColor: Color(0xff1a1817),
         focusColor: Color(0x1a6c4613));
 
-    return MaterialApp(
-      theme: lightTheme,
-      home: LoginPage(),
-    );
+    return Sizer(builder: (context, orientation, deviceType) {
+      return MaterialApp(
+        theme: lightTheme,
+        home: LoginPage(),
+      );
+    });
   }
 }

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:itm_ichtrinkmehr_flutter/actions_user/show_stats/popup_edit_stat.dart';
-import 'package:itm_ichtrinkmehr_flutter/actions_user/show_stats/popup_full_stats.dart';
+
 import 'package:itm_ichtrinkmehr_flutter/actions_user/timer/timer_main.dart';
 import 'package:itm_ichtrinkmehr_flutter/global_methods.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
@@ -34,6 +33,8 @@ class _Stats_mainState extends State<Stats_main> {
   User user;
   Company company;
 
+  List<bool> expandedInfos = [];
+
   _Stats_mainState(this.user, this.company);
   List<Statistic> currentStats = [];
   Widget widgetBuilded = Container();
@@ -52,6 +53,116 @@ class _Stats_mainState extends State<Stats_main> {
 
   @override
   Widget build(BuildContext context) {
+    Widget expandedInfoTextRow(String textName, String textInput) {
+      return Container(
+          padding: EdgeInsets.all(5),
+          decoration: BoxDecoration(
+            color: whiteMode.backgroundColor,
+            border: Border.all(width: 1, color: whiteMode.abstractColor),
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          child: Row(
+            children: [
+              Flexible(
+                flex: 1,
+                child: Text(
+                  textName,
+                  style: TextStyle(fontSize: 10),
+                ),
+              ),
+              Flexible(
+                flex: 1,
+                child: Text(
+                  textInput,
+                  style: TextStyle(fontSize: 10),
+                ),
+              ),
+            ],
+          ));
+    }
+
+    Widget expandedInfoContainer(Statistic localStat, int index) {
+      return SizedBox(
+          height:
+              expandedInfos[index] ? MediaQuery.of(context).size.height / 4 : 0,
+          child: Column(
+            children: [
+              SizedBox(height: MediaQuery.of(context).size.height / 40),
+              Container(
+                padding: EdgeInsets.all(5),
+                height: MediaQuery.of(context).size.height / 5,
+                decoration: BoxDecoration(
+                  color: whiteMode.backgroundColor,
+                  border: Border.all(width: 2, color: whiteMode.abstractColor),
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                ),
+                child: Row(
+                  children: [
+                    Flexible(
+                      flex: 1,
+                      child: Column(
+                        children: [
+                          Flexible(
+                              flex: 1,
+                              child: expandedInfoTextRow(
+                                  "Startzeit: ", localStat.startTime)),
+                          SizedBox(
+                              height: MediaQuery.of(context).size.height / 90),
+                          Flexible(
+                              flex: 1,
+                              child: expandedInfoTextRow(
+                                  "Stoppzeit: ", localStat.endTime)),
+                          SizedBox(
+                              height: MediaQuery.of(context).size.height / 90),
+                          Flexible(
+                              flex: 1,
+                              child: expandedInfoTextRow(
+                                "Zeitspanne: ",
+                                statistic.countedTime != ""
+                                    ? globalMethods.outputCountedTime(
+                                        statistic.countedTime)
+                                    : "...",
+                              )),
+                          SizedBox(
+                              height: MediaQuery.of(context).size.height / 90),
+                          Flexible(
+                              flex: 1,
+                              child: expandedInfoTextRow(
+                                  "Datum: ", localStat.date)),
+                        ],
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    Flexible(
+                        flex: 1,
+                        child: Container(
+                            padding: EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              color: whiteMode.backgroundColor,
+                              border: Border.all(
+                                  width: 1, color: whiteMode.abstractColor),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                            ),
+                            child: ListView.builder(
+                                itemCount: localStat.user.length,
+                                padding: EdgeInsets.all(5),
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Container(
+                                      padding: EdgeInsets.all(3),
+                                      child: Text(
+                                        localStat.user[index],
+                                        style: TextStyle(fontSize: 14),
+                                      ));
+                                })))
+                  ],
+                ),
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height / 40),
+            ],
+          ));
+    }
+
     Widget CustomListTile(
       User user,
       Company company,
@@ -60,10 +171,21 @@ class _Stats_mainState extends State<Stats_main> {
     ) {
       Color color = const Color(0xFF4338CA);
       return Container(
-          height: 80,
-          color: Colors.white,
-          child: Row(children: [
-            SizedBox(
+          height: MediaQuery.of(context).size.height / 10,
+          decoration: BoxDecoration(
+            color: whiteMode.cardColor,
+            border: Border.all(width: 2, color: whiteMode.abstractColor),
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          padding: EdgeInsets.only(left: 8, right: 8),
+          child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+            Container(
+                height: MediaQuery.of(context).size.height / 13,
+                decoration: BoxDecoration(
+                  color: whiteMode.backgroundColor,
+                  border: Border.all(width: 2, color: whiteMode.abstractColor),
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                ),
                 width: (MediaQuery.of(context).size.width / 10) * 3,
                 child: Center(
                     child: Column(children: const [
@@ -81,8 +203,15 @@ class _Stats_mainState extends State<Stats_main> {
                     textScaleFactor: 1,
                   )
                 ]))),
-            SizedBox(
-                width: (MediaQuery.of(context).size.width / 10) * 2,
+            SizedBox(width: MediaQuery.of(context).size.width / 30),
+            Container(
+                width: MediaQuery.of(context).size.width / 5,
+                height: MediaQuery.of(context).size.height / 13,
+                decoration: BoxDecoration(
+                  color: whiteMode.backgroundColor,
+                  border: Border.all(width: 2, color: whiteMode.abstractColor),
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                ),
                 child: Center(
                     child: Column(children: [
                   SizedBox(height: 5),
@@ -101,25 +230,9 @@ class _Stats_mainState extends State<Stats_main> {
                     textScaleFactor: 1,
                   )
                 ]))),
-            SizedBox(
-                width: (MediaQuery.of(context).size.width / 10) * 4,
-                child: Row(children: [
-                  CircleAvatar(
-                    radius: 20,
-                    backgroundColor: Colors.amber,
-                    child: IconButton(
-                        color: Colors.black,
-                        padding: const EdgeInsets.all(2),
-                        iconSize: 20,
-                        icon: const Icon(Icons.edit),
-                        onPressed: () {
-                          showDialog<Dialog>(
-                              context: context,
-                              builder: (BuildContext context) =>
-                                  EditStats(statistic, user, company));
-                        }),
-                  ),
-                  SizedBox(width: 10),
+            Container(
+                width: (MediaQuery.of(context).size.width / 3),
+                child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                   CircleAvatar(
                     radius: 20,
                     backgroundColor: Colors.amber,
@@ -133,6 +246,7 @@ class _Stats_mainState extends State<Stats_main> {
                               company, user, statistic);
 
                           currentStats.removeAt(index);
+                          expandedInfos.removeAt(index);
                           updateWidget();
                         }),
                   ),
@@ -143,13 +257,16 @@ class _Stats_mainState extends State<Stats_main> {
                     child: IconButton(
                         color: Colors.black,
                         padding: const EdgeInsets.all(2),
-                        iconSize: 20,
-                        icon: const Icon(Icons.menu),
+                        iconSize: 40,
+                        icon: expandedInfos[index] == false
+                            ? const Icon(Icons.arrow_drop_down_sharp)
+                            : const Icon(Icons.arrow_right),
                         onPressed: () {
-                          showDialog<Dialog>(
-                              context: context,
-                              builder: (BuildContext context) =>
-                                  FullStats(statistic));
+                          setState(() {
+                            expandedInfos[index]
+                                ? expandedInfos[index] = false
+                                : expandedInfos[index] = true;
+                          });
                         }),
                   ),
                 ]))
@@ -159,8 +276,10 @@ class _Stats_mainState extends State<Stats_main> {
     Widget spaltenCards(Category category) {
       return Container(
           height: 50,
-          color: category.isSelected ? Colors.white : Colors.black,
-          width: MediaQuery.of(context).size.width / spaltenNamen.length,
+          color: category.isSelected
+              ? whiteMode.backgroundColor
+              : whiteMode.textColor,
+          width: (MediaQuery.of(context).size.width / spaltenNamen.length) - 6,
           child: OutlinedButton(
             onPressed: () {
 //currentStats.sort((a, b) => a.countedTime.length.compareTo(b.countedTime.length));
@@ -177,7 +296,9 @@ class _Stats_mainState extends State<Stats_main> {
             },
             child: Text(category.title,
                 style: TextStyle(
-                    color: category.isSelected ? Colors.black : Colors.grey)),
+                    color: category.isSelected
+                        ? whiteMode.textColor
+                        : whiteMode.backgroundColor)),
             style: ButtonStyle(
                 padding: MaterialStateProperty.all(
                     EdgeInsets.symmetric(vertical: 10, horizontal: 5)),
@@ -205,8 +326,9 @@ class _Stats_mainState extends State<Stats_main> {
                   child: Column(
                     children: [
                       Container(
-                        height: 50,
-                        color: Colors.black,
+                        padding: EdgeInsets.only(left: 6, right: 6),
+                        height: MediaQuery.of(context).size.height / 12,
+                        color: whiteMode.textColor,
                         child: Row(
                           children: [
                             spaltenCards(spaltenNamen[0]),
@@ -217,7 +339,7 @@ class _Stats_mainState extends State<Stats_main> {
                         ),
                       ),
                       Container(
-                        height: MediaQuery.of(context).size.height - 200,
+                        height: MediaQuery.of(context).size.height / 1.25,
                         child: Scrollbar(
                             child: ListView.builder(
                                 itemCount: currentStats.length,
@@ -225,8 +347,15 @@ class _Stats_mainState extends State<Stats_main> {
                                 itemBuilder: (BuildContext context, int index) {
                                   return Container(
                                       padding: EdgeInsets.all(5),
-                                      child: CustomListTile(user, company,
-                                          currentStats[index], index));
+                                      child: Column(children: [
+                                        CustomListTile(user, company,
+                                            currentStats[index], index),
+                                        AnimatedSize(
+                                            curve: Curves.easeIn,
+                                            duration: Duration(seconds: 1),
+                                            child: expandedInfoContainer(
+                                                currentStats[index], index)),
+                                      ]));
                                 })),
                       )
                     ],
@@ -246,6 +375,9 @@ class _Stats_mainState extends State<Stats_main> {
       List<Statistic> allDrinks =
           await selectStatements.selectStatsOfUserOnDate(user, company);
 
+      for (int i = 0; i < allDrinks.length; i++) {
+        expandedInfos.add(false);
+      }
       return allDrinks;
     } catch (Exception) {
       print("Error while getting Data");

@@ -2,17 +2,19 @@ import 'package:flutter/material.dart';
 import "package:intl/intl.dart";
 
 import 'package:itm_ichtrinkmehr_flutter/actions_admin/full_stats_admin.dart';
+import 'package:itm_ichtrinkmehr_flutter/global_methods.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/colors.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/message.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
 import 'package:itm_ichtrinkmehr_flutter/web_db/insert_statements.dart';
+import 'package:sizer/sizer.dart';
 
-TextEditingController messageController = TextEditingController();
 WhiteMode whiteMode = WhiteMode();
 InsertStatements insertStatements = InsertStatements();
 DateFormat _formatterDate = DateFormat('dd:MM:yyyy');
 DateFormat _formatter = DateFormat('HH:mm:ss');
+GlobalMethods globalMethods = GlobalMethods();
 
 class SendMessages extends StatefulWidget {
   Company company;
@@ -28,6 +30,7 @@ class _SendMessagesState extends State<SendMessages> {
   _SendMessagesState(this.company, this.user);
   Company company;
   User user;
+  TextEditingController messageController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     decoratedTextBox(Message message) {
@@ -78,7 +81,7 @@ class _SendMessagesState extends State<SendMessages> {
 
               return Container(
                   padding: EdgeInsets.all(10),
-                  height: MediaQuery.of(context).size.height / 1.25,
+                  height: 80.h,
                   child: ListView.builder(
                       itemCount: allMessages.length,
                       itemBuilder: (BuildContext context, int index) {

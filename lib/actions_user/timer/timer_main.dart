@@ -345,7 +345,7 @@ class _Timer_mainState extends State<Timer_main> {
     }
 
     Widget addUserDisplay = AnimatedSize(
-        curve: Curves.easeIn,
+        curve: Curves.decelerate,
         duration: Duration(seconds: 1),
         child: Container(
             height: MediaQuery.of(context).size.height / sizeOfUserFieldFull,
