@@ -1,15 +1,10 @@
-import 'dart:async';
-
 import "package:intl/intl.dart";
 import 'package:itm_ichtrinkmehr_flutter/values/colors.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:flutter/material.dart';
-import 'package:itm_ichtrinkmehr_flutter/actions_user/timer/stopwatch.dart';
 import 'package:itm_ichtrinkmehr_flutter/global_methods.dart';
 import 'package:itm_ichtrinkmehr_flutter/web_db/select_statements.dart';
-import 'package:lottie/lottie.dart';
-import 'package:itm_ichtrinkmehr_flutter/actions_user/timer/stopwatchv2.dart';
-
+import 'package:sizer/sizer.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/statistic.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
@@ -23,6 +18,7 @@ SelectStatements selectStatements = SelectStatements();
 GlobalMethods globalmethods = GlobalMethods();
 WhiteMode whiteMode = WhiteMode();
 bool timeAlreadyRunning = false;
+bool addUserShown = true;
 int doubleChecker = 0;
 bool running = false;
 
@@ -60,8 +56,9 @@ class _Timer_mainState extends State<Timer_main> {
   bool firstStarted = true;
 
   final _formatter = DateFormat('HH:mm:ss');
-  var StartTime = 0;
-  var NowTime = 0;
+  var startTime = 0;
+  var nowTime = 0;
+
   late StopWatchTimer _stopWatchTimer;
   var displayTime = "00:00:00";
 
@@ -144,9 +141,9 @@ class _Timer_mainState extends State<Timer_main> {
       if (time <= 60) {
         int seconds = time % 60;
         if (seconds.toString().length > 1) {
-          return "00:00" + ":" + formatTime;
+          return "00:00" ":" + formatTime;
         } else {
-          return "00:00" + ":0" + formatTime;
+          return "00:00" ":0" + formatTime;
         }
       } else if (time <= 3600) {
         int minute = time ~/ 60;
@@ -177,22 +174,7 @@ class _Timer_mainState extends State<Timer_main> {
     }
 
     var DiffTime =
-        DateTime.fromMillisecondsSinceEpoch(NowTime - StartTime).toUtc();
-
-    //if Timer is already running
-
-    /* if (statisticInput.isrunning != "") {
-      buttonIndex = 1;
-      setState(() {
-        buttonIndex = 1;
-      });
-    }
-    else{
-       buttonIndex = 0;
-      setState(() {
-        buttonIndex = 0;
-      });
-    }*/
+        DateTime.fromMillisecondsSinceEpoch(nowTime - startTime).toUtc();
 
     int _value = 1;
 
@@ -212,8 +194,8 @@ class _Timer_mainState extends State<Timer_main> {
         });
         //Veränderung Text-Status
         setState(() {
-          StartTime = DateTime.now().millisecondsSinceEpoch.toInt();
-          NowTime = DateTime.now().millisecondsSinceEpoch.toInt();
+          startTime = DateTime.now().millisecondsSinceEpoch.toInt();
+          nowTime = DateTime.now().millisecondsSinceEpoch.toInt();
         });
         _stopWatchTimer.onExecute.add(StopWatchExecute.start);
         setTimeAtStart(0, statistic);
@@ -225,8 +207,8 @@ class _Timer_mainState extends State<Timer_main> {
           //Veränderung Text-Status
           running = false;
           addUserButtonAble = true;
-          StartTime = 0;
-          NowTime = 0;
+          startTime = 0;
+          nowTime = 0;
         });
         _stopWatchTimer.onExecute.add(StopWatchExecute.stop);
         _stopWatchTimer.onExecute.add(StopWatchExecute.reset);
@@ -244,8 +226,8 @@ class _Timer_mainState extends State<Timer_main> {
     Widget buttonWidget() {
       return Container(
           color: running
-              ? Color.fromARGB(255, 241, 151, 151)
-              : Color.fromARGB(255, 157, 240, 171),
+              ? const Color.fromARGB(255, 241, 151, 151)
+              : const Color.fromARGB(255, 157, 240, 171),
           height: MediaQuery.of(context).size.height / 16,
           width: MediaQuery.of(context).size.width,
           child: GestureDetector(
@@ -260,98 +242,55 @@ class _Timer_mainState extends State<Timer_main> {
           ));
     }
 
-    showDialogAddWorker() {
-      return Dialog(
-        elevation: 1,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        child: Container(
-          width: MediaQuery.of(context).size.width / 1.5,
-          height: MediaQuery.of(context).size.height / 2.2,
-          decoration: BoxDecoration(boxShadow: [
-            BoxShadow(
-                offset: const Offset(12, 26),
-                blurRadius: 50,
-                spreadRadius: 0,
-                color: Colors.grey.withOpacity(.6)),
-          ]),
-          child: ListView.builder(
-              itemCount: allUser.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  padding: EdgeInsets.all(10),
-                  width: MediaQuery.of(context).size.width,
-                  child: Column(
-                    children: [
-                      AspectRatio(
-                        aspectRatio: 208 / 71,
-                        child: Container(
-                          decoration: BoxDecoration(boxShadow: [
-                            BoxShadow(
-                              offset: Offset(0, 4),
-                              color: Colors.blue,
-                              spreadRadius: 4,
-                            )
-                          ]),
-                          child: MaterialButton(
-                              onPressed: () {
-                                bool userInArray = false;
-                                for (int i = 0; i < currentWorker.length; i++) {
-                                  if (allUser[index].user_name ==
-                                      currentWorker[i].user_name) {
-                                    userInArray = true;
-                                  }
-                                }
-                                if (userInArray == false) {
-                                  currentWorker.add(allUser[index]);
-                                  if (sizeOfUserFieldFull > 3) {
-                                    setState(() {
-                                      sizeOfUserFieldFull =
-                                          sizeOfUserFieldFull - 2;
-                                    });
-                                  }
-                                  setState(() {});
-                                } else {
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(const SnackBar(
-                                    backgroundColor: Colors.red,
-                                    content: Text("User bereits in Liste"),
-                                    duration: Duration(milliseconds: 2500),
-                                  ));
-                                }
-                              },
-                              splashColor: whiteMode.cardColor,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(36)),
-                              padding: const EdgeInsets.all(0.0),
-                              child: Container(
-                                  constraints: const BoxConstraints(
-                                      minWidth: 88.0,
-                                      minHeight:
-                                          36.0), // min sizes for Material buttons
-                                  alignment: Alignment.center,
-                                  child: Text(allUser[index].user_name,
-                                      style: TextStyle(
-                                          color: whiteMode.backgroundColor,
-                                          fontWeight: FontWeight.w300)))),
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                    ],
-                  ),
-                );
-              }),
-        ),
+    showAddUser() {
+      return SizedBox(
+        height: addUserShown ? 0.h : 20.h,
+        width: 80.w,
+        child: ListView.separated(
+            separatorBuilder: (context, index) => Container(height: 1.h),
+            itemCount: allUser.length,
+            itemBuilder: (BuildContext context, int index) {
+              return Container(
+                  height: 8.h,
+                  padding: const EdgeInsets.all(1),
+                  color: whiteMode.cardColor,
+                  child: ListTile(
+                      title: Text(allUser[index].user_name),
+                      onTap: () {
+                        bool userInArray = false;
+                        for (int i = 0; i < currentWorker.length; i++) {
+                          if (allUser[index].user_name ==
+                              currentWorker[i].user_name) {
+                            userInArray = true;
+                          }
+                        }
+                        if (userInArray == false) {
+                          currentWorker.add(allUser[index]);
+
+                          setState(() {
+                            addUserShown = true;
+                          });
+                        } else {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            backgroundColor: Colors.red,
+                            content: Text("User bereits in Liste"),
+                            duration: Duration(milliseconds: 2500),
+                          ));
+                        }
+                      }));
+            }),
       );
     }
 
     Widget addUserDisplay = AnimatedSize(
         curve: Curves.decelerate,
-        duration: Duration(seconds: 1),
-        child: Container(
-            height: MediaQuery.of(context).size.height / sizeOfUserFieldFull,
+        duration: const Duration(seconds: 1),
+        child: SizedBox(
+            height: addUserShown ? 30.h : 10.h,
             child: ListView.separated(
                 separatorBuilder: (BuildContext context, int index) {
-                  return SizedBox(height: 10);
+                  return const SizedBox(height: 10);
                 },
                 itemCount: currentWorker.length,
                 itemBuilder: (BuildContext context, int index) {
@@ -368,35 +307,37 @@ class _Timer_mainState extends State<Timer_main> {
                         trailing: IconButton(
                           iconSize: 40,
                           onPressed: () {
-                            if (currentWorker.length > 1) {
-                              if (addUserButtonAble) {
-                                currentWorker.removeAt(index);
-                                setState(() {
-                                  currentWorker = currentWorker;
-                                });
+                            if (!running) {
+                              if (currentWorker.length > 1) {
+                                if (addUserButtonAble) {
+                                  currentWorker.removeAt(index);
+                                  setState(() {
+                                    currentWorker = currentWorker;
+                                  });
 
-                                if (sizeOfUserFieldFull > 9) {
-                                  setState(() {
-                                    sizeOfUserFieldFull =
-                                        sizeOfUserFieldFull - 1.8;
-                                  });
-                                } else {
-                                  setState(() {
-                                    sizeOfUserFieldFull = 9;
-                                  });
+                                  if (sizeOfUserFieldFull > 9) {
+                                    setState(() {
+                                      sizeOfUserFieldFull =
+                                          sizeOfUserFieldFull - 1.8;
+                                    });
+                                  } else {
+                                    setState(() {
+                                      sizeOfUserFieldFull = 9;
+                                    });
+                                  }
                                 }
+                              } else {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(const SnackBar(
+                                  backgroundColor: Colors.red,
+                                  content: Text(
+                                      "Es muss mindestens ein User ausgewählt sein"),
+                                  duration: Duration(milliseconds: 2500),
+                                ));
                               }
-                            } else {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(const SnackBar(
-                                backgroundColor: Colors.red,
-                                content: Text(
-                                    "Es muss mindestens ein User ausgewählt sein"),
-                                duration: Duration(milliseconds: 2500),
-                              ));
                             }
                           },
-                          icon: Icon(Icons.remove_circle),
+                          icon: const Icon(Icons.remove_circle),
                           color: addUserButtonAble
                               ? Colors.red
                               : whiteMode.backgroundColor,
@@ -412,12 +353,22 @@ class _Timer_mainState extends State<Timer_main> {
               return Container();
             } else {
               if (dataSnapshot.error != null) {
-                return Center(
+                return const Center(
                   child: Text('An error occured'),
                 );
               } else {
+                var data = dataSnapshot.data as Statistic;
+
+                if (data.isrunning != "") {
+                  setState(() {
+                    timeAlreadyRunning = true;
+                    running = true;
+                  });
+                  _StartStopButton(data);
+                }
+
                 return SizedBox(
-                    height: 100,
+                    height: 15.h,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
@@ -426,6 +377,7 @@ class _Timer_mainState extends State<Timer_main> {
                           initialData: 0,
                           builder: (context, snap) {
                             final value = snap.data;
+
                             print('Listen every minute. $value');
                             return Column(
                               children: <Widget>[
@@ -444,6 +396,9 @@ class _Timer_mainState extends State<Timer_main> {
                                             formatTime(value.toString()),
                                             style: TextStyle(
                                                 fontSize: 30,
+                                                color: running
+                                                    ? whiteMode.abstractColor
+                                                    : whiteMode.backgroundColor,
                                                 fontFamily: 'Helvetica',
                                                 fontWeight: FontWeight.bold),
                                           ),
@@ -454,7 +409,7 @@ class _Timer_mainState extends State<Timer_main> {
                             );
                           },
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                       ],
                     ));
               }
@@ -465,30 +420,46 @@ class _Timer_mainState extends State<Timer_main> {
 //main Frontend
 
     return Container(
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       height: MediaQuery.of(context).size.height,
       child: Column(children: [
         Divider(
           height: MediaQuery.of(context).size.height / 30,
         ),
-        Container(
-          color: addUserButtonAble
-              ? whiteMode.abstractColor
-              : Colors.grey.withOpacity(0.2),
-          height: MediaQuery.of(context).size.height / 14,
-          width: MediaQuery.of(context).size.height,
-          child: IconButton(
-            iconSize: 45,
-            onPressed: () {
-              if (addUserButtonAble) {
-                // Call this in a function
-                showDialog<Dialog>(
-                    context: context,
-                    builder: (BuildContext context) => showDialogAddWorker());
-              }
-            },
-            icon: Icon(Icons.add_circle),
-            color: addUserButtonAble ? whiteMode.backgroundColor : Colors.grey,
+        AnimatedSize(
+          curve: Curves.decelerate,
+          duration: const Duration(seconds: 1),
+          child: SizedBox(
+            width: 100.w,
+            height: addUserShown ? 10.h : 30.h,
+            child: Column(
+              children: [
+                Container(
+                  width: 100.w,
+                  color: addUserButtonAble
+                      ? whiteMode.abstractColor
+                      : Colors.grey.withOpacity(0.2),
+                  child: IconButton(
+                    iconSize: 45,
+                    onPressed: () {
+                      if (!running) {
+                        setState(() {
+                          addUserShown
+                              ? addUserShown = false
+                              : addUserShown = true;
+                        });
+                      }
+                    },
+                    icon: Icon(
+                        addUserShown ? Icons.add_circle : Icons.close_sharp),
+                    color: addUserButtonAble
+                        ? whiteMode.backgroundColor
+                        : Colors.grey,
+                  ),
+                ),
+                showAddUser()
+              ],
+            ),
           ),
         ),
         Divider(
@@ -507,17 +478,26 @@ class _Timer_mainState extends State<Timer_main> {
               children: <Widget>[
                 Text(
                   'Startzeit',
-                  style:
-                      TextStyle(fontSize: 25, color: whiteMode.backgroundColor),
+                  style: TextStyle(
+                      fontSize: 25,
+                      color: running
+                          ? whiteMode.backgroundColor
+                          : whiteMode.abstractColor),
                 ),
                 Text(
                   timerStart,
-                  style:
-                      TextStyle(fontSize: 30, color: whiteMode.backgroundColor),
+                  style: TextStyle(
+                      fontSize: 30,
+                      color: running
+                          ? whiteMode.backgroundColor
+                          : whiteMode.abstractColor),
                 )
               ],
             ))),
-        stopWatch(),
+        SizedBox(
+          height: 15.h,
+          child: stopWatch(),
+        ),
         buttonWidget(),
       ]),
     );
@@ -527,8 +507,8 @@ class _Timer_mainState extends State<Timer_main> {
     try {
       Statistic stat = await selectStatements.selectStatOfUserO(user, company);
       allUser = await selectStatements.selectAllUserOfCompany(company);
-      if (stat.isrunning == "true") {}
-      timeAlreadyRunning = true;
+
+      return stat;
     } catch (Exception) {
       print("Error while getting Data");
     }

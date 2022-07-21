@@ -1,22 +1,24 @@
 import "package:intl/intl.dart";
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:itm_ichtrinkmehr_flutter/actions_user/timer/timer_main.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/message.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/statistic.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
 
 class SelectStatements {
-
-  Future<List<String>> selectUserOfStat(String statistic_id, Company company ) async {
+  Future<List<String>> selectUserOfStat(
+      String statisticId, Company company) async {
     List<String> userList = <String>[];
 
-      await FirebaseFirestore.instance.collection(
-        '/AllProjects/' + company.company_name + '/StatisticsInProject' + statistic_id + "User")
+    await FirebaseFirestore.instance
+        .collection('/AllProjects/' +
+            company.company_name +
+            '/StatisticsInProject' +
+            statisticId +
+            "User")
         .get()
         .then((QuerySnapshot querySnapshot) {
       for (var doc in querySnapshot.docs) {
-        
         userList.add(doc["user_name"]);
       }
     });
@@ -24,26 +26,24 @@ class SelectStatements {
     return userList;
   }
 
-
   Future<Company> selectCompany(String companyCode) async {
-        Company company = Company.empty();
+    Company company = Company.empty();
 
     await FirebaseFirestore.instance
         .collection('/AllProjects/' + company.company_name)
         .where('company_code', isEqualTo: companyCode)
         .get()
         .then((QuerySnapshot querySnapshot) {
-         
       for (var doc in querySnapshot.docs) {
-          company = Company(
+        company = Company(
           doc["company_name"],
           doc["company_code"],
-
         );
       }
     });
-return company;
+    return company;
   }
+
   Future<List<Statistic>> selectStatsOfUserOnDate(
       User user, Company company) async {
     List<Statistic> statisticList = <Statistic>[];
@@ -89,7 +89,21 @@ return company;
       }
     });
 
-    return statisticList;
+    List<Statistic> sortedUser = [];
+    bool isIn = false;
+    for (int i = 0; i < statisticList.length; i++) {
+      for (int j = 0; j < statisticList[i].user.length; j++) {
+        if (statisticList[i].user[j] == user.user_name) {
+          isIn = true;
+        }
+      }
+      if (isIn) {
+        isIn = false;
+        sortedUser.add(statisticList[i]);
+      }
+    }
+
+    return sortedUser;
   }
 
   Future<List<Statistic>> selectAllStats(Company company) async {
@@ -159,7 +173,6 @@ return company;
             .get()
             .then((QuerySnapshot insideSnapshot) {
           for (var doc in insideSnapshot.docs) {
-            print("Schnitzel");
             users.add(doc["user_name"]);
           }
           value.user = users;
@@ -203,38 +216,37 @@ return company;
 
     return userList;
   }
-    Future<User> selectOneUserOfCompany(Company company, String user_code) async {
+
+  Future<User> selectOneUserOfCompany(Company company, String userCode) async {
     User user = User.empty();
 
     await FirebaseFirestore.instance
         .collection('/AllProjects/' + company.company_name + '/UserInProject')
-        .where('user_code', isEqualTo: user_code)
+        .where('user_code', isEqualTo: userCode)
         .get()
         .then((QuerySnapshot querySnapshot) {
-         
       for (var doc in querySnapshot.docs) {
-          user = User(
+        user = User(
           doc["user_name"],
           doc["user_code"],
           doc["isAdmin"],
         );
       }
     });
-return user;
+    return user;
   }
 
   Future<List<Message>> selectAllMessages(Company company) async {
     List<Message> messageList = <Message>[];
 
     await FirebaseFirestore.instance
-        .collection(
-            '/AllProjects/' + company.company_name + '/Messages')
+        .collection('/AllProjects/' + company.company_name + '/Messages')
         .orderBy("time")
         .get()
         .then((QuerySnapshot querySnapshot) {
       for (var doc in querySnapshot.docs) {
         Message value = Message.empty();
-        value.message_id= doc["message_id"];
+        value.message_id = doc["message_id"];
         value.user_name = doc["user_name"];
         value.message_text = doc["message_text"];
         value.date = doc["date"];
@@ -246,6 +258,4 @@ return user;
 
     return messageList;
   }
-  
 }
-

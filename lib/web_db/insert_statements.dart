@@ -15,7 +15,7 @@ class InsertStatements {
     Random random = Random();
     int userId = random.nextInt(10000);
     databaseUser
-        .doc(user.user_name)
+        .doc(userId.toString())
         .set(
           {
             'user_name': user.user_name,
@@ -41,7 +41,8 @@ class InsertStatements {
     });
   }
 
-  insertNewStatistic(Company company, List<User> userList, Statistic statistic) {
+  insertNewStatistic(
+      Company company, List<User> userList, Statistic statistic) {
     var databaseUser = FirebaseFirestore.instance.collection(
         '/AllProjects/' + company.company_name + '/StatisticsInProject');
 
@@ -69,18 +70,16 @@ class InsertStatements {
         statisticId.toString() +
         '/User');
 
-
-for(int i = 0; i<userList.length; i++){
-  print(userList[i].user_name);
-    database.doc(userList[i].user_name).set({
-      'user_name': userList[i].user_name,
-    });
-
-}
+    for (int i = 0; i < userList.length; i++) {
+      print(userList[i].user_name);
+      database.doc(userList[i].user_name).set({
+        'user_name': userList[i].user_name,
+      });
+    }
     return statisticId.toString();
   }
 
-    void insertNewMessage(Company company, Message message) {
+  void insertNewMessage(Company company, Message message) {
     var databaseUser = FirebaseFirestore.instance
         .collection('/AllProjects/' + company.company_name + '/Messages');
 
@@ -90,7 +89,7 @@ for(int i = 0; i<userList.length; i++){
         .doc(messageId.toString())
         .set(
           {
-            'message_id':messageId.toString(),
+            'message_id': messageId.toString(),
             'user_name': message.user_name,
             'message_text': message.message_text,
             'date': message.date,

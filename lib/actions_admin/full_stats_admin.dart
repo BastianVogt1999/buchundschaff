@@ -48,11 +48,11 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
   Widget build(BuildContext context) {
     Widget expandedInfoTextRow(String textName, String textInput) {
       return Container(
-          padding: EdgeInsets.all(5),
+          padding: const EdgeInsets.all(5),
           decoration: BoxDecoration(
             color: whiteMode.backgroundColor,
             border: Border.all(width: 1, color: whiteMode.abstractColor),
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
           ),
           child: Row(
             children: [
@@ -60,14 +60,14 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
                 flex: 1,
                 child: Text(
                   textName,
-                  style: TextStyle(fontSize: 10),
+                  style: const TextStyle(fontSize: 10),
                 ),
               ),
               Flexible(
                 flex: 1,
                 child: Text(
                   textInput,
-                  style: TextStyle(fontSize: 10),
+                  style: const TextStyle(fontSize: 10),
                 ),
               ),
             ],
@@ -82,12 +82,12 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
             children: [
               SizedBox(height: MediaQuery.of(context).size.height / 40),
               Container(
-                padding: EdgeInsets.all(5),
+                padding: const EdgeInsets.all(5),
                 height: MediaQuery.of(context).size.height / 5,
                 decoration: BoxDecoration(
                   color: whiteMode.backgroundColor,
                   border: Border.all(width: 2, color: whiteMode.abstractColor),
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
                 ),
                 child: Row(
                   children: [
@@ -125,27 +125,27 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
                         ],
                       ),
                     ),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     Flexible(
                         flex: 1,
                         child: Container(
-                            padding: EdgeInsets.all(5),
+                            padding: const EdgeInsets.all(5),
                             decoration: BoxDecoration(
                               color: whiteMode.backgroundColor,
                               border: Border.all(
                                   width: 1, color: whiteMode.abstractColor),
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
+                                  const BorderRadius.all(Radius.circular(10)),
                             ),
                             child: ListView.builder(
                                 itemCount: localStat.user.length,
-                                padding: EdgeInsets.all(5),
+                                padding: const EdgeInsets.all(5),
                                 itemBuilder: (BuildContext context, int index) {
                                   return Container(
-                                      padding: EdgeInsets.all(3),
+                                      padding: const EdgeInsets.all(3),
                                       child: Text(
                                         localStat.user[index],
-                                        style: TextStyle(fontSize: 14),
+                                        style: const TextStyle(fontSize: 14),
                                       ));
                                 })))
                   ],
@@ -168,16 +168,16 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
           decoration: BoxDecoration(
             color: whiteMode.cardColor,
             border: Border.all(width: 2, color: whiteMode.abstractColor),
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
           ),
-          padding: EdgeInsets.only(left: 8, right: 8),
+          padding: const EdgeInsets.only(left: 8, right: 8),
           child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
             Container(
                 height: MediaQuery.of(context).size.height / 13,
                 decoration: BoxDecoration(
                   color: whiteMode.backgroundColor,
                   border: Border.all(width: 2, color: whiteMode.abstractColor),
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
                 ),
                 width: (MediaQuery.of(context).size.width / 10) * 3,
                 child: Center(
@@ -203,11 +203,11 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
                 decoration: BoxDecoration(
                   color: whiteMode.backgroundColor,
                   border: Border.all(width: 2, color: whiteMode.abstractColor),
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
                 ),
                 child: Center(
                     child: Column(children: [
-                  SizedBox(height: 5),
+                  const SizedBox(height: 5),
                   Text(
                     statistic.startTime,
                     textScaleFactor: 1,
@@ -223,14 +223,14 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
                     textScaleFactor: 1,
                   )
                 ]))),
-            Container(
+            SizedBox(
                 width: (MediaQuery.of(context).size.width / 3),
                 child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                   CircleAvatar(
                     radius: 20,
-                    backgroundColor: Colors.amber,
+                    backgroundColor: whiteMode.abstractColor,
                     child: IconButton(
-                        color: Colors.black,
+                        color: whiteMode.backgroundColor,
                         padding: const EdgeInsets.all(2),
                         iconSize: 20,
                         icon: const Icon(Icons.delete),
@@ -243,12 +243,12 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
                           updateWidget();
                         }),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   CircleAvatar(
                     radius: 20,
-                    backgroundColor: Colors.amber,
+                    backgroundColor: whiteMode.abstractColor,
                     child: IconButton(
-                        color: Colors.black,
+                        color: whiteMode.backgroundColor,
                         padding: const EdgeInsets.all(2),
                         iconSize: 40,
                         icon: expandedInfos[index] == false
@@ -294,8 +294,8 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
                         : whiteMode.backgroundColor)),
             style: ButtonStyle(
                 padding: MaterialStateProperty.all(
-                    EdgeInsets.symmetric(vertical: 10, horizontal: 5)),
-                shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 5)),
+                shape: MaterialStateProperty.all(const RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(2))))),
           ));
     }
@@ -308,18 +308,18 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
             return globalmethods.loadingScreen(context);
           } else {
             if (dataSnapshot.error != null) {
-              return Center(
+              return const Center(
                 child: Text('An error occured'),
               );
             } else {
               currentStats = dataSnapshot.data as List<Statistic>;
 
-              return Container(
+              return SizedBox(
                   height: MediaQuery.of(context).size.height,
                   child: Column(
                     children: [
                       Container(
-                        padding: EdgeInsets.only(left: 6, right: 6),
+                        padding: const EdgeInsets.only(left: 6, right: 6),
                         height: MediaQuery.of(context).size.height / 12,
                         color: whiteMode.textColor,
                         child: Row(
@@ -331,21 +331,22 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
                           ],
                         ),
                       ),
-                      Container(
+                      SizedBox(
                         height: MediaQuery.of(context).size.height / 1.25,
                         child: Scrollbar(
                             child: ListView.builder(
                                 itemCount: currentStats.length,
-                                padding: EdgeInsets.all(5),
+                                padding: const EdgeInsets.all(5),
                                 itemBuilder: (BuildContext context, int index) {
                                   return Container(
-                                      padding: EdgeInsets.all(5),
+                                      padding: const EdgeInsets.all(5),
                                       child: Column(children: [
                                         CustomListTile(user, company,
                                             currentStats[index], index),
                                         AnimatedSize(
                                             curve: Curves.easeIn,
-                                            duration: Duration(seconds: 1),
+                                            duration:
+                                                const Duration(seconds: 1),
                                             child: expandedInfoContainer(
                                                 currentStats[index], index)),
                                       ]));

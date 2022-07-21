@@ -6,7 +6,7 @@ import 'package:itm_ichtrinkmehr_flutter/values/colors.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
 import 'package:itm_ichtrinkmehr_flutter/web_db/select_statements.dart';
-
+import 'package:sizer/sizer.dart';
 SelectStatements selectStatements = SelectStatements();
 GlobalMethods globalMethods = GlobalMethods();
 WhiteMode whiteMode = WhiteMode();
@@ -29,12 +29,14 @@ class LoginPage_state extends State<LoginPage> {
 
             //background
             padding: const EdgeInsets.all(10.0),
-            width: double.infinity,
-            height: double.infinity,
+            width: 100.w,
+            height: 100.h,
             decoration: BoxDecoration(
               color: whiteMode.backgroundColor,
             ),
-            child: Center(
+            child: Container(width: MediaQuery.of(context).size.height>200? 50.w : 80.w, child:
+            Center(
+
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -42,6 +44,7 @@ class LoginPage_state extends State<LoginPage> {
                       size: 200, color: whiteMode.textColor),
                   SizedBox(height: 20),
                   //Input Company-Code
+                      Container(width: MediaQuery.of(context).size.height>200? 50.w : 80.w, child:
                   TextFormField(
                     controller: companyNameController,
                     obscureText: !pwdVisibility,
@@ -96,12 +99,15 @@ class LoginPage_state extends State<LoginPage> {
                       return null;
                     },
                   ),
+                      ),
 
                   //
                   SizedBox(height: 30),
 
                   //Button weiter
+                Container(width: MediaQuery.of(context).size.height>200? 50.w : 80.w, child:
                   OutlinedButton(
+
                       onPressed: () {
                         entered_code(context, companyNameController.text);
                       },
@@ -126,7 +132,8 @@ class LoginPage_state extends State<LoginPage> {
                         padding:
                             EdgeInsets.symmetric(vertical: 20, horizontal: 50),
                       )),
-                ]))));
+                ),
+                ])))));
   }
 }
 

@@ -3,16 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_admin/UserManagement/user_operations/add_user.dart';
 import 'package:itm_ichtrinkmehr_flutter/global_methods.dart';
-import 'package:itm_ichtrinkmehr_flutter/intro/unternehmens_eingabe.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/colors.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
-import 'package:itm_ichtrinkmehr_flutter/values/statistic.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
 import 'package:itm_ichtrinkmehr_flutter/web_db/select_statements.dart';
 import 'package:itm_ichtrinkmehr_flutter/web_db/update_statements.dart';
-import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
-import 'package:flutter/services.dart';
 
 SelectStatements selectStatements = SelectStatements();
 GlobalMethods globalmethods = GlobalMethods();
@@ -59,7 +55,7 @@ class _allUserState extends State<allUser> {
   Widget build(BuildContext context) {
     Widget editUserName(User user, int index) {
       //Edit Card
-      return Container(
+      return SizedBox(
           height: sizeOfUserEditFields[index] ? 24.h : 0,
           child: Column(
             children: [
@@ -80,14 +76,14 @@ class _allUserState extends State<allUser> {
                       border: const OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(45.0)),
                       ),
-                      enabledBorder: OutlineInputBorder(
+                      enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.grey, width: 1.0),
                         borderRadius: BorderRadius.all(Radius.circular(45.0)),
                       ),
                     ),
                   ),
                   trailing: IconButton(
-                    icon: Icon(Icons.save),
+                    icon: const Icon(Icons.save),
                     iconSize: 30,
                     onPressed: () async {
                       String value =
@@ -128,7 +124,7 @@ class _allUserState extends State<allUser> {
                     title: Text("Adminrechte: " +
                         (user.is_admin == "true" ? "ja" : "nein")),
                     trailing: IconButton(
-                        icon: Icon(Icons.admin_panel_settings),
+                        icon: const Icon(Icons.admin_panel_settings),
                         color:
                             user.is_admin == "true" ? Colors.green : Colors.red,
                         iconSize: 30,
@@ -203,11 +199,11 @@ class _allUserState extends State<allUser> {
             border: const OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(45.0)),
             ),
-            enabledBorder: OutlineInputBorder(
+            enabledBorder: const OutlineInputBorder(
               borderSide: BorderSide(color: Colors.grey, width: 1.0),
               borderRadius: BorderRadius.all(Radius.circular(45.0)),
             ),
-            focusedBorder: OutlineInputBorder(
+            focusedBorder: const OutlineInputBorder(
               borderSide: BorderSide(color: Colors.grey, width: 1.5),
               borderRadius: BorderRadius.all(Radius.circular(45.0)),
             ),
@@ -219,29 +215,28 @@ class _allUserState extends State<allUser> {
     _getUserServer();
 
     Widget addUser() {
-      return Container(
-          height: shownAddUser ? 40.h : 0.h,
+      return SizedBox(
+          height: shownAddUser ? 20.h : 0.h,
           child: Column(children: [
             Container(
               width: 80.w,
               color: whiteMode.cardColor,
               child: ListTile(
-                  title: Text(
-                    "Admin-Rechte: ",
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  trailing: IconButton(
-                    icon: Icon(checkBoxUserIsAdminSelected
-                        ? Icons.check_box
-                        : Icons.crop_square_sharp),
-                    onPressed: () {
-                      setState(() {
-                        checkBoxUserIsAdminSelected
-                            ? checkBoxUserIsAdminSelected = false
-                            : checkBoxUserIsAdminSelected = true;
-                      });
-                    },
-                  )),
+                onTap: () {
+                  setState(() {
+                    checkBoxUserIsAdminSelected
+                        ? checkBoxUserIsAdminSelected = false
+                        : checkBoxUserIsAdminSelected = true;
+                  });
+                },
+                title: const Text(
+                  "Admin-Rechte: ",
+                  style: TextStyle(fontSize: 20),
+                ),
+                trailing: Icon(checkBoxUserIsAdminSelected
+                    ? Icons.check_box
+                    : Icons.crop_square_sharp),
+              ),
             ),
             SizedBox(height: 1.h),
             Container(
@@ -250,15 +245,15 @@ class _allUserState extends State<allUser> {
               child: ListTile(
                 title: TextField(
                   controller: controllerUserName,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
                     hintText: "User-Name",
-                    hintStyle: const TextStyle(
+                    hintStyle: TextStyle(
                         color: Colors.grey, fontWeight: FontWeight.w300),
-                    contentPadding: const EdgeInsets.symmetric(
-                        vertical: 8.0, horizontal: 20.0),
-                    border: const OutlineInputBorder(
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0),
+                    border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(45.0)),
                     ),
                     enabledBorder: OutlineInputBorder(
@@ -268,7 +263,7 @@ class _allUserState extends State<allUser> {
                   ),
                 ),
                 trailing: IconButton(
-                  icon: Icon(Icons.save, size: 30),
+                  icon: const Icon(Icons.save, size: 30),
                   onPressed: () {
                     User newUser = User.empty();
                     newUser.user_name = controllerUserName.text;
@@ -295,7 +290,7 @@ class _allUserState extends State<allUser> {
     Widget CurrentUserWidget() {
       return AnimatedSize(
           curve: Curves.easeIn,
-          duration: Duration(seconds: 1),
+          duration: const Duration(milliseconds: 500),
           child: Container(
               color: whiteMode.backgroundColor,
               height: !shownAddUser ? 60.h : 40.h,
@@ -304,49 +299,49 @@ class _allUserState extends State<allUser> {
                   itemBuilder: (context, index) {
                     return AnimatedSize(
                         curve: Curves.easeIn,
-                        duration: Duration(milliseconds: 500),
-                        child: Container(
+                        duration: const Duration(milliseconds: 500),
+                        child: SizedBox(
                             height: sizeOfUserEditFields[index] ? 33.h : 9.h,
                             child: Column(
                               children: [
                                 //User Card
                                 Card(
-                                    color: whiteMode.abstractColor,
-                                    child: Padding(
-                                      padding: EdgeInsets.all(2),
-                                      child: ListTile(
-                                        title: Text(
-                                          currentUser[index].user_name,
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                          ),
-                                        ),
-                                        leading: CircleAvatar(
-                                            backgroundColor:
-                                                whiteMode.backgroundColor,
-                                            child: Icon(
-                                              Icons.person,
-                                              color: whiteMode.abstractColor,
-                                            )),
-                                        trailing: IconButton(
-                                          icon: !sizeOfUserEditFields[index]
-                                              ? Icon(Icons
-                                                  .mode_edit_outline_outlined)
-                                              : Icon(Icons.arrow_right),
-                                          iconSize: 30,
-                                          color: whiteMode.backgroundColor,
-                                          onPressed: () {
-                                            setState(() {
-                                              sizeOfUserEditFields[index]
-                                                  ? sizeOfUserEditFields[
-                                                      index] = false
-                                                  : sizeOfUserEditFields[
-                                                      index] = true;
-                                            });
-                                          },
+                                  color: whiteMode.abstractColor,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(2),
+                                    child: ListTile(
+                                      onTap: () {
+                                        setState(() {
+                                          sizeOfUserEditFields[index]
+                                              ? sizeOfUserEditFields[index] =
+                                                  false
+                                              : sizeOfUserEditFields[index] =
+                                                  true;
+                                        });
+                                      },
+                                      title: Text(
+                                        currentUser[index].user_name,
+                                        style: const TextStyle(
+                                          fontSize: 20,
                                         ),
                                       ),
-                                    )),
+                                      leading: CircleAvatar(
+                                          backgroundColor:
+                                              whiteMode.backgroundColor,
+                                          child: Icon(
+                                            Icons.person,
+                                            color: whiteMode.abstractColor,
+                                          )),
+                                      trailing: Icon(
+                                        !sizeOfUserEditFields[index]
+                                            ? Icons.mode_edit_outline_outlined
+                                            : Icons.arrow_right,
+                                        size: 30,
+                                        color: whiteMode.backgroundColor,
+                                      ),
+                                    ),
+                                  ),
+                                ),
 
                                 editUserName(currentUser[index], index)
                               ],
@@ -360,15 +355,15 @@ class _allUserState extends State<allUser> {
 // Checking if future is resolved
         return snapshot.hasData
             ? SingleChildScrollView(
-                physics: BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 child: SizedBox(
                     child: Column(children: [
-                  Divider(height: 20),
+                  const Divider(height: 20),
                   SizedBox(
                     height: 50,
                     child: RoundedSearchInput(),
                   ),
-                  Divider(height: 20),
+                  const Divider(height: 20),
                   CurrentUserWidget(),
                   Divider(height: 4.h),
                   Container(
@@ -398,7 +393,7 @@ class _allUserState extends State<allUser> {
                   ),
                   addUser()
                 ])))
-            : Center(
+            : const Center(
                 child: CircularProgressIndicator(),
               );
       },

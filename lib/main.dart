@@ -7,8 +7,10 @@ import 'intro/unternehmens_eingabe.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+      // Replace with actual values
 
-  await Firebase.initializeApp();
+      );
 
   runApp(MyApp());
 }
@@ -18,10 +20,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     ThemeData lightTheme = ThemeData(
         brightness: Brightness.light,
-        visualDensity: VisualDensity(vertical: 0.5, horizontal: 0.5),
-        primarySwatch: MaterialColor(
+        visualDensity: const VisualDensity(vertical: 0.5, horizontal: 0.5),
+        primarySwatch: const MaterialColor(
           0x00000000,
-          const <int, Color>{
+          <int, Color>{
             50: Color(0xff000000),
             100: Color(0xff181818),
             200: Color(0xff1c1c1c),
@@ -34,20 +36,19 @@ class MyApp extends StatelessWidget {
             900: Color(0xffc9c9c9)
           },
         ),
-        primaryColor: Color(0xff000000),
-        primaryColorBrightness: Brightness.light,
-        primaryColorLight: Color(0xff00fff1),
-        primaryColorDark: Color(0xff00adb5),
-        bottomAppBarColor: Color(0xff029bff),
+        primaryColor: const Color(0xff000000),
+        primaryColorLight: const Color(0xff00fff1),
+        primaryColorDark: const Color(0xff00adb5),
+        bottomAppBarColor: const Color(0xff029bff),
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(primary: Colors.white),
         ),
-        bottomNavigationBarTheme:
-            BottomNavigationBarThemeData(selectedItemColor: Color(0xff6ef5db)),
-        cardColor: Color(0xff00adb5),
-        dividerColor: Color(0x1fae90ff),
-        backgroundColor: Color(0xff1a1817),
-        focusColor: Color(0x1a6c4613));
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+            selectedItemColor: Color(0xff6ef5db)),
+        cardColor: const Color(0xff00adb5),
+        dividerColor: const Color(0x1fae90ff),
+        backgroundColor: const Color(0xff1a1817),
+        focusColor: const Color(0x1a6c4613));
 
     return Sizer(builder: (context, orientation, deviceType) {
       return MaterialApp(

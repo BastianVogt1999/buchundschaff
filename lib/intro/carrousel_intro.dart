@@ -18,32 +18,34 @@ class cusCar extends StatefulWidget {
   Stream stream;
   StreamController streamController;
 
-  cusCar(this.stream, this.streamController);
+double widgetSize;
+  cusCar(this.stream, this.streamController, this. widgetSize);
 
   @override
   _CustomCarouselFB2State createState() =>
-      _CustomCarouselFB2State(stream, streamController);
+      _CustomCarouselFB2State(stream, streamController, widgetSize);
 }
 
 class _CustomCarouselFB2State extends State<cusCar> {
   Stream stream;
   StreamController streamController;
-
-  _CustomCarouselFB2State(this.stream, this.streamController);
+  double widgetSize;
+  _CustomCarouselFB2State(this.stream, this.streamController, this.widgetSize);
 
   final double carouselItemMargin = 16;
-
+  final ScrollController _firstController = ScrollController();
   late PageController _pageController;
   int _position = 0;
 
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(initialPage: 1, viewportFraction: .7);
+    _pageController = PageController(initialPage: 1, viewportFraction: 0.6);
   }
 
   @override
   Widget build(BuildContext context) {
+    print("page-size: " + widgetSize.toString());
     List<Widget> cards = [
       CardFb1(
         text: "Anmelden als Admin",
@@ -71,7 +73,13 @@ class _CustomCarouselFB2State extends State<cusCar> {
       ),
     ];
 
-    return PageView.builder(
+    return Scrollbar(
+        thumbVisibility: true,
+        controller: _firstController,
+        interactive: true,
+        child:
+
+      PageView.builder(
         controller: _pageController,
         itemCount: cards.length,
         onPageChanged: (int position) {
@@ -81,11 +89,12 @@ class _CustomCarouselFB2State extends State<cusCar> {
         },
         itemBuilder: (BuildContext context, int position) {
           return imageSlider(position, cards);
-        });
+        }));
   }
 
   Widget imageSlider(int position, var cards) {
-    return AnimatedBuilder(
+    return
+      AnimatedBuilder(
       animation: _pageController,
       builder: (BuildContext context, widget) {
         return Container(

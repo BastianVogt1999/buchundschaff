@@ -9,7 +9,7 @@ import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
 import 'package:itm_ichtrinkmehr_flutter/web_db/insert_statements.dart';
 import 'package:itm_ichtrinkmehr_flutter/web_db/select_statements.dart';
 import 'package:lottie/lottie.dart';
-
+import 'package:sizer/sizer.dart';
 import '../actions_admin/admin_menu.dart';
 import '../actions_user/user_menu.dart';
 import 'unternehmens_eingabe.dart';
@@ -126,6 +126,7 @@ class _RoleInputState extends State<RoleInput> {
         height: double.infinity,
         color: whiteMode.backgroundColor,
         child: Center(
+       child:   Container(width: MediaQuery.of(context).size.height>200? 50.w : 80.w,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -204,13 +205,13 @@ class _RoleInputState extends State<RoleInput> {
               ),
               SizedBox(
                 height: 300,
-                child: cusCar(stream, streamControllerUserInput),
+                child: cusCar(stream, streamControllerUserInput, MediaQuery.of(context).size.width),
               )
             ],
           ),
         ),
       ),
-    );
+    ));
   }
 }
 
