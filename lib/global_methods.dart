@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
-class GlobalMethods{
-String substractTimeString(String startTime, String endTime) {
-  
-
+class GlobalMethods {
+  String substractTimeString(String startTime, String endTime) {
     String result = "";
 
     List<String> startTimeArrayString = startTime.split(":");
@@ -43,59 +41,60 @@ String substractTimeString(String startTime, String endTime) {
     return result;
   }
 
-  Widget loadingScreen(BuildContext context){
-    return 
-    Container(height: MediaQuery.of(context).size.width/2 -50, child:
-    Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(top: 16),
-                  child: Center(
-                    
-                    child: Lottie.asset("assets/worker.json"),
-                  ),
-                )
-              ],
-            ));
+  Widget loadingScreen(BuildContext context) {
+    return Container(
+        height: MediaQuery.of(context).size.width / 2 - 50,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(top: 16),
+              child: Center(
+                child: Lottie.asset("assets/worker.json"),
+              ),
+            )
+          ],
+        ));
   }
 
-  String outputCountedTime(String input){
+  String outputCountedTime(String input) {
     int time = int.parse(input);
-    if(time<=60){
-      int seconds = time%60;
-      if(seconds.toString().length > 1){
-return "00:00"+ ":"+input;
+    if (time <= 60) {
+      int seconds = time % 60;
+      if (seconds.toString().length > 1) {
+        return "00:00" + ":" + input;
+      } else {
+        return "00:00" + ":0" + input;
       }
-      else{
-        return "00:00"+ ":0"+input;
+    } else if (time <= 3600) {
+      int minute = time ~/ 60;
+      int seconds = time % 60;
+      if (minute.toString().length > 1 && seconds.toString().length > 1) {
+        return "00:" + minute.toString() + ":" + seconds.toString();
+      } else if (minute.toString().length == 1 &&
+          seconds.toString().length > 1) {
+        return "00:0" + minute.toString() + ":" + seconds.toString();
+      } else if (minute.toString().length > 1 &&
+          seconds.toString().length == 1) {
+        return "00:" + minute.toString() + ":0" + seconds.toString();
+      } else {
+        return "00:" + minute.toString() + ":" + seconds.toString();
       }
-      
-    }
-    else if(time<=3600){
-      int minute = time~/60;
-      int seconds = time%60;
-      if(minute.toString().length > 1 && seconds.toString().length > 1){
-return "00:"+ minute.toString() + ":" + seconds.toString();
-      }
-      else if(minute.toString().length == 1 && seconds.toString().length > 1){
-return "00:0"+ minute.toString() + ":" + seconds.toString();
-      }
-         else if(minute.toString().length > 1 && seconds.toString().length == 1){
-return "00:"+ minute.toString() + ":0" + seconds.toString();
-      }
-      else{
-        return "00:"+ minute.toString() + ":" + seconds.toString();
-      }
-      
-    }
-    else if(time>3600){
-       int minute = time~/3600;
-      int seconds = time%3600;
-      int hours = time~/60;
+    } else if (time > 3600) {
+      int minute = time ~/ 3600;
+      int seconds = time % 3600;
+      int hours = time ~/ 60;
 
-      return hours.toString() + ":" + minute.toString() + ":" + seconds.toString();
+      return hours.toString() +
+          ":" +
+          minute.toString() +
+          ":" +
+          seconds.toString();
     }
     return "";
-}
+  }
+
+  double getSizeOfPage(BuildContext context) {
+    return MediaQuery.of(context).size.width;
+  }
 }

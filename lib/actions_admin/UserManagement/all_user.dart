@@ -21,6 +21,7 @@ TextEditingController searchField = TextEditingController();
 TextEditingController controllerUserName = TextEditingController();
 List<TextEditingController> controllerUserEdit = [];
 List<bool> sizeOfUserEditFields = [];
+List<bool> sizeOfDeleteFields = [];
 
 class allUser extends StatefulWidget {
   allUser(this.company);
@@ -53,6 +54,15 @@ class _allUserState extends State<allUser> {
   _allUserState(this.company);
   @override
   Widget build(BuildContext context) {
+    Widget deleteUser(User user, int index) {
+      return SizedBox(
+          height: sizeOfDeleteFields[index] ? 24.h : 0,
+          child: Container(
+            color: Colors.red,
+            width: 100.w,
+          ));
+    }
+
     Widget editUserName(User user, int index) {
       //Edit Card
       return SizedBox(
@@ -82,30 +92,24 @@ class _allUserState extends State<allUser> {
                       ),
                     ),
                   ),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.save),
-                    iconSize: 30,
-                    onPressed: () async {
-                      String value =
-                          await updateStatements.updateUser(company, user);
+                  trailing: CircleAvatar(
+                    backgroundColor: whiteMode.abstractColor,
+                    child: IconButton(
+                        icon: const Icon(Icons.save_as_outlined),
+                        iconSize: 25,
+                        color: whiteMode.backgroundColor,
+                        onPressed: () {
+                          User usrCopy = user;
+                          usrCopy.user_name = controllerUserEdit[index].text;
 
-                      if (value == "1") {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          backgroundColor: Colors.red,
-                          content: Text("Fehler beim Update"),
-                          duration: Duration(milliseconds: 2500),
-                        ));
-                      } else {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          backgroundColor: Colors.green,
-                          content: Text("Operation erfolgreich"),
-                          duration: Duration(milliseconds: 2500),
-                        ));
-                        setState(() {});
-                      }
-                    },
+                          if (usrCopy.user_name != user.user_name) {
+                            setState(() {
+                              sizeOfDeleteFields[index] = false;
+                              sizeOfUserEditFields[index] = false;
+                            });
+                          }
+                          updateStatements.updateUser(company, usrCopy);
+                        }),
                   ),
                 ),
               ),
@@ -115,6 +119,18 @@ class _allUserState extends State<allUser> {
                   color: whiteMode.cardColor,
                   child: ListTile(
                     title: Text("User-Code: " + user.user_code),
+                    trailing: CircleAvatar(
+                        backgroundColor: whiteMode.abstractColor,
+                        child: IconButton(
+                          icon: Icon(Icons.delete),
+                          color: Colors.redAccent,
+                          onPressed: () {
+                            setState(() {
+                              sizeOfUserEditFields[index] = false;
+                              sizeOfDeleteFields[index] = true;
+                            });
+                          },
+                        )),
                   )),
               SizedBox(height: (0.5).h),
               Container(
@@ -144,6 +160,7 @@ class _allUserState extends State<allUser> {
 
       for (int i = 0; i < allUser.length; i++) {
         sizeOfUserEditFields.add(false);
+        sizeOfDeleteFields.add(false);
         controllerUserEdit
             .add(TextEditingController(text: allUser[i].user_name));
       }
@@ -263,7 +280,7 @@ class _allUserState extends State<allUser> {
                   ),
                 ),
                 trailing: IconButton(
-                  icon: const Icon(Icons.save, size: 30),
+                  icon: const Icon(Icons.save, size: 30, color: Colors.green),
                   onPressed: () {
                     User newUser = User.empty();
                     newUser.user_name = controllerUserName.text;
@@ -301,7 +318,10 @@ class _allUserState extends State<allUser> {
                         curve: Curves.easeIn,
                         duration: const Duration(milliseconds: 500),
                         child: SizedBox(
-                            height: sizeOfUserEditFields[index] ? 33.h : 9.h,
+                            height: (sizeOfUserEditFields[index] ^
+                                    sizeOfDeleteFields[index])
+                                ? 33.h
+                                : 9.h,
                             child: Column(
                               children: [
                                 //User Card
@@ -317,6 +337,10 @@ class _allUserState extends State<allUser> {
                                                   false
                                               : sizeOfUserEditFields[index] =
                                                   true;
+
+                                          if (sizeOfDeleteFields[index]) {
+                                            sizeOfDeleteFields[index] = false;
+                                          }
                                         });
                                       },
                                       title: Text(
@@ -333,7 +357,8 @@ class _allUserState extends State<allUser> {
                                             color: whiteMode.abstractColor,
                                           )),
                                       trailing: Icon(
-                                        !sizeOfUserEditFields[index]
+                                        !(sizeOfUserEditFields[index] ^
+                                                sizeOfDeleteFields[index])
                                             ? Icons.mode_edit_outline_outlined
                                             : Icons.arrow_right,
                                         size: 30,
@@ -343,7 +368,8 @@ class _allUserState extends State<allUser> {
                                   ),
                                 ),
 
-                                editUserName(currentUser[index], index)
+                                editUserName(currentUser[index], index),
+                                deleteUser(currentUser[index], index)
                               ],
                             )));
                   })));

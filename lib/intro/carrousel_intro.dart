@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_admin/admin_menu.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_admin/container_admin.dart';
+import 'package:itm_ichtrinkmehr_flutter/actions_admin/send_messages.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_user/container_user.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_user/user_menu.dart';
 import 'package:itm_ichtrinkmehr_flutter/intro/rollen_input.dart';
@@ -18,19 +19,18 @@ class cusCar extends StatefulWidget {
   Stream stream;
   StreamController streamController;
 
-double widgetSize;
-  cusCar(this.stream, this.streamController, this. widgetSize);
+  cusCar(this.stream, this.streamController);
 
   @override
   _CustomCarouselFB2State createState() =>
-      _CustomCarouselFB2State(stream, streamController, widgetSize);
+      _CustomCarouselFB2State(stream, streamController);
 }
 
 class _CustomCarouselFB2State extends State<cusCar> {
   Stream stream;
   StreamController streamController;
-  double widgetSize;
-  _CustomCarouselFB2State(this.stream, this.streamController, this.widgetSize);
+
+  _CustomCarouselFB2State(this.stream, this.streamController);
 
   final double carouselItemMargin = 16;
   final ScrollController _firstController = ScrollController();
@@ -40,12 +40,11 @@ class _CustomCarouselFB2State extends State<cusCar> {
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(initialPage: 1, viewportFraction: 0.6);
+    _pageController = PageController(initialPage: 1, viewportFraction: 0.7);
   }
 
   @override
   Widget build(BuildContext context) {
-    print("page-size: " + widgetSize.toString());
     List<Widget> cards = [
       CardFb1(
         text: "Anmelden als Admin",
@@ -74,27 +73,23 @@ class _CustomCarouselFB2State extends State<cusCar> {
     ];
 
     return Scrollbar(
-        thumbVisibility: true,
         controller: _firstController,
         interactive: true,
-        child:
-
-      PageView.builder(
-        controller: _pageController,
-        itemCount: cards.length,
-        onPageChanged: (int position) {
-          setState(() {
-            _position = position;
-          });
-        },
-        itemBuilder: (BuildContext context, int position) {
-          return imageSlider(position, cards);
-        }));
+        child: PageView.builder(
+            controller: _pageController,
+            itemCount: cards.length,
+            onPageChanged: (int position) {
+              setState(() {
+                _position = position;
+              });
+            },
+            itemBuilder: (BuildContext context, int position) {
+              return imageSlider(position, cards);
+            }));
   }
 
   Widget imageSlider(int position, var cards) {
-    return
-      AnimatedBuilder(
+    return AnimatedBuilder(
       animation: _pageController,
       builder: (BuildContext context, widget) {
         return Container(

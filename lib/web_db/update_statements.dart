@@ -41,16 +41,13 @@ class UpdateStatements {
     var database = FirebaseFirestore.instance
         .collection('/AllProjects/' + company.company_name + '/UserInProject');
 
-    database.doc(user.user_name).update(
+    database.doc(user.user_code).update(
       {
         'user_name': user.user_name,
       },
     ).catchError((error) {
       print("Failed to update user: $error");
-      return "1"; //if Operation failed
     });
-
-    return "0"; //if Operation successful
   }
 
   updateUserAdminRight(Company company, User user) {
@@ -58,7 +55,7 @@ class UpdateStatements {
         .collection('/AllProjects/' + company.company_name + '/UserInProject');
 
     if (user.is_admin == "true") {
-      database.doc(user.user_name).update(
+      database.doc(user.user_code).update(
         {
           'isAdmin': "false",
         },

@@ -7,10 +7,23 @@ import 'intro/unternehmens_eingabe.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
+  try {
+    await Firebase.initializeApp(
       // Replace with actual values
-
-      );
+      options: FirebaseOptions(
+          apiKey: "AIzaSyCktbmvPzOS4O-7w3EMEgGtE3baVRvWGFc",
+          authDomain: "buchundschaff-18ad9.firebaseapp.com",
+          databaseURL:
+              "https://buchundschaff-18ad9-default-rtdb.europe-west1.firebasedatabase.app",
+          projectId: "buchundschaff-18ad9",
+          storageBucket: "buchundschaff-18ad9.appspot.com",
+          messagingSenderId: "47602994221",
+          appId: "1:47602994221:web:b4f171d61a27adf675fca4",
+          measurementId: "G-LB699M0091"),
+    );
+  } catch (Exception) {
+    await Firebase.initializeApp();
+  }
 
   runApp(MyApp());
 }

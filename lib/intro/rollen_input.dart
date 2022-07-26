@@ -90,128 +90,129 @@ class _RoleInputState extends State<RoleInput> {
     bool pwdVisibility = false;
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: whiteMode.cardColor,
-        actions: [
-          IconButton(
+        appBar: AppBar(
+          backgroundColor: whiteMode.cardColor,
+          actions: [
+            IconButton(
+              icon: Icon(
+                Icons.share,
+                color: whiteMode.textColor,
+              ),
+              onPressed: () {
+                insertStatements.insertNewCompany(Company("12", "asas"));
+              },
+            ),
+            IconButton(
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => LoginPage()));
+                },
+                icon: Icon(
+                  Icons.home_filled,
+                  color: whiteMode.textColor,
+                ))
+          ],
+          leading: IconButton(
             icon: Icon(
-              Icons.share,
+              Icons.keyboard_arrow_left,
               color: whiteMode.textColor,
             ),
-            onPressed: () {
-              insertStatements.insertNewCompany(Company("12", "asas"));
-            },
+            onPressed: () {},
           ),
-          IconButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => LoginPage()));
-              },
-              icon: Icon(
-                Icons.home_filled,
-                color: whiteMode.textColor,
-              ))
-        ],
-        leading: IconButton(
-          icon: Icon(
-            Icons.keyboard_arrow_left,
-            color: whiteMode.textColor,
-          ),
-          onPressed: () {},
         ),
-      ),
-      body: Container(
-        padding: const EdgeInsets.all(10.0),
-        width: double.infinity,
-        height: double.infinity,
-        color: whiteMode.backgroundColor,
-        child: Center(
-       child:   Container(width: MediaQuery.of(context).size.height>200? 50.w : 80.w,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              TextFormField(
-                controller: userCodeController,
-                obscureText: !pwdVisibility,
-                decoration: InputDecoration(
-                  hintText: "User-Code",
-                  hintStyle: TextStyle(color: whiteMode.textColor),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: whiteMode.textColor,
-                      width: 1,
+        body: Container(
+          padding: const EdgeInsets.all(10.0),
+          width: double.infinity,
+          height: double.infinity,
+          color: whiteMode.backgroundColor,
+          child: Center(
+            child: Container(
+              width: globalMethods.getSizeOfPage(context) > 400 ? 50.w : 100.w,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  TextFormField(
+                    controller: userCodeController,
+                    obscureText: !pwdVisibility,
+                    decoration: InputDecoration(
+                      hintText: "User-Code",
+                      hintStyle: TextStyle(color: whiteMode.textColor),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: whiteMode.textColor,
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.red,
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.red,
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: whiteMode.textColor,
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                      suffixIcon: InkWell(
+                        onTap: () => setState(
+                          () => pwdVisibility = !pwdVisibility,
+                        ),
+                        child: Icon(
+                          pwdVisibility
+                              ? Icons.visibility_outlined
+                              : Icons.visibility_off_outlined,
+                          color: whiteMode.textColor,
+                          size: 18,
+                        ),
+                      ),
                     ),
-                    borderRadius: BorderRadius.circular(25.0),
-                  ),
-                  focusedErrorBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.red,
-                      width: 1,
-                    ),
-                    borderRadius: BorderRadius.circular(25.0),
-                  ),
-                  errorBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.red,
-                      width: 1,
-                    ),
-                    borderRadius: BorderRadius.circular(25.0),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: whiteMode.textColor,
-                      width: 1,
-                    ),
-                    borderRadius: BorderRadius.circular(25.0),
-                  ),
-                  suffixIcon: InkWell(
-                    onTap: () => setState(
-                      () => pwdVisibility = !pwdVisibility,
-                    ),
-                    child: Icon(
-                      pwdVisibility
-                          ? Icons.visibility_outlined
-                          : Icons.visibility_off_outlined,
-                      color: whiteMode.textColor,
-                      size: 18,
-                    ),
-                  ),
-                ),
-                validator: (val) {
-                  if (val!.isEmpty) {
-                    return 'Required';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 10),
-
-              /** Checkbox Widget **/
-              SizedBox(
-                height: 40,
-                child: CheckboxListTile(
-                  title: const Text('Angemeldet bleiben'),
-                  value: this.valuefirst,
-                  onChanged: (value) {
-                    setState(() {
-                      if (valuefirst) {
-                        valuefirst = false;
-                      } else {
-                        valuefirst = true;
+                    validator: (val) {
+                      if (val!.isEmpty) {
+                        return 'Required';
                       }
-                    });
-                  },
-                ),
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 10),
+
+                  /** Checkbox Widget **/
+                  SizedBox(
+                    height: 40,
+                    child: CheckboxListTile(
+                      title: const Text('Angemeldet bleiben'),
+                      value: this.valuefirst,
+                      onChanged: (value) {
+                        setState(() {
+                          if (valuefirst) {
+                            valuefirst = false;
+                          } else {
+                            valuefirst = true;
+                          }
+                        });
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                    height: 300,
+                    child: cusCar(stream, streamControllerUserInput),
+                  )
+                ],
               ),
-              SizedBox(
-                height: 300,
-                child: cusCar(stream, streamControllerUserInput, MediaQuery.of(context).size.width),
-              )
-            ],
+            ),
           ),
-        ),
-      ),
-    ));
+        ));
   }
 }
 
