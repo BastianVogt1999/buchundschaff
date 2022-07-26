@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_admin/UserManagement/user_operations/add_user.dart';
+import 'package:itm_ichtrinkmehr_flutter/actions_admin/full_stats_admin.dart';
 import 'package:itm_ichtrinkmehr_flutter/global_methods.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/colors.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
@@ -54,16 +55,103 @@ class _allUserState extends State<allUser> {
   _allUserState(this.company);
   @override
   Widget build(BuildContext context) {
-    Widget deleteUser(User user, int index) {
+    _getUserServer() async {
+      List<User> allUser =
+          await selectStatements.selectAllUserOfCompany(company);
+
+      for (int i = 0; i < allUser.length; i++) {
+        sizeOfUserEditFields.add(false);
+        sizeOfDeleteFields.add(false);
+        controllerUserEdit
+            .add(TextEditingController(text: allUser[i].user_name));
+      }
+
+      currentUser = allUser;
+
+      currentStream.add(allUser);
+    }
+
+    Widget deleteUser(int index) {
       return SizedBox(
           height: sizeOfDeleteFields[index] ? 24.h : 0,
           child: Container(
-            color: Colors.red,
-            width: 100.w,
-          ));
+              padding: EdgeInsets.all(10.sp),
+              color: Colors.red.withOpacity(0.8),
+              width: 100.w,
+              child: Column(
+                children: [
+                  Flexible(
+                    flex: 7,
+                    child: Container(
+                        child: Text("Wirklich löschen?",
+                            style: TextStyle(fontSize: 20.sp))),
+                  ),
+                  Flexible(flex: 4, child: SizedBox(height: 30.h)),
+                  Flexible(
+                    flex: 7,
+                    child: Container(
+                      alignment: Alignment.bottomCenter,
+                      child: Row(
+                        children: [
+                          Flexible(
+                            flex: 7,
+                            child: Container(
+                                decoration: BoxDecoration(
+                                  color: whiteMode.cardColor,
+                                  border: Border.all(
+                                      width: 2, color: whiteMode.abstractColor),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(10)),
+                                ),
+                                alignment: Alignment.bottomCenter,
+                                child: ListTile(
+                                  title: CircleAvatar(
+                                      radius: 20,
+                                      backgroundColor: whiteMode.abstractColor,
+                                      child: Icon(
+                                        Icons.cancel,
+                                        color: whiteMode.backgroundColor,
+                                      )),
+                                )),
+                          ),
+                          Flexible(flex: 1, child: SizedBox(width: 10.w)),
+                          Flexible(
+                            flex: 7,
+                            child: Container(
+                                decoration: BoxDecoration(
+                                  color: whiteMode.cardColor,
+                                  border: Border.all(
+                                      width: 2, color: whiteMode.abstractColor),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(10)),
+                                ),
+                                alignment: Alignment.bottomCenter,
+                                child: ListTile(
+                                  onTap: (() async {
+                                    await deleteStatements.deleteUser(
+                                        company, currentUser[index]);
+
+                                    controllerUserEdit.removeAt(index);
+                                    _getUserServer();
+                                  }),
+                                  title: CircleAvatar(
+                                      radius: 20,
+                                      backgroundColor: whiteMode.abstractColor,
+                                      child: Icon(
+                                        Icons.delete,
+                                        color: whiteMode.backgroundColor,
+                                      )),
+                                )),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              )));
     }
 
-    Widget editUserName(User user, int index) {
+    Widget editUserName(int index) {
       //Edit Card
       return SizedBox(
           height: sizeOfUserEditFields[index] ? 24.h : 0,
@@ -96,19 +184,20 @@ class _allUserState extends State<allUser> {
                     backgroundColor: whiteMode.abstractColor,
                     child: IconButton(
                         icon: const Icon(Icons.save_as_outlined),
-                        iconSize: 25,
+                        iconSize: 20.sp,
                         color: whiteMode.backgroundColor,
                         onPressed: () {
-                          User usrCopy = user;
+                          User usrCopy = currentUser[index];
                           usrCopy.user_name = controllerUserEdit[index].text;
 
-                          if (usrCopy.user_name != user.user_name) {
+                          if (usrCopy.user_name !=
+                              currentUser[index].user_name) {
                             setState(() {
                               sizeOfDeleteFields[index] = false;
                               sizeOfUserEditFields[index] = false;
                             });
+                            updateStatements.updateUser(company, usrCopy);
                           }
-                          updateStatements.updateUser(company, usrCopy);
                         }),
                   ),
                 ),
@@ -118,11 +207,14 @@ class _allUserState extends State<allUser> {
                   width: 80.w,
                   color: whiteMode.cardColor,
                   child: ListTile(
-                    title: Text("User-Code: " + user.user_code),
+                    title: Text("User-Code: " + currentUser[index].user_code),
                     trailing: CircleAvatar(
                         backgroundColor: whiteMode.abstractColor,
                         child: IconButton(
-                          icon: Icon(Icons.delete),
+                          icon: const Icon(
+                            Icons.delete,
+                          ),
+                          iconSize: 20.sp,
                           color: Colors.redAccent,
                           onPressed: () {
                             setState(() {
@@ -138,35 +230,26 @@ class _allUserState extends State<allUser> {
                   color: whiteMode.cardColor,
                   child: ListTile(
                     title: Text("Adminrechte: " +
-                        (user.is_admin == "true" ? "ja" : "nein")),
-                    trailing: IconButton(
-                        icon: const Icon(Icons.admin_panel_settings),
-                        color:
-                            user.is_admin == "true" ? Colors.green : Colors.red,
-                        iconSize: 30,
-                        onPressed: () async {
-                          await updateStatements.updateUserAdminRight(
-                              company, user);
-                          setState(() {});
-                        }),
+                        (currentUser[index].is_admin == "true"
+                            ? "ja"
+                            : "nein")),
+                    trailing: CircleAvatar(
+                      backgroundColor: whiteMode.abstractColor,
+                      child: IconButton(
+                          icon: const Icon(Icons.admin_panel_settings),
+                          color: currentUser[index].is_admin == "true"
+                              ? Colors.green
+                              : Colors.red,
+                          iconSize: 20.sp,
+                          onPressed: () async {
+                            await updateStatements.updateUserAdminRight(
+                                company, currentUser[index]);
+                            setState(() {});
+                          }),
+                    ),
                   )),
             ],
           ));
-    }
-
-    _getUserServer() async {
-      List<User> allUser =
-          await selectStatements.selectAllUserOfCompany(company);
-
-      for (int i = 0; i < allUser.length; i++) {
-        sizeOfUserEditFields.add(false);
-        sizeOfDeleteFields.add(false);
-        controllerUserEdit
-            .add(TextEditingController(text: allUser[i].user_name));
-      }
-
-      currentUser = allUser;
-      currentStream.add(allUser);
     }
 
     // ignore: non_constant_identifier_names
@@ -196,10 +279,9 @@ class _allUserState extends State<allUser> {
                 }
               }
             }
+            currentUser = newUsers;
 
-            setState(() {
-              currentUser = newUsers;
-            });
+            currentStream.add(currentUser);
           },
           decoration: InputDecoration(
             prefixIcon: Icon(
@@ -292,6 +374,10 @@ class _allUserState extends State<allUser> {
                       content: Text("User hinzugefügt"),
                       duration: Duration(milliseconds: 2500),
                     ));
+                    currentUser.add(newUser);
+                    controllerUserEdit
+                        .add(TextEditingController(text: newUser.user_name));
+                    _getUserServer();
                     setState(() {
                       controllerUserName.text = "";
                       checkBoxUserIsAdminSelected = false;
@@ -368,8 +454,8 @@ class _allUserState extends State<allUser> {
                                   ),
                                 ),
 
-                                editUserName(currentUser[index], index),
-                                deleteUser(currentUser[index], index)
+                                editUserName(index),
+                                deleteUser(index)
                               ],
                             )));
                   })));

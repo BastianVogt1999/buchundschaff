@@ -1,17 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:itm_ichtrinkmehr_flutter/actions_admin/admin_menu.dart';
-import 'package:itm_ichtrinkmehr_flutter/actions_admin/container_admin.dart';
-import 'package:itm_ichtrinkmehr_flutter/actions_admin/send_messages.dart';
-import 'package:itm_ichtrinkmehr_flutter/actions_user/container_user.dart';
-import 'package:itm_ichtrinkmehr_flutter/actions_user/user_menu.dart';
 import 'package:itm_ichtrinkmehr_flutter/intro/rollen_input.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/colors.dart';
-
-import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
-import 'package:itm_ichtrinkmehr_flutter/values/statistic.dart';
-import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
 
 WhiteMode whiteMode = WhiteMode();
 
@@ -33,7 +24,7 @@ class _CustomCarouselFB2State extends State<cusCar> {
   _CustomCarouselFB2State(this.stream, this.streamController);
 
   final double carouselItemMargin = 16;
-  final ScrollController _firstController = ScrollController();
+
   late PageController _pageController;
   int _position = 0;
 
@@ -72,20 +63,17 @@ class _CustomCarouselFB2State extends State<cusCar> {
       ),
     ];
 
-    return Scrollbar(
-        controller: _firstController,
-        interactive: true,
-        child: PageView.builder(
-            controller: _pageController,
-            itemCount: cards.length,
-            onPageChanged: (int position) {
-              setState(() {
-                _position = position;
-              });
-            },
-            itemBuilder: (BuildContext context, int position) {
-              return imageSlider(position, cards);
-            }));
+    return PageView.builder(
+        controller: _pageController,
+        itemCount: cards.length,
+        onPageChanged: (int position) {
+          setState(() {
+            _position = position;
+          });
+        },
+        itemBuilder: (BuildContext context, int position) {
+          return imageSlider(position, cards);
+        });
   }
 
   Widget imageSlider(int position, var cards) {

@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:itm_ichtrinkmehr_flutter/actions_user/timer/timer_main.dart';
 import 'package:itm_ichtrinkmehr_flutter/global_methods.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/statistic.dart';
@@ -63,7 +62,7 @@ class UpdateStatements {
         print("Failed to update user: $error");
       });
     } else {
-      database.doc(user.user_name).update(
+      database.doc(user.user_code).update(
         {
           'isAdmin': "true",
         },
