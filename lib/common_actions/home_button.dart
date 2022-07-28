@@ -9,7 +9,7 @@ WhiteMode whiteMode = WhiteMode();
 
 class HomeButton extends StatelessWidget {
   final BuildContext context;
-  final User user;
+  final UserBuS user;
   final Company company;
   const HomeButton(this.context, this.user, this.company);
 

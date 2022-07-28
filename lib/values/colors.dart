@@ -7,3 +7,10 @@ class WhiteMode {
   Color abstractColor = const Color.fromARGB(255, 107, 109, 108);
   Color redLight = Color.fromARGB(255, 244, 199, 198);
 }
+
+class BlackMode {
+  Color backgroundColor = const Color.fromARGB(255, 29, 29, 29);
+  Color cardColor = const Color(0xffd5dfe8);
+  Color textColor = const Color.fromARGB(255, 180, 178, 178);
+  Color abstractColor = const Color.fromARGB(255, 118, 184, 223);
+}

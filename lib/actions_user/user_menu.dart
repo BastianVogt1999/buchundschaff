@@ -13,12 +13,12 @@ import 'package:itm_ichtrinkmehr_flutter/values/statistic.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
 
 WhiteMode whiteMode = WhiteMode();
+
 class UserMenu extends StatefulWidget {
   UserMenu(this.company, this.user);
 
-
   Company company;
-  User user;
+  UserBuS user;
   @override
   State<UserMenu> createState() => UserMenuState(company, user);
 }
@@ -27,7 +27,7 @@ class UserMenuState extends State<UserMenu> {
   UserMenuState(this.company, this.user);
 
   Company company;
-  User user;
+  UserBuS user;
 
   onItemTapped(int index) {
     setState(
@@ -47,7 +47,6 @@ class UserMenuState extends State<UserMenu> {
       //DayStats(),
       Stats_main(user, company),
       MessagesUser(company, user),
-   
     ];
 
     return Drawer(
@@ -123,7 +122,6 @@ class MenuItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return ListTile(
       leading: Icon(icon, color: whiteMode.textColor),
       title: Text(text, style: TextStyle(color: whiteMode.textColor)),
@@ -138,10 +136,9 @@ class SearchFieldDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-
     return TextField(
-      style: TextStyle(color: whiteMode.textColor.withOpacity(0.5), fontSize: 14),
+      style:
+          TextStyle(color: whiteMode.textColor.withOpacity(0.5), fontSize: 14),
       decoration: InputDecoration(
         contentPadding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
         hintText: 'Suchen',

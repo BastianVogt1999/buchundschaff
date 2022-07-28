@@ -1,13 +1,11 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:itm_ichtrinkmehr_flutter/global_methods.dart';
 import 'package:itm_ichtrinkmehr_flutter/intro/rollen_input.dart';
 import 'package:itm_ichtrinkmehr_flutter/intro/sign_in.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/colors.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
-import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
 import 'package:itm_ichtrinkmehr_flutter/web_db/select_statements.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
@@ -15,9 +13,10 @@ import 'package:sizer/sizer.dart';
 SelectStatements selectStatements = SelectStatements();
 GlobalMethods globalMethods = GlobalMethods();
 WhiteMode whiteMode = WhiteMode();
+BlackMode blackMode = BlackMode();
 
 class LoginPage extends StatefulWidget {
-  LoginPage({Key? key}) : super(key: key);
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
   State<LoginPage> createState() => LoginPage_state();
@@ -25,6 +24,7 @@ class LoginPage extends StatefulWidget {
 
 class LoginPage_state extends State<LoginPage> {
   TextEditingController companyNameController = TextEditingController();
+  bool whiteModeOn = true;
 
   bool pwdVisibility = false;
 
@@ -45,9 +45,11 @@ class LoginPage_state extends State<LoginPage> {
             width: 100.w,
             height: 100.h,
             decoration: BoxDecoration(
-              color: whiteMode.backgroundColor,
+              color: whiteModeOn
+                  ? whiteMode.backgroundColor
+                  : blackMode.backgroundColor,
             ),
-            child: Container(
+            child: SizedBox(
                 width: MediaQuery.of(context).size.width > 100 ? 50.w : 80.w,
                 child: Center(
                     child: Column(
@@ -81,15 +83,8 @@ class LoginPage_state extends State<LoginPage> {
                               ),
                               borderRadius: BorderRadius.circular(25.0),
                             ),
-                            focusedErrorBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.red,
-                                width: 1,
-                              ),
-                              borderRadius: BorderRadius.circular(25.0),
-                            ),
                             errorBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
+                              borderSide: const BorderSide(
                                 color: Colors.red,
                                 width: 1,
                               ),
@@ -110,7 +105,9 @@ class LoginPage_state extends State<LoginPage> {
                                 pwdVisibility
                                     ? Icons.visibility_outlined
                                     : Icons.visibility_off_outlined,
-                                color: whiteMode.textColor,
+                                color: whiteModeOn
+                                    ? whiteMode.textColor
+                                    : blackMode.textColor,
                                 size: 18,
                               ),
                             ),
@@ -125,48 +122,58 @@ class LoginPage_state extends State<LoginPage> {
                       ),
 
                       //
-                      SizedBox(height: 30),
+                      const SizedBox(height: 30),
 
                       //Button weiter
-                      Container(
-                        width: globalMethods.getSizeOfPage(context) > 400.0
-                            ? 30.w
-                            : 80.w,
-                        child: OutlinedButton(
-                            onPressed: () {
-                              entered_code(context, companyNameController.text);
-                            },
-                            child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "Weiter",
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w300,
-                                        color: whiteMode.backgroundColor),
-                                  ),
-                                  Icon(Icons.arrow_forward,
-                                      color: whiteMode.backgroundColor)
-                                ]),
-                            style: OutlinedButton.styleFrom(
-                              backgroundColor: whiteMode.textColor,
-                              shape: const RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(40))),
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 20, horizontal: 50),
-                            )),
-                      ),
+                      Flexible(
+                        flex: 3,
+                        child: SizedBox(
+                          width: globalMethods.getSizeOfPage(context) > 400.0
+                              ? 30.w
+                              : 80.w,
+                          child: OutlinedButton(
+                              onPressed: () {
+                                entered_code(
+                                    context, companyNameController.text);
+                              },
+                              child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Weiter",
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w300,
+                                          color: whiteModeOn
+                                              ? whiteMode.backgroundColor
+                                              : blackMode.backgroundColor),
+                                    ),
+                                    Icon(Icons.arrow_forward,
+                                        color: whiteModeOn
+                                            ? whiteMode.backgroundColor
+                                            : blackMode.backgroundColor)
+                                  ]),
+                              style: OutlinedButton.styleFrom(
+                                backgroundColor: whiteModeOn
+                                    ? whiteMode.textColor
+                                    : blackMode.textColor,
+                                shape: const RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(40))),
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 20, horizontal: 50),
+                              )),
+                        ),
+                      )
                     ])))));
   }
 }
 
-entered_code(BuildContext context, String company_code) async {
+entered_code(BuildContext context, String companyCode) async {
   Company company = Company.empty();
   try {
-    company = await selectStatements.selectCompany(company_code);
+    company = await selectStatements.selectCompany(companyCode);
   } catch (Exception) {
     print("error");
   }

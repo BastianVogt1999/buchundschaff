@@ -12,7 +12,7 @@ WhiteMode whiteMode = WhiteMode();
 
 class MessagesUser extends StatefulWidget {
   Company company;
-  User user;
+  UserBuS user;
 
   MessagesUser(this.company, this.user);
 
@@ -23,7 +23,7 @@ class MessagesUser extends StatefulWidget {
 class _MessagesUserState extends State<MessagesUser> {
   _MessagesUserState(this.company, this.user);
   Company company;
-  User user;
+  UserBuS user;
   List<Message> allMessages = [];
   @override
   Widget build(BuildContext context) {

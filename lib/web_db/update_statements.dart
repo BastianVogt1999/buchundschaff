@@ -7,7 +7,7 @@ import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
 GlobalMethods globalmethods = GlobalMethods();
 
 class UpdateStatements {
-  updateStatisticState(Company company, User user, Statistic statistic) {
+  updateStatisticState(Company company, UserBuS user, Statistic statistic) {
     var database = FirebaseFirestore.instance.collection(
         '/AllProjects/' + company.company_name + '/StatisticsInProject');
 
@@ -36,7 +36,7 @@ class UpdateStatements {
     ).catchError((error) => print("Failed to update statistic: $error"));
   }
 
-  updateUser(Company company, User user) {
+  updateUser(Company company, UserBuS user) {
     var database = FirebaseFirestore.instance
         .collection('/AllProjects/' + company.company_name + '/UserInProject');
 
@@ -49,7 +49,7 @@ class UpdateStatements {
     });
   }
 
-  updateUserAdminRight(Company company, User user) {
+  updateUserAdminRight(Company company, UserBuS user) {
     var database = FirebaseFirestore.instance
         .collection('/AllProjects/' + company.company_name + '/UserInProject');
 

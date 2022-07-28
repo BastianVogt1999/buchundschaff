@@ -22,7 +22,7 @@ DeleteStatements deleteStatements = DeleteStatements();
 GlobalMethods globalMethods = GlobalMethods();
 
 class Stats_main extends StatefulWidget {
-  final User user;
+  final UserBuS user;
   final Company company;
   const Stats_main(this.user, this.company, {Key? key}) : super(key: key);
 
@@ -31,7 +31,7 @@ class Stats_main extends StatefulWidget {
 }
 
 class _Stats_mainState extends State<Stats_main> {
-  User user;
+  UserBuS user;
   Company company;
 
   List<bool> expandedInfos = [];
@@ -178,7 +178,7 @@ class _Stats_mainState extends State<Stats_main> {
     }
 
     Widget CustomListTile(
-      User user,
+      UserBuS user,
       Company company,
       Statistic statistic,
       int index,
@@ -415,5 +415,5 @@ class _Stats_mainState extends State<Stats_main> {
     }
   }
 
-  deleteStatistic(User user, Statistic statistic, BuildContext context) {}
+  deleteStatistic(UserBuS user, Statistic statistic, BuildContext context) {}
 }

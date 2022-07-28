@@ -22,7 +22,7 @@ class StopwatchPage extends StatefulWidget {
   StreamController<UpdateableStatistic> streamSetStartTime;
   StopwatchPage(
       this.streamSetStartTime, this.user, this.company, this.statisticInput);
-  User user;
+  UserBuS user;
   Company company;
   @override
   _StopwatchPageState createState() =>
@@ -31,7 +31,7 @@ class StopwatchPage extends StatefulWidget {
 
 class _StopwatchPageState extends State<StopwatchPage> {
   Statistic statisticInput;
-  User user;
+  UserBuS user;
   Company company;
   late Timer _timer;
   int buttonIndex = 0;
@@ -44,12 +44,12 @@ class _StopwatchPageState extends State<StopwatchPage> {
 
   _StopwatchPageState(
       this.streamSetStartTime, this.user, this.company, this.statisticInput);
-      
+
   @override
   void initState() {
     super.initState();
     _timer = Timer.periodic(
-      Duration(milliseconds: 123),
+      const Duration(milliseconds: 123),
       (_t) => setState(() {}),
     );
   }
@@ -63,7 +63,7 @@ class _StopwatchPageState extends State<StopwatchPage> {
   @override
   Widget build(BuildContext context) {
     //if Timer is already running
-    
+
     /* if (statisticInput.isrunning != "") {
       buttonIndex = 1;
       setState(() {
@@ -91,7 +91,7 @@ class _StopwatchPageState extends State<StopwatchPage> {
 
       if (buttonIndex == 0) {
         //Veränderung Button
-    buttonIndex = 1;
+        buttonIndex = 1;
         print("Timer started");
         setState(() {
           buttonIndex = 1;
@@ -116,7 +116,7 @@ class _StopwatchPageState extends State<StopwatchPage> {
           StartTime = 0;
           NowTime = 0;
         });
-       streamSetStartTime.add(UpdateableStatistic(1, statistic));
+        streamSetStartTime.add(UpdateableStatistic(1, statistic));
       }
     }
 
@@ -137,7 +137,6 @@ class _StopwatchPageState extends State<StopwatchPage> {
       );
     }
 
-
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -149,13 +148,13 @@ class _StopwatchPageState extends State<StopwatchPage> {
               children: [
                 Text(
                   _formatter.format(DiffTime),
-                  style: TextStyle(fontSize: 30),
+                  style: const TextStyle(fontSize: 30),
                 ),
               ],
             ),
           ],
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Container(
           color: Colors.white,
           width: double.infinity,

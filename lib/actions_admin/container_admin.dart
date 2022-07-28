@@ -15,7 +15,7 @@ WhiteMode whiteMode = WhiteMode();
 
 class ContainerAdmin extends StatefulWidget {
   Company company;
-  User user;
+  UserBuS user;
   int selectedIndex;
   ContainerAdmin(this.company, this.user, this.selectedIndex);
 
@@ -25,7 +25,7 @@ class ContainerAdmin extends StatefulWidget {
 }
 
 class _ContainerAdminState extends State<ContainerAdmin> {
-  User user;
+  UserBuS user;
   Company company;
   int selectedIndex;
   _ContainerAdminState(this.company, this.user, this.selectedIndex);

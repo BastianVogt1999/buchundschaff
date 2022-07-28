@@ -16,7 +16,7 @@ GlobalMethods globalmethods = GlobalMethods();
 UpdateStatements updateStatements = UpdateStatements();
 
 WhiteMode whiteMode = WhiteMode();
-List<User> currentUser = [];
+List<UserBuS> currentUser = [];
 
 TextEditingController searchField = TextEditingController();
 TextEditingController controllerUserName = TextEditingController();
@@ -35,15 +35,15 @@ class _allUserState extends State<allUser> {
   Company company;
   bool shownAddUser = false;
   bool checkBoxUserIsAdminSelected = false;
-  late StreamController<List<User>> currentStream =
-      StreamController<List<User>>();
+  late StreamController<List<UserBuS>> currentStream =
+      StreamController<List<UserBuS>>();
 
   Future<void> closeStream() => currentStream.close();
 
   @override
   void initState() {
     super.initState();
-    currentStream = StreamController<List<User>>();
+    currentStream = StreamController<List<UserBuS>>();
   }
 
   @override
@@ -56,7 +56,7 @@ class _allUserState extends State<allUser> {
   @override
   Widget build(BuildContext context) {
     _getUserServer() async {
-      List<User> allUser =
+      List<UserBuS> allUser =
           await selectStatements.selectAllUserOfCompany(company);
 
       controllerUserEdit = [];
@@ -189,7 +189,7 @@ class _allUserState extends State<allUser> {
                         iconSize: 20.sp,
                         color: whiteMode.backgroundColor,
                         onPressed: () {
-                          User usrCopy = currentUser[index];
+                          UserBuS usrCopy = currentUser[index];
                           usrCopy.user_name = controllerUserEdit[index].text;
 
                           if (usrCopy.user_name !=
@@ -268,7 +268,7 @@ class _allUserState extends State<allUser> {
           controller: searchField,
           onSubmitted: (value) {},
           onChanged: (value) {
-            List<User> newUsers = [];
+            List<UserBuS> newUsers = [];
 
             if (searchField.text == "") {
             } else {
@@ -366,7 +366,7 @@ class _allUserState extends State<allUser> {
                 trailing: IconButton(
                   icon: const Icon(Icons.save, size: 30, color: Colors.green),
                   onPressed: () {
-                    User newUser = User.empty();
+                    UserBuS newUser = UserBuS.empty();
                     newUser.user_name = controllerUserName.text;
                     newUser.is_admin = checkBoxUserIsAdminSelected.toString();
 

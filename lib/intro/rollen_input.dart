@@ -1,14 +1,14 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:itm_ichtrinkmehr_flutter/actions_user/timer/timer_main.dart';
 import 'package:itm_ichtrinkmehr_flutter/intro/carrousel_intro.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/colors.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
 import 'package:itm_ichtrinkmehr_flutter/web_db/insert_statements.dart';
 import 'package:itm_ichtrinkmehr_flutter/web_db/select_statements.dart';
-import 'package:lottie/lottie.dart';
+
 import 'package:sizer/sizer.dart';
 import '../actions_admin/admin_menu.dart';
 import '../actions_user/user_menu.dart';
@@ -45,7 +45,7 @@ class _RoleInputState extends State<RoleInput> {
   }
 
   pressedRole(String adminPressed) async {
-    User user = await selectStatements.selectOneUserOfCompany(
+    UserBuS user = await selectStatements.selectOneUserOfCompany(
         company, userCodeController.text);
 
     if (user.user_name != "") {
@@ -126,7 +126,7 @@ class _RoleInputState extends State<RoleInput> {
           height: double.infinity,
           color: whiteMode.backgroundColor,
           child: Center(
-            child: Container(
+            child: SizedBox(
               width: globalMethods.getSizeOfPage(context) > 400 ? 50.w : 100.w,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -145,14 +145,14 @@ class _RoleInputState extends State<RoleInput> {
                         borderRadius: BorderRadius.circular(25.0),
                       ),
                       focusedErrorBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
+                        borderSide: const BorderSide(
                           color: Colors.red,
                           width: 1,
                         ),
                         borderRadius: BorderRadius.circular(25.0),
                       ),
                       errorBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
+                        borderSide: const BorderSide(
                           color: Colors.red,
                           width: 1,
                         ),
@@ -185,14 +185,14 @@ class _RoleInputState extends State<RoleInput> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
 
                   /** Checkbox Widget **/
                   SizedBox(
                     height: 40,
                     child: CheckboxListTile(
                       title: const Text('Angemeldet bleiben'),
-                      value: this.valuefirst,
+                      value: valuefirst,
                       onChanged: (value) {
                         setState(() {
                           if (valuefirst) {
