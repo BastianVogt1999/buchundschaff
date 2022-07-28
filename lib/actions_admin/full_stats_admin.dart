@@ -16,14 +16,14 @@ WhiteMode whiteMode = WhiteMode();
 
 class FullStatsAdmin extends StatefulWidget {
   FullStatsAdmin(this.user, this.company);
-  User user;
+  UserBuS user;
   Company company;
   @override
   State<FullStatsAdmin> createState() => _FullStatsAdminState(user, company);
 }
 
 class _FullStatsAdminState extends State<FullStatsAdmin> {
-  User user;
+  UserBuS user;
   Company company;
   List<bool> expandedInfos = [];
 
@@ -157,7 +157,7 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
     }
 
     Widget CustomListTile(
-      User user,
+      UserBuS user,
       Company company,
       Statistic statistic,
       int index,
@@ -363,7 +363,7 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
 
   _getStatsFromServer(
     Company company,
-    User user,
+    UserBuS user,
   ) async {
     try {
       List<Statistic> allDrinks =
@@ -378,5 +378,5 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
     }
   }
 
-  deleteStatistic(User user, Statistic statistic, BuildContext context) {}
+  deleteStatistic(UserBuS user, Statistic statistic, BuildContext context) {}
 }

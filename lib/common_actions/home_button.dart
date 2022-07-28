@@ -5,9 +5,10 @@ import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
 
 WhiteMode whiteMode = WhiteMode();
+
 class HomeButton extends StatelessWidget {
   final BuildContext context;
-  final User user;
+  final UserBuS user;
   final Company company;
   const HomeButton(this.context, this.user, this.company);
 
@@ -17,7 +18,7 @@ class HomeButton extends StatelessWidget {
       backgroundColor: whiteMode.abstractColor,
       onPressed: () {
         Navigator.push(context,
-            MaterialPageRoute(builder: (context) => RoleInput( company)));
+            MaterialPageRoute(builder: (context) => RoleInput(company)));
       },
       child: Icon(
         Icons.home_outlined,

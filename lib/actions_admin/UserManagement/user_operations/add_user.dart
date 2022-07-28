@@ -77,8 +77,10 @@ class dialogAddUserState extends State<DialogAddUser> {
             SimpleBtn1(
                 text: "Bestätigen",
                 onPressed: () {
-                  insertStatements.insertNewUser(company,
-                      User(getUserName.text, "", checkBoxSelected.toString()));
+                  insertStatements.insertNewUser(
+                      company,
+                      UserBuS(
+                          getUserName.text, "", checkBoxSelected.toString()));
                   setState(() {
                     checkBoxSelected = false;
                     getUserName.text = "";

@@ -45,7 +45,7 @@ class SelectStatements {
   }
 
   Future<List<Statistic>> selectStatsOfUserOnDate(
-      User user, Company company) async {
+      UserBuS user, Company company) async {
     List<Statistic> statisticList = <Statistic>[];
     final _formatter = DateFormat('HH:mm:ss');
     final _formatterDate = DateFormat('dd:MM:yyyy');
@@ -145,7 +145,7 @@ class SelectStatements {
     return statisticList;
   }
 
-  Future<Statistic> selectStatOfUserO(User user, Company company) async {
+  Future<Statistic> selectStatOfUserO(UserBuS user, Company company) async {
     List<Statistic> statisticList = <Statistic>[];
 
     await FirebaseFirestore.instance
@@ -194,8 +194,8 @@ class SelectStatements {
     return statFinal;
   }
 
-  Future<List<User>> selectAllUserOfCompany(Company company) async {
-    List<User> userList = <User>[];
+  Future<List<UserBuS>> selectAllUserOfCompany(Company company) async {
+    List<UserBuS> userList = <UserBuS>[];
 
     company.company_code = company.company_code.toString();
     company.company_name = company.company_name.toString();
@@ -205,7 +205,7 @@ class SelectStatements {
         .get()
         .then((QuerySnapshot querySnapshot) {
       for (var doc in querySnapshot.docs) {
-        User value = User(
+        UserBuS value = UserBuS(
           doc["user_name"],
           doc["user_code"],
           doc["isAdmin"],
@@ -217,8 +217,9 @@ class SelectStatements {
     return userList;
   }
 
-  Future<User> selectOneUserOfCompany(Company company, String userCode) async {
-    User user = User.empty();
+  Future<UserBuS> selectOneUserOfCompany(
+      Company company, String userCode) async {
+    UserBuS user = UserBuS.empty();
 
     await FirebaseFirestore.instance
         .collection('/AllProjects/' + company.company_name + '/UserInProject')
@@ -226,7 +227,7 @@ class SelectStatements {
         .get()
         .then((QuerySnapshot querySnapshot) {
       for (var doc in querySnapshot.docs) {
-        user = User(
+        user = UserBuS(
           doc["user_name"],
           doc["user_code"],
           doc["isAdmin"],

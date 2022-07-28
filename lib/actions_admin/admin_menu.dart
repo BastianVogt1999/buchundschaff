@@ -10,7 +10,7 @@ WhiteMode whiteMode = WhiteMode();
 class AdminMenu extends StatefulWidget {
   AdminMenu(this.company, this.user);
   Company company;
-  User user;
+  UserBuS user;
   @override
   State<AdminMenu> createState() => _nameState(company, user);
 }
@@ -18,7 +18,7 @@ class AdminMenu extends StatefulWidget {
 class _nameState extends State<AdminMenu> {
   _nameState(this.company, this.user);
   Company company;
-  User user;
+  UserBuS user;
 
   onItemTapped(int index) {
     setState(() {
@@ -37,11 +37,11 @@ class _nameState extends State<AdminMenu> {
         child: ListView(
           children: <Widget>[
             Container(
-              padding: EdgeInsets.all(15.0),
+              padding: const EdgeInsets.all(15.0),
               child: Column(
                 children: [
                   const SizedBox(height: 12),
-                  SearchFieldDrawer(),
+                  const SearchFieldDrawer(),
                   const SizedBox(height: 12),
                   MenuItem(
                     text: 'Tagesstatistik ausgewählter User',
@@ -129,7 +129,7 @@ class SearchFieldDrawer extends StatelessWidget {
       style:
           TextStyle(color: whiteMode.textColor.withOpacity(0.5), fontSize: 14),
       decoration: InputDecoration(
-        contentPadding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
         hintText: 'Suchen',
         hintStyle: TextStyle(color: whiteMode.textColor.withOpacity(0.5)),
         prefixIcon: Icon(

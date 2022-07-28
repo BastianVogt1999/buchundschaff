@@ -8,7 +8,7 @@ import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
 import '../values/message.dart';
 
 class InsertStatements {
-  void insertNewUser(Company company, User user) {
+  void insertNewUser(Company company, UserBuS user) {
     var databaseUser = FirebaseFirestore.instance
         .collection('/AllProjects/' + company.company_name + '/UserInProject');
 
@@ -42,7 +42,7 @@ class InsertStatements {
   }
 
   insertNewStatistic(
-      Company company, List<User> userList, Statistic statistic) {
+      Company company, List<UserBuS> userList, Statistic statistic) {
     var databaseUser = FirebaseFirestore.instance.collection(
         '/AllProjects/' + company.company_name + '/StatisticsInProject');
 

@@ -18,7 +18,7 @@ GlobalMethods globalMethods = GlobalMethods();
 
 class SendMessages extends StatefulWidget {
   Company company;
-  User user;
+  UserBuS user;
   SendMessages(this.company, this.user);
 
   @override
@@ -29,7 +29,7 @@ class _SendMessagesState extends State<SendMessages> {
   List<Message> allMessages = [];
   _SendMessagesState(this.company, this.user);
   Company company;
-  User user;
+  UserBuS user;
   TextEditingController messageController = TextEditingController();
   @override
   Widget build(BuildContext context) {

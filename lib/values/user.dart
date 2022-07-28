@@ -1,11 +1,11 @@
-class User {
+class UserBuS {
   String user_name;
   String user_code;
   String is_admin;
 
-  User(this.user_name, this.user_code, this.is_admin);
+  UserBuS(this.user_name, this.user_code, this.is_admin);
 
-  User.empty() : this("", "", "");
+  UserBuS.empty() : this("", "", "");
 
   String getUserName() {
     return user_name;
@@ -13,7 +13,10 @@ class User {
 }
 
 class UserAsMap {
-  UserAsMap({required this.user_name, required this.user_code, required this.is_admin});
+  UserAsMap(
+      {required this.user_name,
+      required this.user_code,
+      required this.is_admin});
 
   UserAsMap.fromJson(Map<String, Object> json)
       : this(

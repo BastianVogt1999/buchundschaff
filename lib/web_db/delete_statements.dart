@@ -7,7 +7,7 @@ import 'package:itm_ichtrinkmehr_flutter/web_db/select_statements.dart';
 SelectStatements selectStatements = SelectStatements();
 
 class DeleteStatements {
-  deleteStatistic(Company company, User user, Statistic statistic) async {
+  deleteStatistic(Company company, UserBuS user, Statistic statistic) async {
     List<String> allUserInStat = await selectStatements.selectUserOfStat(
         statistic.statistic_id, company);
 
@@ -33,7 +33,7 @@ class DeleteStatements {
         .catchError((error) => print("Failed to delete Statistic : $error"));
   }
 
-  deleteUser(Company company, User user) {
+  deleteUser(Company company, UserBuS user) {
     var database = FirebaseFirestore.instance
         .collection('/AllProjects/' + company.company_name + '/UserInProject');
     database

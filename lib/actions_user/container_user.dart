@@ -15,11 +15,11 @@ import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
 WhiteMode whiteMode = WhiteMode();
 
 class ContainerUser extends StatefulWidget {
-  final User user;
+  final UserBuS user;
   final Company company;
   final int selectedIndex;
 
-  ContainerUser(this.user, this.company, this.selectedIndex);
+  const ContainerUser(this.user, this.company, this.selectedIndex);
 
   @override
   State<ContainerUser> createState() =>
@@ -27,7 +27,7 @@ class ContainerUser extends StatefulWidget {
 }
 
 class _ContainerUserState extends State<ContainerUser> {
-  User user = User.empty();
+  UserBuS user = UserBuS.empty();
   int selectedIndex;
   Company company;
 

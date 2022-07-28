@@ -31,7 +31,7 @@ class IconValues {
 }
 
 class Timer_main extends StatefulWidget {
-  User user;
+  UserBuS user;
   Company company;
 
   Timer_main(this.user, this.company);
@@ -41,12 +41,12 @@ class Timer_main extends StatefulWidget {
 }
 
 class _Timer_mainState extends State<Timer_main> {
-  User user;
+  UserBuS user;
   Company company;
 
   bool addUserButtonAble = true;
   double sizeOfUserFieldFull = 9;
-  List<User> currentWorker = [];
+  List<UserBuS> currentWorker = [];
   _Timer_mainState(this.user, this.company);
 
   String timerStart = "00:00:00";
@@ -62,7 +62,7 @@ class _Timer_mainState extends State<Timer_main> {
   late StopWatchTimer _stopWatchTimer;
   var displayTime = "00:00:00";
 
-  List<User> allUser = [];
+  List<UserBuS> allUser = [];
 
   @override
   void initState() {
@@ -503,7 +503,7 @@ class _Timer_mainState extends State<Timer_main> {
     );
   }
 
-  _getStatsFromServer(User user, Company company) async {
+  _getStatsFromServer(UserBuS user, Company company) async {
     try {
       Statistic stat = await selectStatements.selectStatOfUserO(user, company);
       allUser = await selectStatements.selectAllUserOfCompany(company);
