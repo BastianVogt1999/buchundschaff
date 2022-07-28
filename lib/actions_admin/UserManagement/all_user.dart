@@ -59,6 +59,7 @@ class _allUserState extends State<allUser> {
       List<User> allUser =
           await selectStatements.selectAllUserOfCompany(company);
 
+      controllerUserEdit = [];
       for (int i = 0; i < allUser.length; i++) {
         sizeOfUserEditFields.add(false);
         sizeOfDeleteFields.add(false);
@@ -132,6 +133,7 @@ class _allUserState extends State<allUser> {
                                         company, currentUser[index]);
 
                                     controllerUserEdit.removeAt(index);
+
                                     _getUserServer();
                                   }),
                                   title: CircleAvatar(
@@ -215,7 +217,7 @@ class _allUserState extends State<allUser> {
                             Icons.delete,
                           ),
                           iconSize: 20.sp,
-                          color: Colors.redAccent,
+                          color: whiteMode.redLight,
                           onPressed: () {
                             setState(() {
                               sizeOfUserEditFields[index] = false;
@@ -239,7 +241,7 @@ class _allUserState extends State<allUser> {
                           icon: const Icon(Icons.admin_panel_settings),
                           color: currentUser[index].is_admin == "true"
                               ? Colors.green
-                              : Colors.red,
+                              : whiteMode.redLight,
                           iconSize: 20.sp,
                           onPressed: () async {
                             await updateStatements.updateUserAdminRight(

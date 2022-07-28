@@ -1,11 +1,15 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:itm_ichtrinkmehr_flutter/global_methods.dart';
 import 'package:itm_ichtrinkmehr_flutter/intro/rollen_input.dart';
+import 'package:itm_ichtrinkmehr_flutter/intro/sign_in.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/colors.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
 import 'package:itm_ichtrinkmehr_flutter/web_db/select_statements.dart';
+import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
 
 SelectStatements selectStatements = SelectStatements();
@@ -27,6 +31,13 @@ class LoginPage_state extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () => Navigator.push(
+              context, MaterialPageRoute(builder: (context) => SignInPage())),
+          backgroundColor: whiteMode.abstractColor,
+          label: Text("Jetzt Zugang beantragen"),
+          icon: Icon(Icons.login),
+        ),
         body: Container(
 
             //background
@@ -42,8 +53,15 @@ class LoginPage_state extends State<LoginPage> {
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                      Icon(Icons.smart_toy_sharp,
-                          size: 200, color: whiteMode.textColor),
+                      Container(
+                        height: 20.h,
+                        child: Center(
+                          child: Lottie.asset(
+                            "assets/worker_icon.json",
+                            reverse: true,
+                          ),
+                        ),
+                      ),
                       SizedBox(height: 20),
                       //Input Company-Code
                       Container(

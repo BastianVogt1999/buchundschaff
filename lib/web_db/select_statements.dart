@@ -241,7 +241,7 @@ class SelectStatements {
 
     await FirebaseFirestore.instance
         .collection('/AllProjects/' + company.company_name + '/Messages')
-        .orderBy("time")
+        .orderBy("date")
         .get()
         .then((QuerySnapshot querySnapshot) {
       for (var doc in querySnapshot.docs) {
@@ -255,6 +255,14 @@ class SelectStatements {
         messageList.add(value);
       }
     });
+
+    //Sort in opposite count
+    int runner = messageList.length - 1;
+    List<Message> messageListCopy = messageList;
+    for (int i = 0; i < messageList.length; i++) {
+      messageList[i] = messageListCopy[runner];
+      --runner;
+    }
 
     return messageList;
   }

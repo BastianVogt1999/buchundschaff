@@ -37,7 +37,7 @@ class _SendMessagesState extends State<SendMessages> {
       return Container(
         padding: EdgeInsets.all(5),
         alignment: Alignment.center,
-        width: MediaQuery.of(context).size.width / 1.8,
+        width: 60.w,
         decoration: BoxDecoration(
           color: whiteMode.cardColor,
           border: Border.all(width: 2, color: whiteMode.abstractColor),
@@ -50,14 +50,32 @@ class _SendMessagesState extends State<SendMessages> {
                 textAlign: TextAlign.center),
             Divider(),
             Text(message.message_text,
-                style: TextStyle(fontSize: 25, color: whiteMode.textColor),
+                style: TextStyle(fontSize: 20.sp, color: whiteMode.textColor),
                 textAlign: TextAlign.center),
             Divider(),
-            Container(
-              alignment: Alignment.centerRight,
-              child: Text(message.time,
-                  style: TextStyle(fontSize: 12, color: whiteMode.textColor),
-                  textAlign: TextAlign.right),
+            Row(
+              children: [
+                Flexible(
+                  flex: 2,
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text("Datum: " + message.date,
+                        style: TextStyle(
+                            fontSize: 8.sp, color: whiteMode.textColor),
+                        textAlign: TextAlign.right),
+                  ),
+                ),
+                Flexible(
+                  flex: 2,
+                  child: Container(
+                    alignment: Alignment.centerRight,
+                    child: Text("Zeit: " + message.time,
+                        style: TextStyle(
+                            fontSize: 8.sp, color: whiteMode.textColor),
+                        textAlign: TextAlign.right),
+                  ),
+                ),
+              ],
             ),
             SizedBox(height: MediaQuery.of(context).size.height / 40)
           ],
@@ -68,7 +86,6 @@ class _SendMessagesState extends State<SendMessages> {
     Widget messagesBuilder = FutureBuilder(
         future: selectStatements.selectAllMessages(company),
         builder: (context, dataSnapshot) {
-          List<Widget> children;
           if (dataSnapshot.connectionState == ConnectionState.waiting) {
             return globalMethods.loadingScreen(context);
           } else {
@@ -89,10 +106,10 @@ class _SendMessagesState extends State<SendMessages> {
                             width: MediaQuery.of(context).size.width,
                             child: Column(children: [
                               Align(
-                                alignment: Alignment.topRight,
+                                alignment: Alignment.bottomRight,
                                 child: decoratedTextBox(allMessages[index]),
                               ),
-                              SizedBox(height: 10),
+                              SizedBox(height: 2.h),
                             ]));
                       }));
             }
@@ -101,7 +118,8 @@ class _SendMessagesState extends State<SendMessages> {
 
     return Container(
         padding: EdgeInsets.all(10),
-        child: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
+        child: SingleChildScrollView(
+            child: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
           messagesBuilder,
           Container(
             height: MediaQuery.of(context).size.height / 16,
@@ -169,6 +187,6 @@ class _SendMessagesState extends State<SendMessages> {
               ],
             ),
           )
-        ]));
+        ])));
   }
 }
