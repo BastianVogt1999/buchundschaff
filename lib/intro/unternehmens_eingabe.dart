@@ -20,7 +20,7 @@ class LoginPage extends StatefulWidget {
 
 class LoginPage_state extends State<LoginPage> {
   TextEditingController companyNameController = TextEditingController();
-  bool whiteModeOn = false;
+  bool whiteModeOn = true;
 
   bool pwdVisibility = false;
 
@@ -34,7 +34,9 @@ class LoginPage_state extends State<LoginPage> {
             width: 100.w,
             height: 100.h,
             decoration: BoxDecoration(
-              color: whiteModeOn ? whiteMode.textColor : blackMode.textColor,
+              color: whiteModeOn
+                  ? whiteMode.backgroundColor
+                  : blackMode.backgroundColor,
             ),
             child: SizedBox(
                 width: MediaQuery.of(context).size.width > 100 ? 50.w : 80.w,
@@ -71,8 +73,13 @@ class LoginPage_state extends State<LoginPage> {
                   ),
                   Flexible(
                     flex: 8,
-                    child: Icon(Icons.smart_toy_sharp,
-                        size: 200, color: whiteMode.textColor),
+                    child: Icon(
+                      Icons.smart_toy_sharp,
+                      size: 200,
+                      color: whiteModeOn
+                          ? whiteMode.textColor
+                          : blackMode.textColor,
+                    ),
                   ),
 
                   //Input Company-Code
@@ -87,7 +94,11 @@ class LoginPage_state extends State<LoginPage> {
                         obscureText: !pwdVisibility,
                         decoration: InputDecoration(
                           hintText: "Unternehmenscode",
-                          hintStyle: TextStyle(color: whiteMode.textColor),
+                          hintStyle: TextStyle(
+                            color: whiteModeOn
+                                ? whiteMode.textColor
+                                : blackMode.textColor,
+                          ),
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
                               color: whiteModeOn
@@ -164,7 +175,9 @@ class LoginPage_state extends State<LoginPage> {
                                   style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w300,
-                                      color: whiteMode.backgroundColor),
+                                      color: whiteModeOn
+                                          ? whiteMode.backgroundColor
+                                          : blackMode.backgroundColor),
                                 ),
                                 Icon(Icons.arrow_forward,
                                     color: whiteModeOn
@@ -172,7 +185,9 @@ class LoginPage_state extends State<LoginPage> {
                                         : blackMode.backgroundColor)
                               ]),
                           style: OutlinedButton.styleFrom(
-                            backgroundColor: whiteMode.textColor,
+                            backgroundColor: whiteModeOn
+                                ? whiteMode.textColor
+                                : blackMode.textColor,
                             shape: const RoundedRectangleBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(40))),
