@@ -36,13 +36,14 @@ class UpdateStatements {
     ).catchError((error) => print("Failed to update statistic: $error"));
   }
 
-  updateUser(Company company, UserBuS user) {
+  updateUserName(Company company, UserBuS user) {
+    print(user.user_code);
     var database = FirebaseFirestore.instance
         .collection('/AllProjects/' + company.company_name + '/UserInProject');
 
     database.doc(user.user_code).update(
       {
-        'user_name': user.user_name,
+        "user_name": user.user_name,
       },
     ).catchError((error) {
       print("Failed to update user: $error");

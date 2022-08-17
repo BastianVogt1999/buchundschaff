@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:itm_ichtrinkmehr_flutter/intro/rollen_input.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/colors.dart';
+import 'package:sizer/sizer.dart';
 
 WhiteMode whiteMode = WhiteMode();
 
@@ -38,14 +39,6 @@ class _CustomCarouselFB2State extends State<cusCar> {
   Widget build(BuildContext context) {
     List<Widget> cards = [
       CardFb1(
-        text: "Anmelden als Admin",
-        imageUrl: Icons.admin_panel_settings,
-        subtitle: "Erweiterte Funktionen",
-        isAdmin: "true",
-        stream: stream,
-        streamControllerUserInput: streamControllerUserInput,
-      ),
-      CardFb1(
         text: "Anmelden als User",
         imageUrl: Icons.supervised_user_circle,
         subtitle: "",
@@ -54,9 +47,9 @@ class _CustomCarouselFB2State extends State<cusCar> {
         streamControllerUserInput: streamControllerUserInput,
       ),
       CardFb1(
-        text: "Anmelden als Developeer",
-        imageUrl: Icons.developer_board,
-        subtitle: "Developer Funktionen",
+        text: "Anmelden als Admin",
+        imageUrl: Icons.admin_panel_settings,
+        subtitle: "Erweiterte Funktionen",
         isAdmin: "true",
         stream: stream,
         streamControllerUserInput: streamControllerUserInput,
@@ -116,8 +109,8 @@ class CardFb1 extends StatelessWidget {
         streamControllerUserInput.add(isAdmin);
       },
       child: Container(
-        width: 250,
-        height: 230,
+        width: 40.h,
+        height: 28.h,
         padding: const EdgeInsets.all(30.0),
         decoration: BoxDecoration(
           color: whiteMode.textColor,
@@ -133,7 +126,7 @@ class CardFb1 extends StatelessWidget {
         child: Column(
           children: [
             SizedBox(
-              height: 100,
+              height: 10.h,
               child: Icon(
                 imageUrl,
                 color: whiteMode.backgroundColor,

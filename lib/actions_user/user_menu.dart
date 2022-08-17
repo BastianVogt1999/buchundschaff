@@ -55,11 +55,10 @@ class UserMenuState extends State<UserMenu> {
         child: ListView(
           children: <Widget>[
             Container(
-              padding: EdgeInsets.all(15.0),
+              padding: const EdgeInsets.all(15.0),
               child: Column(
                 children: [
                   const SizedBox(height: 12),
-                  SearchFieldDrawer(),
                   const SizedBox(height: 12),
                   MenuItem(
                     text: 'Timer starten',
@@ -127,38 +126,6 @@ class MenuItem extends StatelessWidget {
       title: Text(text, style: TextStyle(color: whiteMode.textColor)),
       hoverColor: whiteMode.textColor,
       onTap: onClicked,
-    );
-  }
-}
-
-class SearchFieldDrawer extends StatelessWidget {
-  const SearchFieldDrawer();
-
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      style:
-          TextStyle(color: whiteMode.textColor.withOpacity(0.5), fontSize: 14),
-      decoration: InputDecoration(
-        contentPadding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-        hintText: 'Suchen',
-        hintStyle: TextStyle(color: whiteMode.textColor.withOpacity(0.5)),
-        prefixIcon: Icon(
-          Icons.search,
-          color: whiteMode.textColor.withOpacity(0.5),
-          size: 20,
-        ),
-        filled: true,
-        fillColor: whiteMode.cardColor,
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
-          borderSide: BorderSide(color: whiteMode.textColor.withOpacity(0.7)),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
-          borderSide: BorderSide(color: whiteMode.textColor.withOpacity(0.7)),
-        ),
-      ),
     );
   }
 }

@@ -1,7 +1,4 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:itm_ichtrinkmehr_flutter/actions_user/day_stats.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_user/messages_user.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_user/show_stats/stats_main.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_user/timer/timer_main.dart';
@@ -9,8 +6,9 @@ import 'package:itm_ichtrinkmehr_flutter/actions_user/user_menu.dart';
 import 'package:itm_ichtrinkmehr_flutter/common_actions/home_button.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/colors.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
-import 'package:itm_ichtrinkmehr_flutter/values/statistic.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
+
+import '../common_actions/settings.dart';
 
 WhiteMode whiteMode = WhiteMode();
 
@@ -47,6 +45,7 @@ class _ContainerUserState extends State<ContainerUser> {
       Timer_main(user, company),
       Stats_main(user, company),
       MessagesUser(company, user),
+      Settings(user, company),
     ];
 
     return Scaffold(

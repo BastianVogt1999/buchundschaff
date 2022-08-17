@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_admin/admin_menu.dart';
+import 'package:itm_ichtrinkmehr_flutter/actions_admin/rebase_stats.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_admin/send_messages.dart';
 import 'package:itm_ichtrinkmehr_flutter/common_actions/home_button.dart';
-import 'package:itm_ichtrinkmehr_flutter/intro/unternehmens_eingabe.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/colors.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
 
-import 'UserManagement/manage_user.dart';
-import 'day_stats_admin.dart';
+import '../common_actions/settings.dart';
+import 'all_user.dart';
+
+import 'running_projects.dart';
 import 'full_stats_admin.dart';
 
 WhiteMode whiteMode = WhiteMode();
@@ -17,7 +19,8 @@ class ContainerAdmin extends StatefulWidget {
   Company company;
   UserBuS user;
   int selectedIndex;
-  ContainerAdmin(this.company, this.user, this.selectedIndex);
+  ContainerAdmin(this.company, this.user, this.selectedIndex, {Key? key})
+      : super(key: key);
 
   @override
   State<ContainerAdmin> createState() =>
@@ -41,10 +44,12 @@ class _ContainerAdminState extends State<ContainerAdmin> {
   @override
   Widget build(BuildContext context) {
     final List _pages = [
-      DayStatsAdmin(),
+      RunningProjects(company),
       FullStatsAdmin(user, company),
-      UserManagement(company),
+      allUser(company),
+      RebaseStats(company),
       SendMessages(company, user),
+      Settings(user, company)
     ];
 
     return Scaffold(

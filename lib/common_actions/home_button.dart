@@ -15,13 +15,14 @@ class HomeButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FloatingActionButton(
+    return FloatingActionButton.extended(
       backgroundColor: whiteMode.abstractColor,
       onPressed: () {
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => RoleInput(company)));
       },
-      child: Icon(
+      label: const Text("Log-Out"),
+      icon: const Icon(
         Icons.logout,
       ),
     );

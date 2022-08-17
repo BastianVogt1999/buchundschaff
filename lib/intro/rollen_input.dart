@@ -1,6 +1,6 @@
 import 'dart:async';
+import 'dart:ui';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:itm_ichtrinkmehr_flutter/intro/carrousel_intro.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/colors.dart';
@@ -22,17 +22,21 @@ StreamController<String> streamControllerUserInput = StreamController<String>();
 Stream stream = streamControllerUserInput.stream.asBroadcastStream();
 
 class RoleInput extends StatefulWidget {
-  RoleInput(this.company);
+  const RoleInput(this.company, {Key? key}) : super(key: key);
 
-  Company company;
+  final Company company;
+
   @override
   State<RoleInput> createState() => _RoleInputState(company);
 }
 
 class _RoleInputState extends State<RoleInput> {
   TextEditingController userCodeController = TextEditingController();
+  Future<void> closeStream() => streamControllerUserInput.close();
+  bool valuefirst = false;
 
   Company company;
+
   _RoleInputState(this.company);
 
   @override
@@ -83,8 +87,6 @@ class _RoleInputState extends State<RoleInput> {
     }
   }
 
-  bool valuefirst = false;
-
   @override
   Widget build(BuildContext context) {
     bool pwdVisibility = false;
@@ -93,31 +95,29 @@ class _RoleInputState extends State<RoleInput> {
         appBar: AppBar(
           backgroundColor: whiteMode.cardColor,
           actions: [
-            IconButton(
-              icon: Icon(
-                Icons.share,
+            CircleAvatar(
+                backgroundColor: whiteMode.textColor,
+                child: IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const LoginPage()));
+                    },
+                    icon: Icon(
+                      Icons.home_filled,
+                      color: whiteMode.cardColor,
+                    ))),
+          ],
+          automaticallyImplyLeading: false,
+          title: SizedBox(
+            child: Text(
+              company.company_name,
+              style: TextStyle(
+                fontSize: 3.h,
                 color: whiteMode.textColor,
               ),
-              onPressed: () {
-                insertStatements.insertNewCompany(Company("12", "asas"));
-              },
             ),
-            IconButton(
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => LoginPage()));
-                },
-                icon: Icon(
-                  Icons.home_filled,
-                  color: whiteMode.textColor,
-                ))
-          ],
-          leading: IconButton(
-            icon: Icon(
-              Icons.keyboard_arrow_left,
-              color: whiteMode.textColor,
-            ),
-            onPressed: () {},
           ),
         ),
         body: Container(
@@ -136,7 +136,12 @@ class _RoleInputState extends State<RoleInput> {
                     obscureText: !pwdVisibility,
                     decoration: InputDecoration(
                       hintText: "User-Code",
-                      hintStyle: TextStyle(color: whiteMode.textColor),
+                      hintStyle: TextStyle(
+                          color: whiteMode.textColor,
+                          fontStyle: FontStyle.italic,
+                          fontFeatures: const <FontFeature>[
+                            FontFeature.liningFigures()
+                          ]),
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           color: whiteMode.textColor,

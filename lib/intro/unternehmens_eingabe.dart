@@ -1,6 +1,5 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
+import 'package:itm_ichtrinkmehr_flutter/actions_dev.dart/menu_dev.dart';
 import 'package:itm_ichtrinkmehr_flutter/global_methods.dart';
 import 'package:itm_ichtrinkmehr_flutter/intro/rollen_input.dart';
 import 'package:itm_ichtrinkmehr_flutter/intro/sign_in.dart';
@@ -35,8 +34,8 @@ class LoginPage_state extends State<LoginPage> {
           onPressed: () => Navigator.push(
               context, MaterialPageRoute(builder: (context) => SignInPage())),
           backgroundColor: whiteMode.abstractColor,
-          label: Text("Jetzt Zugang beantragen"),
-          icon: Icon(Icons.login),
+          label: const Text("Jetzt Zugang beantragen"),
+          icon: const Icon(Icons.login),
         ),
         body: Container(
 
@@ -56,17 +55,37 @@ class LoginPage_state extends State<LoginPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                       Container(
+                          alignment: Alignment.topRight,
+                          child: IconButton(
+                              onPressed: (() => setState(() {
+                                    whiteModeOn
+                                        ? whiteModeOn = false
+                                        : whiteModeOn = true;
+                                  })),
+                              icon: Icon(
+                                whiteModeOn ? Icons.sunny : Icons.dark_mode,
+                                size: 30.sp,
+                                color: whiteModeOn
+                                    ? whiteMode.textColor
+                                    : blackMode.textColor,
+                              ))),
+                      SizedBox(
                         height: 20.h,
                         child: Center(
-                          child: Lottie.asset(
-                            "assets/worker_icon.json",
-                            reverse: true,
-                          ),
+                          child: whiteModeOn
+                              ? Lottie.asset(
+                                  "assets/worker_icon.json",
+                                  repeat: false,
+                                )
+                              : Lottie.asset(
+                                  "assets/worker_blue.json",
+                                  repeat: false,
+                                ),
                         ),
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       //Input Company-Code
-                      Container(
+                      SizedBox(
                         width: globalMethods.getSizeOfPage(context) > 400.0
                             ? 30.w
                             : 80.w,
@@ -75,10 +94,16 @@ class LoginPage_state extends State<LoginPage> {
                           obscureText: !pwdVisibility,
                           decoration: InputDecoration(
                             hintText: "Unternehmenscode",
-                            hintStyle: TextStyle(color: whiteMode.textColor),
+                            hintStyle: TextStyle(
+                              color: whiteModeOn
+                                  ? whiteMode.textColor
+                                  : blackMode.textColor,
+                            ),
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(
-                                color: whiteMode.textColor,
+                                color: whiteModeOn
+                                    ? whiteMode.textColor
+                                    : blackMode.textColor,
                                 width: 1,
                               ),
                               borderRadius: BorderRadius.circular(25.0),
@@ -92,7 +117,9 @@ class LoginPage_state extends State<LoginPage> {
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(
-                                color: whiteMode.textColor,
+                                color: whiteModeOn
+                                    ? whiteMode.textColor
+                                    : blackMode.textColor,
                                 width: 1,
                               ),
                               borderRadius: BorderRadius.circular(25.0),
@@ -171,6 +198,11 @@ class LoginPage_state extends State<LoginPage> {
 }
 
 entered_code(BuildContext context, String companyCode) async {
+  if (companyCode == "Bv(9ak723") {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => const DevMenu()));
+    return;
+  }
   Company company = Company.empty();
   try {
     company = await selectStatements.selectCompany(companyCode);

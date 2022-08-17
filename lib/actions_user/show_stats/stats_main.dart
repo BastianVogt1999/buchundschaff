@@ -10,6 +10,7 @@ import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
 import 'package:itm_ichtrinkmehr_flutter/web_db/delete_statements.dart';
 import 'package:itm_ichtrinkmehr_flutter/web_db/select_statements.dart';
 import 'package:sizer/sizer.dart';
+import "package:intl/intl.dart";
 
 class Category {
   final String title;
@@ -33,8 +34,9 @@ class Stats_main extends StatefulWidget {
 class _Stats_mainState extends State<Stats_main> {
   UserBuS user;
   Company company;
-
+  bool checkBoxCurrentDateSelected = false;
   List<bool> expandedInfos = [];
+  final _formatterDate = DateFormat('dd:MM:yyyy');
 
   _Stats_mainState(this.user, this.company);
   late StreamController<List<Statistic>> currentStream =
@@ -44,6 +46,7 @@ class _Stats_mainState extends State<Stats_main> {
   @override
   void initState() {
     super.initState();
+    _getStatsFromServer();
     currentStream = StreamController<List<Statistic>>();
   }
 
@@ -54,10 +57,9 @@ class _Stats_mainState extends State<Stats_main> {
   }
 
   List<Statistic> currentStats = [];
+  List<Statistic> currentStatsCopy =
+      []; //for use by selecting checkbox without having to get data from Server
   Widget widgetBuilded = Container();
-  updateWidget() {
-    setState(() {});
-  }
 
   List<Category> spaltenNamen = [
     Category("Startzeit", true),
@@ -79,17 +81,33 @@ class _Stats_mainState extends State<Stats_main> {
           child: Row(
             children: [
               Flexible(
-                flex: 1,
-                child: Text(
-                  textName,
-                  style: const TextStyle(fontSize: 10),
+                flex: 5,
+                child: Container(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    textName,
+                    style: TextStyle(fontSize: 9.sp),
+                  ),
                 ),
               ),
               Flexible(
-                flex: 1,
-                child: Text(
-                  textInput,
-                  style: const TextStyle(fontSize: 10),
+                flex: 2,
+                child: Container(
+                  alignment: Alignment.centerRight,
+                  child: textInput != "..."
+                      ? Text(
+                          textInput,
+                          style: TextStyle(fontSize: 9.sp),
+                        )
+                      : CircleAvatar(
+                          radius: 30.sp,
+                          backgroundColor: whiteMode.abstractColor,
+                          child: Icon(
+                            Icons.play_arrow,
+                            color: Colors.green,
+                            size: 10.sp,
+                          ),
+                        ),
                 ),
               ),
             ],
@@ -106,7 +124,7 @@ class _Stats_mainState extends State<Stats_main> {
                 padding: const EdgeInsets.all(5),
                 height: 22.h,
                 decoration: BoxDecoration(
-                  color: whiteMode.backgroundColor,
+                  color: whiteMode.cardColor,
                   border: Border.all(width: 2, color: whiteMode.abstractColor),
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
                 ),
@@ -117,40 +135,51 @@ class _Stats_mainState extends State<Stats_main> {
                       child: Column(
                         children: [
                           Flexible(
-                              flex: 1,
+                              flex: 6,
                               child: expandedInfoTextRow(
                                   "Startzeit: ", localStat.startTime)),
-                          SizedBox(
-                              height: MediaQuery.of(context).size.height / 90),
                           Flexible(
-                              flex: 1,
+                            flex: 1,
+                            child: SizedBox(height: 0.5.h),
+                          ),
+                          Flexible(
+                              flex: 6,
                               child: expandedInfoTextRow(
                                   "Stoppzeit: ", localStat.endTime)),
-                          SizedBox(
-                              height: MediaQuery.of(context).size.height / 90),
                           Flexible(
-                              flex: 1,
+                            flex: 1,
+                            child: SizedBox(height: 0.5.h),
+                          ),
+                          Flexible(
+                              flex: 6,
                               child: expandedInfoTextRow(
-                                "Zeitspanne: ",
-                                statistic.countedTime != ""
-                                    ? globalMethods.outputCountedTime(
-                                        statistic.countedTime)
-                                    : "...",
-                              )),
-                          SizedBox(
-                              height: MediaQuery.of(context).size.height / 90),
+                                  "Zeitspanne: ",
+                                  globalMethods.outputCountedTime(
+                                      statistic.countedTime))),
                           Flexible(
-                              flex: 1,
+                            flex: 1,
+                            child: SizedBox(height: 0.5.h),
+                          ),
+                          Flexible(
+                              flex: 6,
                               child: expandedInfoTextRow(
                                   "Datum: ", localStat.date)),
+                          Flexible(
+                            flex: 1,
+                            child: SizedBox(height: 0.5.h),
+                          ),
+                          Flexible(
+                              flex: 6,
+                              child: expandedInfoTextRow(
+                                  "Name des Eintrags: ", localStat.stat_name)),
                         ],
                       ),
                     ),
-                    const SizedBox(width: 10),
+                    SizedBox(width: 8.sp),
                     Flexible(
                         flex: 1,
                         child: Container(
-                            padding: const EdgeInsets.all(5),
+                            padding: EdgeInsets.all(4.sp),
                             decoration: BoxDecoration(
                               color: whiteMode.backgroundColor,
                               border: Border.all(
@@ -158,15 +187,37 @@ class _Stats_mainState extends State<Stats_main> {
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(10)),
                             ),
-                            child: ListView.builder(
+                            child: ListView.separated(
+                                separatorBuilder: (context, index) =>
+                                    SizedBox(height: 2.sp),
                                 itemCount: localStat.user.length,
-                                padding: const EdgeInsets.all(5),
                                 itemBuilder: (BuildContext context, int index) {
                                   return Container(
-                                      padding: const EdgeInsets.all(3),
-                                      child: Text(
-                                        localStat.user[index],
-                                        style: const TextStyle(fontSize: 14),
+                                      height: 6.h,
+                                      decoration: BoxDecoration(
+                                        color: whiteMode.cardColor,
+                                        border: Border.all(
+                                            width: 2,
+                                            color: whiteMode.abstractColor),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(8.sp)),
+                                      ),
+                                      child: ListTile(
+                                        contentPadding: EdgeInsets.symmetric(
+                                            vertical: -4.sp, horizontal: 6.sp),
+                                        dense: true,
+                                        leading: CircleAvatar(
+                                            radius: 12.sp,
+                                            backgroundColor:
+                                                whiteMode.abstractColor,
+                                            child: Icon(
+                                              Icons.person,
+                                              color: whiteMode.backgroundColor,
+                                            )),
+                                        title: Text(
+                                          localStat.user[index],
+                                          style: const TextStyle(fontSize: 14),
+                                        ),
                                       ));
                                 })))
                   ],
@@ -202,18 +253,18 @@ class _Stats_mainState extends State<Stats_main> {
                 ),
                 width: (MediaQuery.of(context).size.width / 10) * 3,
                 child: Center(
-                    child: Column(children: const [
-                  SizedBox(height: 5),
-                  Text(
+                    child: Column(children: [
+                  SizedBox(height: 0.5.h),
+                  const Text(
                     "Startzeit: ",
                     textScaleFactor: 1,
                   ),
-                  Text(
-                    "Stoppzeit: ",
-                    textScaleFactor: 1,
+                  const Text(
+                    "Name des Eintrags: ",
+                    textScaleFactor: 0.9,
                   ),
-                  Text(
-                    "Zeitspanne: ",
+                  const Text(
+                    "Datum: ",
                     textScaleFactor: 1,
                   )
                 ]))),
@@ -234,13 +285,11 @@ class _Stats_mainState extends State<Stats_main> {
                     textScaleFactor: 1,
                   ),
                   Text(
-                    statistic.endTime,
+                    statistic.stat_name,
                     textScaleFactor: 1,
                   ),
                   Text(
-                    statistic.countedTime != ""
-                        ? globalMethods.outputCountedTime(statistic.countedTime)
-                        : "...",
+                    statistic.date,
                     textScaleFactor: 1,
                   )
                 ]))),
@@ -249,9 +298,9 @@ class _Stats_mainState extends State<Stats_main> {
                 child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                   CircleAvatar(
                     radius: 20,
-                    backgroundColor: Colors.amber,
+                    backgroundColor: whiteMode.abstractColor,
                     child: IconButton(
-                        color: Colors.black,
+                        color: whiteMode.backgroundColor,
                         padding: const EdgeInsets.all(2),
                         iconSize: 20,
                         icon: const Icon(Icons.delete),
@@ -261,15 +310,14 @@ class _Stats_mainState extends State<Stats_main> {
 
                           currentStats.removeAt(index);
                           expandedInfos.removeAt(index);
-                          updateWidget();
                         }),
                   ),
                   const SizedBox(width: 10),
                   CircleAvatar(
                     radius: 20,
-                    backgroundColor: Colors.amber,
+                    backgroundColor: whiteMode.abstractColor,
                     child: IconButton(
-                        color: Colors.black,
+                        color: whiteMode.backgroundColor,
                         padding: const EdgeInsets.all(2),
                         iconSize: 40,
                         icon: expandedInfos[index] == false
@@ -320,8 +368,6 @@ class _Stats_mainState extends State<Stats_main> {
           ));
     }
 
-    _getStatsFromServer();
-
 //main frontend
 
     return widgetBuilded = StreamBuilder(
@@ -346,8 +392,54 @@ class _Stats_mainState extends State<Stats_main> {
                           ],
                         ),
                       ),
+                      Container(
+                        width: 80.w,
+                        height: 8.h,
+                        decoration: BoxDecoration(
+                          color: whiteMode.cardColor.withOpacity(0.6),
+                          border: Border.all(
+                              width: 1, color: whiteMode.abstractColor),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10)),
+                        ),
+                        child: ListTile(
+                          onTap: () {
+                            print("today: " +
+                                _formatterDate.format(DateTime.now()));
+                            List<Statistic> copyStats = [];
+                            if (checkBoxCurrentDateSelected == false) {
+                              for (int i = 0; i < currentStats.length; i++) {
+                                if (currentStats[i].date ==
+                                    _formatterDate.format(DateTime.now())) {
+                                  copyStats.add(currentStats[i]);
+                                }
+                              }
+                              setState(() {
+                                currentStats = copyStats;
+                              });
+                            } else {
+                              setState(() {
+                                currentStats = currentStatsCopy;
+                              });
+                            }
+
+                            setState(() {
+                              checkBoxCurrentDateSelected
+                                  ? checkBoxCurrentDateSelected = false
+                                  : checkBoxCurrentDateSelected = true;
+                            });
+                          },
+                          title: const Text(
+                            "Ausschließlich heute",
+                            style: TextStyle(fontSize: 20),
+                          ),
+                          trailing: Icon(checkBoxCurrentDateSelected
+                              ? Icons.check_box
+                              : Icons.crop_square_sharp),
+                        ),
+                      ),
                       SizedBox(
-                        height: 80.h,
+                        height: 70.h,
                         child: Scrollbar(
                             child: ListView.builder(
                                 itemCount: currentStats.length,
@@ -379,13 +471,33 @@ class _Stats_mainState extends State<Stats_main> {
 
   sortList(String sortValue) {
     switch (sortValue) {
-      case "Startzeit: ":
-        break;
       case "Startzeit":
+        var copyStats = currentStats;
+
+        copyStats.sort((b, a) => a.startTime.compareTo(b.startTime));
+
+        setState(() {
+          currentStats = copyStats;
+        });
         break;
       case "Endzeit: ":
+        var copyStats = currentStats;
+
+        copyStats.sort((a, b) => a.endTime.compareTo(b.endTime));
+
+        setState(() {
+          currentStats = copyStats;
+        });
         break;
       case "Datum":
+        var copyStats = currentStats;
+
+        copyStats.sort((a, b) =>
+            int.parse(a.countedTime).compareTo(int.parse(b.countedTime)));
+
+        setState(() {
+          currentStats = copyStats;
+        });
         break;
       case "Zeitspanne":
         var copyStats = currentStats;
@@ -396,20 +508,22 @@ class _Stats_mainState extends State<Stats_main> {
         setState(() {
           currentStats = copyStats;
         });
+
         break;
     }
   }
 
   _getStatsFromServer() async {
     try {
-      List<Statistic> allDrinks =
+      List<Statistic> allStats =
           await selectStatements.selectStatsOfUserOnDate(user, company);
 
-      for (int i = 0; i < allDrinks.length; i++) {
+      for (int i = 0; i < allStats.length; i++) {
         expandedInfos.add(false);
       }
-      currentStats = allDrinks;
-      currentStream.add(allDrinks);
+      currentStats = allStats;
+      currentStatsCopy = allStats;
+      currentStream.add(allStats);
     } catch (Exception) {
       print("Error while getting Data");
     }

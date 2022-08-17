@@ -42,13 +42,13 @@ class GlobalMethods {
   }
 
   Widget loadingScreen(BuildContext context) {
-    return Container(
+    return SizedBox(
         height: MediaQuery.of(context).size.width / 2 - 50,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
-              padding: EdgeInsets.only(top: 16),
+              padding: const EdgeInsets.only(top: 16),
               child: Center(
                 child: Lottie.asset("assets/worker.json"),
               ),
@@ -62,9 +62,9 @@ class GlobalMethods {
     if (time <= 60) {
       int seconds = time % 60;
       if (seconds.toString().length > 1) {
-        return "00:00" + ":" + input;
+        return "00:00" ":" + input;
       } else {
-        return "00:00" + ":0" + input;
+        return "00:00" ":0" + input;
       }
     } else if (time <= 3600) {
       int minute = time ~/ 60;

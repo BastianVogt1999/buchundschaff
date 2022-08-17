@@ -31,13 +31,15 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
   final Stream<User?> user = Auth().currentUser;
+  ThemeData whiteTheme = ThemeData(fontFamily: 'Fontshare');
 
   @override
   Widget build(BuildContext context) {
     return Sizer(builder: (context, orientation, deviceType) {
       return MaterialApp(
+        theme: whiteTheme,
         debugShowCheckedModeBanner: false,
-        home: LoginPage(),
+        home: const LoginPage(),
       );
     });
   }

@@ -6,11 +6,12 @@ class Statistic {
   String countedTime;
   String date;
   String isrunning;
+  String stat_name;
 
   Statistic(this.statistic_id, this.user, this.startTime, this.endTime,
-      this.countedTime, this.date, this.isrunning);
+      this.countedTime, this.date, this.isrunning, this.stat_name);
 
-  Statistic.empty() : this("", List.empty(), "", "", "", "", "");
+  Statistic.empty() : this("", List.empty(), "", "", "", "", "", "");
 }
 
 class UserAsMap {
