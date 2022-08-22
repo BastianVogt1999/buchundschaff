@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import 'package:itm_ichtrinkmehr_flutter/actions_user/timer/timer_main.dart';
 import 'package:itm_ichtrinkmehr_flutter/global_methods.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/statistic.dart';
@@ -74,8 +73,9 @@ class _Stats_mainState extends State<Stats_main> {
       return Container(
           padding: const EdgeInsets.all(5),
           decoration: BoxDecoration(
-            color: whiteMode.backgroundColor,
-            border: Border.all(width: 1, color: whiteMode.abstractColor),
+            color: Theme.of(context).backgroundColor,
+            border: Border.all(
+                width: 1, color: Theme.of(context).colorScheme.secondary),
             borderRadius: const BorderRadius.all(Radius.circular(10)),
           ),
           child: Row(
@@ -101,7 +101,8 @@ class _Stats_mainState extends State<Stats_main> {
                         )
                       : CircleAvatar(
                           radius: 30.sp,
-                          backgroundColor: whiteMode.abstractColor,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.secondary,
                           child: Icon(
                             Icons.play_arrow,
                             color: Colors.green,
@@ -116,16 +117,17 @@ class _Stats_mainState extends State<Stats_main> {
 
     Widget expandedInfoContainer(Statistic localStat, int index) {
       return SizedBox(
-          height: expandedInfos[index] ? 30.h : 0,
+          height: expandedInfos[index] ? 22.h : 0,
           child: Column(
             children: [
-              SizedBox(height: MediaQuery.of(context).size.height / 40),
+              SizedBox(height: 1.h),
               Container(
                 padding: const EdgeInsets.all(5),
-                height: 22.h,
+                height: 20.h,
                 decoration: BoxDecoration(
-                  color: whiteMode.cardColor,
-                  border: Border.all(width: 2, color: whiteMode.abstractColor),
+                  color: Theme.of(context).cardColor,
+                  border: Border.all(
+                      width: 2, color: Theme.of(context).colorScheme.secondary),
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
                 ),
                 child: Row(
@@ -155,7 +157,7 @@ class _Stats_mainState extends State<Stats_main> {
                               child: expandedInfoTextRow(
                                   "Zeitspanne: ",
                                   globalMethods.outputCountedTime(
-                                      statistic.countedTime))),
+                                      localStat.countedTime))),
                           Flexible(
                             flex: 1,
                             child: SizedBox(height: 0.5.h),
@@ -175,30 +177,33 @@ class _Stats_mainState extends State<Stats_main> {
                         ],
                       ),
                     ),
-                    SizedBox(width: 8.sp),
                     Flexible(
                         flex: 1,
                         child: Container(
                             padding: EdgeInsets.all(4.sp),
                             decoration: BoxDecoration(
-                              color: whiteMode.backgroundColor,
+                              color: Theme.of(context).backgroundColor,
                               border: Border.all(
-                                  width: 1, color: whiteMode.abstractColor),
+                                  width: 1,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary),
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(10)),
                             ),
                             child: ListView.separated(
                                 separatorBuilder: (context, index) =>
-                                    SizedBox(height: 2.sp),
+                                    SizedBox(height: 1.h),
                                 itemCount: localStat.user.length,
                                 itemBuilder: (BuildContext context, int index) {
                                   return Container(
                                       height: 6.h,
                                       decoration: BoxDecoration(
-                                        color: whiteMode.cardColor,
+                                        color: Theme.of(context).cardColor,
                                         border: Border.all(
                                             width: 2,
-                                            color: whiteMode.abstractColor),
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .secondary),
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(8.sp)),
                                       ),
@@ -208,11 +213,13 @@ class _Stats_mainState extends State<Stats_main> {
                                         dense: true,
                                         leading: CircleAvatar(
                                             radius: 12.sp,
-                                            backgroundColor:
-                                                whiteMode.abstractColor,
+                                            backgroundColor: Theme.of(context)
+                                                .colorScheme
+                                                .secondary,
                                             child: Icon(
                                               Icons.person,
-                                              color: whiteMode.backgroundColor,
+                                              color: Theme.of(context)
+                                                  .backgroundColor,
                                             )),
                                         title: Text(
                                           localStat.user[index],
@@ -223,7 +230,7 @@ class _Stats_mainState extends State<Stats_main> {
                   ],
                 ),
               ),
-              SizedBox(height: MediaQuery.of(context).size.height / 40),
+              SizedBox(height: 1.h),
             ],
           ));
     }
@@ -238,20 +245,22 @@ class _Stats_mainState extends State<Stats_main> {
       return Container(
           height: MediaQuery.of(context).size.height / 10,
           decoration: BoxDecoration(
-            color: whiteMode.cardColor,
-            border: Border.all(width: 2, color: whiteMode.abstractColor),
+            color: Theme.of(context).cardColor,
+            border: Border.all(
+                width: 2, color: Theme.of(context).colorScheme.secondary),
             borderRadius: const BorderRadius.all(Radius.circular(10)),
           ),
           padding: const EdgeInsets.only(left: 8, right: 8),
           child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
             Container(
-                height: MediaQuery.of(context).size.height / 13,
+                height: 9.h,
                 decoration: BoxDecoration(
-                  color: whiteMode.backgroundColor,
-                  border: Border.all(width: 2, color: whiteMode.abstractColor),
+                  color: Theme.of(context).backgroundColor,
+                  border: Border.all(
+                      width: 2, color: Theme.of(context).colorScheme.secondary),
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
                 ),
-                width: (MediaQuery.of(context).size.width / 10) * 3,
+                width: 35.w,
                 child: Center(
                     child: Column(children: [
                   SizedBox(height: 0.5.h),
@@ -268,18 +277,19 @@ class _Stats_mainState extends State<Stats_main> {
                     textScaleFactor: 1,
                   )
                 ]))),
-            SizedBox(width: MediaQuery.of(context).size.width / 30),
+            SizedBox(width: 1.w),
             Container(
-                width: MediaQuery.of(context).size.width / 5,
-                height: MediaQuery.of(context).size.height / 13,
+                width: 25.w,
+                height: 9.h,
                 decoration: BoxDecoration(
-                  color: whiteMode.backgroundColor,
-                  border: Border.all(width: 2, color: whiteMode.abstractColor),
+                  color: Theme.of(context).backgroundColor,
+                  border: Border.all(
+                      width: 2, color: Theme.of(context).colorScheme.secondary),
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
                 ),
                 child: Center(
                     child: Column(children: [
-                  const SizedBox(height: 5),
+                  SizedBox(height: 1.h),
                   Text(
                     statistic.startTime,
                     textScaleFactor: 1,
@@ -294,13 +304,13 @@ class _Stats_mainState extends State<Stats_main> {
                   )
                 ]))),
             SizedBox(
-                width: (MediaQuery.of(context).size.width / 3),
+                width: 28.w,
                 child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                   CircleAvatar(
                     radius: 20,
-                    backgroundColor: whiteMode.abstractColor,
+                    backgroundColor: Theme.of(context).colorScheme.secondary,
                     child: IconButton(
-                        color: whiteMode.backgroundColor,
+                        color: Theme.of(context).backgroundColor,
                         padding: const EdgeInsets.all(2),
                         iconSize: 20,
                         icon: const Icon(Icons.delete),
@@ -315,9 +325,9 @@ class _Stats_mainState extends State<Stats_main> {
                   const SizedBox(width: 10),
                   CircleAvatar(
                     radius: 20,
-                    backgroundColor: whiteMode.abstractColor,
+                    backgroundColor: Theme.of(context).colorScheme.secondary,
                     child: IconButton(
-                        color: whiteMode.backgroundColor,
+                        color: Theme.of(context).backgroundColor,
                         padding: const EdgeInsets.all(2),
                         iconSize: 40,
                         icon: expandedInfos[index] == false
@@ -339,8 +349,8 @@ class _Stats_mainState extends State<Stats_main> {
       return Container(
           height: 50,
           color: category.isSelected
-              ? whiteMode.backgroundColor
-              : whiteMode.textColor,
+              ? Theme.of(context).backgroundColor
+              : Theme.of(context).textSelectionTheme.selectionColor!,
           width: 24.w,
           child: OutlinedButton(
             onPressed: () {
@@ -358,8 +368,8 @@ class _Stats_mainState extends State<Stats_main> {
             child: Text(category.title,
                 style: TextStyle(
                     color: category.isSelected
-                        ? whiteMode.textColor
-                        : whiteMode.backgroundColor)),
+                        ? Theme.of(context).textSelectionTheme.selectionColor!
+                        : Theme.of(context).backgroundColor)),
             style: ButtonStyle(
                 padding: MaterialStateProperty.all(
                     const EdgeInsets.symmetric(vertical: 10, horizontal: 5)),
@@ -382,7 +392,9 @@ class _Stats_mainState extends State<Stats_main> {
                       Container(
                         padding: const EdgeInsets.only(left: 6, right: 6),
                         height: MediaQuery.of(context).size.height / 12,
-                        color: whiteMode.textColor,
+                        color: Theme.of(context)
+                            .textSelectionTheme
+                            .selectionColor!,
                         child: Row(
                           children: [
                             spaltenCards(spaltenNamen[0]),
@@ -396,9 +408,10 @@ class _Stats_mainState extends State<Stats_main> {
                         width: 80.w,
                         height: 8.h,
                         decoration: BoxDecoration(
-                          color: whiteMode.cardColor.withOpacity(0.6),
+                          color: Theme.of(context).cardColor.withOpacity(0.6),
                           border: Border.all(
-                              width: 1, color: whiteMode.abstractColor),
+                              width: 1,
+                              color: Theme.of(context).colorScheme.secondary),
                           borderRadius:
                               const BorderRadius.all(Radius.circular(10)),
                         ),
@@ -450,7 +463,7 @@ class _Stats_mainState extends State<Stats_main> {
                                       duration: const Duration(seconds: 1),
                                       child: Container(
                                           height: expandedInfos[index]
-                                              ? 42.h
+                                              ? 34.h
                                               : 12.h,
                                           padding: const EdgeInsets.all(5),
                                           child: Column(children: [
@@ -519,11 +532,14 @@ class _Stats_mainState extends State<Stats_main> {
           await selectStatements.selectStatsOfUserOnDate(user, company);
 
       for (int i = 0; i < allStats.length; i++) {
-        expandedInfos.add(false);
+        if (allStats[i].countedTime != "") {
+          expandedInfos.add(false);
+          currentStats.add(allStats[i]);
+        }
       }
-      currentStats = allStats;
-      currentStatsCopy = allStats;
-      currentStream.add(allStats);
+
+      currentStatsCopy = currentStats;
+      currentStream.add(currentStats);
     } catch (Exception) {
       print("Error while getting Data");
     }

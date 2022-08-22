@@ -23,12 +23,12 @@ class DevMenuState extends State<DevMenu> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => Navigator.push(context,
             MaterialPageRoute(builder: (context) => const LoginPage())),
-        backgroundColor: whiteMode.abstractColor,
+        backgroundColor: Theme.of(context).colorScheme.secondary,
         label: const Text("Zurück zu Home"),
         icon: const Icon(Icons.home_filled),
       ),
       body: Material(
-        color: whiteMode.backgroundColor,
+        color: Theme.of(context).backgroundColor,
         child: ListView(
           children: <Widget>[
             Container(
@@ -37,19 +37,31 @@ class DevMenuState extends State<DevMenu> {
                 children: [
                   const SizedBox(height: 12),
                   ListTile(
-                    leading:
-                        Icon(Icons.delete_forever, color: whiteMode.textColor),
+                    leading: Icon(Icons.delete_forever,
+                        color: Theme.of(context)
+                            .textSelectionTheme
+                            .selectionColor!),
                     title: Text("Firma löschen",
-                        style: TextStyle(color: whiteMode.textColor)),
-                    hoverColor: whiteMode.abstractColor,
+                        style: TextStyle(
+                            color: Theme.of(context)
+                                .textSelectionTheme
+                                .selectionColor!)),
+                    hoverColor: Theme.of(context).colorScheme.secondary,
                   ),
-                  Divider(color: whiteMode.textColor),
+                  Divider(
+                      color:
+                          Theme.of(context).textSelectionTheme.selectionColor!),
                   ListTile(
                     leading: Icon(Icons.dataset_linked_sharp,
-                        color: whiteMode.textColor),
+                        color: Theme.of(context)
+                            .textSelectionTheme
+                            .selectionColor!),
                     title: Text("Daten zurückgeben",
-                        style: TextStyle(color: whiteMode.textColor)),
-                    hoverColor: whiteMode.abstractColor,
+                        style: TextStyle(
+                            color: Theme.of(context)
+                                .textSelectionTheme
+                                .selectionColor!)),
+                    hoverColor: Theme.of(context).colorScheme.secondary,
                   ),
                   ListTile(
                     onTap: () => Navigator.push(
@@ -57,12 +69,19 @@ class DevMenuState extends State<DevMenu> {
                         MaterialPageRoute(
                             builder: (context) => const ClearStat())),
                     leading: Icon(Icons.star_outline_sharp,
-                        color: whiteMode.textColor),
+                        color: Theme.of(context)
+                            .textSelectionTheme
+                            .selectionColor!),
                     title: Text("Stats clearen",
-                        style: TextStyle(color: whiteMode.textColor)),
-                    hoverColor: whiteMode.abstractColor,
+                        style: TextStyle(
+                            color: Theme.of(context)
+                                .textSelectionTheme
+                                .selectionColor!)),
+                    hoverColor: Theme.of(context).colorScheme.secondary,
                   ),
-                  Divider(color: whiteMode.textColor),
+                  Divider(
+                      color:
+                          Theme.of(context).textSelectionTheme.selectionColor!),
                 ],
               ),
             ),
@@ -85,9 +104,12 @@ class MenuItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(icon, color: whiteMode.textColor),
-      title: Text(text, style: TextStyle(color: whiteMode.textColor)),
-      hoverColor: whiteMode.abstractColor,
+      leading: Icon(icon,
+          color: Theme.of(context).textSelectionTheme.selectionColor!),
+      title: Text(text,
+          style: TextStyle(
+              color: Theme.of(context).textSelectionTheme.selectionColor!)),
+      hoverColor: Theme.of(context).colorScheme.secondary,
     );
   }
 }

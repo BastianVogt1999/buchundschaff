@@ -1,4 +1,5 @@
 import 'package:itm_ichtrinkmehr_flutter/actions_user/timer/new_timer.dart';
+import 'package:itm_ichtrinkmehr_flutter/actions_user/timer/running_projects_user.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:itm_ichtrinkmehr_flutter/global_methods.dart';
@@ -30,7 +31,7 @@ class Timer_main extends StatefulWidget {
   UserBuS user;
   Company company;
 
-  Timer_main(this.user, this.company, {super.key});
+  Timer_main(this.user, this.company, {Key? key}) : super(key: key);
 
   @override
   State<Timer_main> createState() => _Timer_mainState(user, company);
@@ -64,22 +65,16 @@ class _Timer_mainState extends State<Timer_main>
           text: 'Laufende Projekte',
         ),
         view: Center(
-          child: NewTimer(company, user),
+          child: RunningProjects(company, user),
         ),
       ),
       TabPair(
         tab: const Tab(
           text: 'Neues Projekt',
         ),
-        view: const Center(
+        view: Center(
+          child: NewTimer(company, user),
           // replace with your own widget here
-          child: Text(
-            'Ingredients here',
-            style: TextStyle(
-              fontSize: 25,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
         ),
       ),
     ];

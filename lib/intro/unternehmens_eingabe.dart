@@ -6,8 +6,8 @@ import 'package:itm_ichtrinkmehr_flutter/intro/sign_in.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/colors.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
 import 'package:itm_ichtrinkmehr_flutter/web_db/select_statements.dart';
-import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
+import 'package:theme_manager/theme_manager.dart';
 
 SelectStatements selectStatements = SelectStatements();
 GlobalMethods globalMethods = GlobalMethods();
@@ -23,7 +23,6 @@ class LoginPage extends StatefulWidget {
 
 class LoginPage_state extends State<LoginPage> {
   TextEditingController companyNameController = TextEditingController();
-  bool whiteModeOn = true;
 
   bool pwdVisibility = false;
 
@@ -31,9 +30,9 @@ class LoginPage_state extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         floatingActionButton: FloatingActionButton.extended(
-          onPressed: () => Navigator.push(
-              context, MaterialPageRoute(builder: (context) => SignInPage())),
-          backgroundColor: whiteMode.abstractColor,
+          onPressed: () => Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const SignInPage())),
+          backgroundColor: Theme.of(context).cardColor,
           label: const Text("Jetzt Zugang beantragen"),
           icon: const Icon(Icons.login),
         ),
@@ -43,11 +42,7 @@ class LoginPage_state extends State<LoginPage> {
             padding: const EdgeInsets.all(10.0),
             width: 100.w,
             height: 100.h,
-            decoration: BoxDecoration(
-              color: whiteModeOn
-                  ? whiteMode.backgroundColor
-                  : blackMode.backgroundColor,
-            ),
+            decoration: BoxDecoration(color: Theme.of(context).backgroundColor),
             child: SizedBox(
                 width: MediaQuery.of(context).size.width > 100 ? 50.w : 80.w,
                 child: Center(
@@ -57,22 +52,24 @@ class LoginPage_state extends State<LoginPage> {
                       Container(
                           alignment: Alignment.topRight,
                           child: IconButton(
-                              onPressed: (() => setState(() {
-                                    whiteModeOn
-                                        ? whiteModeOn = false
-                                        : whiteModeOn = true;
-                                  })),
+                              onPressed: () {
+                                ThemeManager.of(context)
+                                    .setBrightnessPreference(
+                                        BrightnessPreference.dark);
+                              },
                               icon: Icon(
-                                whiteModeOn ? Icons.sunny : Icons.dark_mode,
-                                size: 30.sp,
-                                color: whiteModeOn
-                                    ? whiteMode.textColor
-                                    : blackMode.textColor,
-                              ))),
+                                  Theme.of(context).brightness ==
+                                          Brightness.dark
+                                      ? Icons.sunny
+                                      : Icons.dark_mode,
+                                  size: 30.sp,
+                                  color: Theme.of(context)
+                                      .textSelectionTheme
+                                      .selectionColor))),
                       SizedBox(
-                        height: 20.h,
-                        child: Center(
-                          child: whiteModeOn
+                        height: 30.h,
+                        child: Center(child: Image.asset('assets/logo_bus.png')
+                            /*whiteModeOn
                               ? Lottie.asset(
                                   "assets/worker_icon.json",
                                   repeat: false,
@@ -80,8 +77,8 @@ class LoginPage_state extends State<LoginPage> {
                               : Lottie.asset(
                                   "assets/worker_blue.json",
                                   repeat: false,
-                                ),
-                        ),
+                                ),*/
+                            ),
                       ),
                       const SizedBox(height: 20),
                       //Input Company-Code
@@ -95,15 +92,14 @@ class LoginPage_state extends State<LoginPage> {
                           decoration: InputDecoration(
                             hintText: "Unternehmenscode",
                             hintStyle: TextStyle(
-                              color: whiteModeOn
-                                  ? whiteMode.textColor
-                                  : blackMode.textColor,
-                            ),
+                                color: Theme.of(context)
+                                    .textSelectionTheme
+                                    .selectionColor!),
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(
-                                color: whiteModeOn
-                                    ? whiteMode.textColor
-                                    : blackMode.textColor,
+                                color: Theme.of(context)
+                                    .textSelectionTheme
+                                    .selectionColor!,
                                 width: 1,
                               ),
                               borderRadius: BorderRadius.circular(25.0),
@@ -117,9 +113,9 @@ class LoginPage_state extends State<LoginPage> {
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(
-                                color: whiteModeOn
-                                    ? whiteMode.textColor
-                                    : blackMode.textColor,
+                                color: Theme.of(context)
+                                    .textSelectionTheme
+                                    .selectionColor!,
                                 width: 1,
                               ),
                               borderRadius: BorderRadius.circular(25.0),
@@ -132,9 +128,9 @@ class LoginPage_state extends State<LoginPage> {
                                 pwdVisibility
                                     ? Icons.visibility_outlined
                                     : Icons.visibility_off_outlined,
-                                color: whiteModeOn
-                                    ? whiteMode.textColor
-                                    : blackMode.textColor,
+                                color: Theme.of(context)
+                                    .textSelectionTheme
+                                    .selectionColor,
                                 size: 18,
                               ),
                             ),
@@ -172,19 +168,17 @@ class LoginPage_state extends State<LoginPage> {
                                       style: TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.w300,
-                                          color: whiteModeOn
-                                              ? whiteMode.backgroundColor
-                                              : blackMode.backgroundColor),
+                                          color: Theme.of(context)
+                                              .backgroundColor),
                                     ),
                                     Icon(Icons.arrow_forward,
-                                        color: whiteModeOn
-                                            ? whiteMode.backgroundColor
-                                            : blackMode.backgroundColor)
+                                        color:
+                                            Theme.of(context).backgroundColor)
                                   ]),
                               style: OutlinedButton.styleFrom(
-                                backgroundColor: whiteModeOn
-                                    ? whiteMode.textColor
-                                    : blackMode.textColor,
+                                backgroundColor: Theme.of(context)
+                                    .textSelectionTheme
+                                    .selectionColor,
                                 shape: const RoundedRectangleBorder(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(40))),

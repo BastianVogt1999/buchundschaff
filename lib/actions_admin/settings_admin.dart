@@ -30,7 +30,7 @@ class _SettingsAdminState extends State<SettingsAdmin> {
                   Container(
                     width: 90.w,
                     decoration: BoxDecoration(
-                      color: whiteMode.abstractColor,
+                      color: Theme.of(context).accentColor,
                       borderRadius: const BorderRadius.all(Radius.circular(10)),
                     ),
                     child: Padding(
@@ -43,13 +43,13 @@ class _SettingsAdminState extends State<SettingsAdmin> {
                           "Gesammelte Daten zusenden",
                           style: TextStyle(
                             fontSize: 20,
-                            color: whiteMode.backgroundColor,
+                            color: Theme.of(context).backgroundColor,
                           ),
                         ),
                         trailing: Icon(
                           Icons.data_exploration_outlined,
                           size: 30,
-                          color: whiteMode.backgroundColor,
+                          color: Theme.of(context).backgroundColor,
                         ),
                       ),
                     ),

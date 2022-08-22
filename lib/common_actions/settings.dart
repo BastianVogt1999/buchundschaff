@@ -31,8 +31,8 @@ class _SettingsState extends State<Settings> {
         width: 80.w,
         height: 8.h,
         decoration: BoxDecoration(
-          color: whiteMode.cardColor.withOpacity(0.6),
-          border: Border.all(width: 1, color: whiteMode.abstractColor),
+          color: Theme.of(context).cardColor.withOpacity(0.6),
+          border: Border.all(width: 1, color: Theme.of(context).accentColor),
           borderRadius: const BorderRadius.all(Radius.circular(10)),
         ),
         child: ListTile(
@@ -62,8 +62,9 @@ class _SettingsState extends State<Settings> {
               width: 80.w,
               height: 8.h,
               decoration: BoxDecoration(
-                color: whiteMode.cardColor.withOpacity(0.6),
-                border: Border.all(width: 1, color: whiteMode.abstractColor),
+                color: Theme.of(context).cardColor.withOpacity(0.6),
+                border:
+                    Border.all(width: 1, color: Theme.of(context).accentColor),
                 borderRadius: const BorderRadius.all(Radius.circular(10)),
               ),
               child: ListTile(
@@ -89,8 +90,9 @@ class _SettingsState extends State<Settings> {
               width: 80.w,
               height: 8.h,
               decoration: BoxDecoration(
-                color: whiteMode.cardColor.withOpacity(0.6),
-                border: Border.all(width: 1, color: whiteMode.abstractColor),
+                color: Theme.of(context).cardColor.withOpacity(0.6),
+                border:
+                    Border.all(width: 1, color: Theme.of(context).accentColor),
                 borderRadius: const BorderRadius.all(Radius.circular(10)),
               ),
               child: ListTile(

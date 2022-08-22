@@ -68,8 +68,9 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
       return Container(
           padding: const EdgeInsets.all(5),
           decoration: BoxDecoration(
-            color: whiteMode.backgroundColor,
-            border: Border.all(width: 1, color: whiteMode.abstractColor),
+            color: Theme.of(context).backgroundColor,
+            border: Border.all(
+                width: 1, color: Theme.of(context).colorScheme.secondary),
             borderRadius: const BorderRadius.all(Radius.circular(10)),
           ),
           child: Row(
@@ -95,7 +96,8 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
                         )
                       : CircleAvatar(
                           radius: 30.sp,
-                          backgroundColor: whiteMode.abstractColor,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.secondary,
                           child: Icon(
                             Icons.play_arrow,
                             color: Colors.green,
@@ -118,8 +120,9 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
                 padding: const EdgeInsets.all(5),
                 height: 22.h,
                 decoration: BoxDecoration(
-                  color: whiteMode.cardColor,
-                  border: Border.all(width: 2, color: whiteMode.abstractColor),
+                  color: Theme.of(context).cardColor,
+                  border: Border.all(
+                      width: 2, color: Theme.of(context).colorScheme.secondary),
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
                 ),
                 child: Row(
@@ -178,9 +181,11 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
                         child: Container(
                             padding: EdgeInsets.all(4.sp),
                             decoration: BoxDecoration(
-                              color: whiteMode.backgroundColor,
+                              color: Theme.of(context).backgroundColor,
                               border: Border.all(
-                                  width: 1, color: whiteMode.abstractColor),
+                                  width: 1,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary),
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(10)),
                             ),
@@ -192,10 +197,12 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
                                   return Container(
                                       height: 6.h,
                                       decoration: BoxDecoration(
-                                        color: whiteMode.cardColor,
+                                        color: Theme.of(context).cardColor,
                                         border: Border.all(
                                             width: 2,
-                                            color: whiteMode.abstractColor),
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .secondary),
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(8.sp)),
                                       ),
@@ -205,11 +212,13 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
                                         dense: true,
                                         leading: CircleAvatar(
                                             radius: 12.sp,
-                                            backgroundColor:
-                                                whiteMode.abstractColor,
+                                            backgroundColor: Theme.of(context)
+                                                .colorScheme
+                                                .secondary,
                                             child: Icon(
                                               Icons.person,
-                                              color: whiteMode.backgroundColor,
+                                              color: Theme.of(context)
+                                                  .backgroundColor,
                                             )),
                                         title: Text(
                                           localStat.user[index],
@@ -235,8 +244,9 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
       return Container(
           height: MediaQuery.of(context).size.height / 10,
           decoration: BoxDecoration(
-            color: whiteMode.cardColor,
-            border: Border.all(width: 2, color: whiteMode.abstractColor),
+            color: Theme.of(context).cardColor,
+            border: Border.all(
+                width: 2, color: Theme.of(context).colorScheme.secondary),
             borderRadius: const BorderRadius.all(Radius.circular(10)),
           ),
           padding: const EdgeInsets.only(left: 8, right: 8),
@@ -244,8 +254,9 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
             Container(
                 height: MediaQuery.of(context).size.height / 13,
                 decoration: BoxDecoration(
-                  color: whiteMode.backgroundColor,
-                  border: Border.all(width: 2, color: whiteMode.abstractColor),
+                  color: Theme.of(context).backgroundColor,
+                  border: Border.all(
+                      width: 2, color: Theme.of(context).colorScheme.secondary),
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
                 ),
                 width: (MediaQuery.of(context).size.width / 10) * 3,
@@ -270,8 +281,9 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
                 width: MediaQuery.of(context).size.width / 5,
                 height: MediaQuery.of(context).size.height / 13,
                 decoration: BoxDecoration(
-                  color: whiteMode.backgroundColor,
-                  border: Border.all(width: 2, color: whiteMode.abstractColor),
+                  color: Theme.of(context).backgroundColor,
+                  border: Border.all(
+                      width: 2, color: Theme.of(context).colorScheme.secondary),
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
                 ),
                 child: Center(
@@ -295,9 +307,9 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
                 child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                   CircleAvatar(
                     radius: 20,
-                    backgroundColor: whiteMode.abstractColor,
+                    backgroundColor: Theme.of(context).colorScheme.secondary,
                     child: IconButton(
-                        color: whiteMode.backgroundColor,
+                        color: Theme.of(context).backgroundColor,
                         padding: const EdgeInsets.all(2),
                         iconSize: 20,
                         icon: const Icon(Icons.delete),
@@ -312,9 +324,9 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
                   const SizedBox(width: 10),
                   CircleAvatar(
                     radius: 20,
-                    backgroundColor: whiteMode.abstractColor,
+                    backgroundColor: Theme.of(context).colorScheme.secondary,
                     child: IconButton(
-                        color: whiteMode.backgroundColor,
+                        color: Theme.of(context).backgroundColor,
                         padding: const EdgeInsets.all(2),
                         iconSize: 40,
                         icon: expandedInfos[index] == false
@@ -336,8 +348,8 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
       return Container(
           height: 50,
           color: category.isSelected
-              ? whiteMode.backgroundColor
-              : whiteMode.textColor,
+              ? Theme.of(context).backgroundColor
+              : Theme.of(context).textSelectionTheme.selectionColor!,
           width: 24.w,
           child: OutlinedButton(
             onPressed: () {
@@ -355,8 +367,8 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
             child: Text(category.title,
                 style: TextStyle(
                     color: category.isSelected
-                        ? whiteMode.textColor
-                        : whiteMode.backgroundColor)),
+                        ? Theme.of(context).textSelectionTheme.selectionColor!
+                        : Theme.of(context).backgroundColor)),
             style: ButtonStyle(
                 padding: MaterialStateProperty.all(
                     const EdgeInsets.symmetric(vertical: 10, horizontal: 5)),
@@ -379,7 +391,9 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
                       Container(
                         padding: const EdgeInsets.only(left: 6, right: 6),
                         height: MediaQuery.of(context).size.height / 12,
-                        color: whiteMode.textColor,
+                        color: Theme.of(context)
+                            .textSelectionTheme
+                            .selectionColor!,
                         child: Row(
                           children: [
                             spaltenCards(spaltenNamen[0]),
@@ -393,9 +407,10 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
                         width: 80.w,
                         height: 8.h,
                         decoration: BoxDecoration(
-                          color: whiteMode.cardColor.withOpacity(0.6),
+                          color: Theme.of(context).cardColor.withOpacity(0.6),
                           border: Border.all(
-                              width: 1, color: whiteMode.abstractColor),
+                              width: 1,
+                              color: Theme.of(context).colorScheme.secondary),
                           borderRadius:
                               const BorderRadius.all(Radius.circular(10)),
                         ),

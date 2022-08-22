@@ -74,7 +74,7 @@ class _RebaseStatsState extends State<RebaseStats> {
     Widget AutoCompleteUser() {
       return Container(
           width: 80.w,
-          color: whiteMode.cardColor,
+          color: Theme.of(context).cardColor,
           child: Autocomplete<String>(
             optionsBuilder: (textEditingValue) {
               if (textEditingValue.text == '') {
@@ -196,7 +196,7 @@ class _RebaseStatsState extends State<RebaseStats> {
           height: 50.h,
           width: 80.w,
           decoration: BoxDecoration(
-            border: Border.all(width: 2, color: whiteMode.abstractColor),
+            border: Border.all(width: 2, color: Theme.of(context).accentColor),
             borderRadius: const BorderRadius.all(Radius.circular(10)),
           ),
           child: ListView.separated(
@@ -207,7 +207,7 @@ class _RebaseStatsState extends State<RebaseStats> {
                 return Container(
                   width: 40.w,
                   decoration: BoxDecoration(
-                    color: whiteMode.abstractColor,
+                    color: Theme.of(context).accentColor,
                     borderRadius: const BorderRadius.all(Radius.circular(10)),
                   ),
                   child: Padding(
@@ -221,15 +221,15 @@ class _RebaseStatsState extends State<RebaseStats> {
                         ),
                       ),
                       leading: CircleAvatar(
-                          backgroundColor: whiteMode.backgroundColor,
+                          backgroundColor: Theme.of(context).backgroundColor,
                           child: Icon(
                             Icons.person,
-                            color: whiteMode.abstractColor,
+                            color: Theme.of(context).accentColor,
                           )),
                       trailing: Icon(
                         Icons.delete,
                         size: 30,
-                        color: whiteMode.backgroundColor,
+                        color: Theme.of(context).backgroundColor,
                       ),
                     ),
                   ),

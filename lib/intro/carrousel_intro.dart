@@ -113,7 +113,7 @@ class CardFb1 extends StatelessWidget {
         height: 28.h,
         padding: const EdgeInsets.all(30.0),
         decoration: BoxDecoration(
-          color: whiteMode.textColor,
+          color: Theme.of(context).textSelectionTheme.selectionColor!,
           borderRadius: BorderRadius.circular(12.5),
           boxShadow: [
             BoxShadow(
@@ -129,7 +129,7 @@ class CardFb1 extends StatelessWidget {
               height: 10.h,
               child: Icon(
                 imageUrl,
-                color: whiteMode.backgroundColor,
+                color: Theme.of(context).backgroundColor,
                 size: 100,
               ),
             ),
@@ -137,7 +137,7 @@ class CardFb1 extends StatelessWidget {
             Text(text,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: whiteMode.backgroundColor,
+                  color: Theme.of(context).backgroundColor,
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
                 )),
@@ -148,7 +148,7 @@ class CardFb1 extends StatelessWidget {
               subtitle,
               textAlign: TextAlign.center,
               style: TextStyle(
-                  color: whiteMode.backgroundColor,
+                  color: Theme.of(context).backgroundColor,
                   fontWeight: FontWeight.normal,
                   fontSize: 10),
             ),

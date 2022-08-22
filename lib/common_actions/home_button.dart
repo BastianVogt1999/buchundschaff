@@ -16,7 +16,7 @@ class HomeButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton.extended(
-      backgroundColor: whiteMode.abstractColor,
+      backgroundColor: Theme.of(context).colorScheme.secondary,
       onPressed: () {
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => RoleInput(company)));

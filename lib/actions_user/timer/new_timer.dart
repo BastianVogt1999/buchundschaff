@@ -285,7 +285,7 @@ class _NewTimerState extends State<NewTimer> {
             itemBuilder: (BuildContext context, int index) {
               return Container(
                   decoration: BoxDecoration(
-                    color: whiteMode.abstractColor,
+                    color: Theme.of(context).colorScheme.secondary,
                     borderRadius: const BorderRadius.all(
                       Radius.circular(10),
                     ),
@@ -337,7 +337,7 @@ class _NewTimerState extends State<NewTimer> {
                 itemBuilder: (BuildContext context, int index) {
                   return Container(
                       decoration: BoxDecoration(
-                        color: whiteMode.cardColor,
+                        color: Theme.of(context).cardColor,
                         borderRadius: const BorderRadius.all(
                           Radius.circular(10),
                         ),
@@ -352,7 +352,7 @@ class _NewTimerState extends State<NewTimer> {
                               size: 4.h,
                               color: addUserButtonAble
                                   ? Colors.red
-                                  : whiteMode.backgroundColor,
+                                  : Theme.of(context).backgroundColor,
                             ),
                             onTap: () {
                               if (!running) {
@@ -391,7 +391,8 @@ class _NewTimerState extends State<NewTimer> {
                           Text(
                             currentWorker[index].user_name,
                             style: TextStyle(
-                                color: whiteMode.abstractColor, fontSize: 2.h),
+                                color: Theme.of(context).colorScheme.secondary,
+                                fontSize: 2.h),
                           ),
                         ],
                       ));
@@ -449,8 +450,11 @@ class _NewTimerState extends State<NewTimer> {
                                             style: TextStyle(
                                                 fontSize: 30,
                                                 color: running
-                                                    ? whiteMode.abstractColor
-                                                    : whiteMode.backgroundColor,
+                                                    ? Theme.of(context)
+                                                        .colorScheme
+                                                        .secondary
+                                                    : Theme.of(context)
+                                                        .backgroundColor,
                                                 fontFamily: 'Helvetica',
                                                 fontWeight: FontWeight.bold),
                                           ),
@@ -488,10 +492,11 @@ class _NewTimerState extends State<NewTimer> {
                     Container(
                         decoration: BoxDecoration(
                           color: addUserButtonAble
-                              ? whiteMode.abstractColor
+                              ? Theme.of(context).colorScheme.secondary
                               : Colors.grey.withOpacity(0.4),
                           border: Border.all(
-                              width: 0.5.h, color: whiteMode.backgroundColor),
+                              width: 0.5.h,
+                              color: Theme.of(context).backgroundColor),
                           borderRadius: const BorderRadius.all(
                             Radius.circular(10),
                           ),
@@ -503,7 +508,7 @@ class _NewTimerState extends State<NewTimer> {
                                   Icons.add_circle,
                                   size: 45,
                                   color: addUserButtonAble
-                                      ? whiteMode.backgroundColor
+                                      ? Theme.of(context).backgroundColor
                                       : Colors.grey,
                                 ),
                                 onTap: () {
@@ -521,7 +526,7 @@ class _NewTimerState extends State<NewTimer> {
                                   Icons.cancel_outlined,
                                   size: 45,
                                   color: addUserButtonAble
-                                      ? whiteMode.backgroundColor
+                                      ? Theme.of(context).backgroundColor
                                       : Colors.grey,
                                 ),
                                 title: Container(
@@ -617,7 +622,8 @@ class _NewTimerState extends State<NewTimer> {
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(
-                      color: whiteMode.textColor,
+                      color:
+                          Theme.of(context).textSelectionTheme.selectionColor!,
                       width: 1,
                     ),
                     borderRadius: BorderRadius.circular(25.0),
@@ -635,7 +641,7 @@ class _NewTimerState extends State<NewTimer> {
               height: 1.h,
             ),
             Container(
-                color: whiteMode.abstractColor,
+                color: Theme.of(context).colorScheme.secondary,
                 height: MediaQuery.of(context).size.height / 8,
                 child: Center(
                     child: Column(
@@ -646,16 +652,16 @@ class _NewTimerState extends State<NewTimer> {
                       style: TextStyle(
                           fontSize: 25,
                           color: running
-                              ? whiteMode.backgroundColor
-                              : whiteMode.abstractColor),
+                              ? Theme.of(context).backgroundColor
+                              : Theme.of(context).colorScheme.secondary),
                     ),
                     Text(
                       timerStart,
                       style: TextStyle(
                           fontSize: 30,
                           color: running
-                              ? whiteMode.backgroundColor
-                              : whiteMode.abstractColor),
+                              ? Theme.of(context).backgroundColor
+                              : Theme.of(context).colorScheme.secondary),
                     )
                   ],
                 ))),

@@ -58,6 +58,7 @@ class GlobalMethods {
   }
 
   String outputCountedTime(String input) {
+    print("Input: " + input);
     int time = int.parse(input);
     if (time <= 60) {
       int seconds = time % 60;

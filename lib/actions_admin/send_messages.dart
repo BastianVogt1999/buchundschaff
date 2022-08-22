@@ -39,18 +39,25 @@ class _SendMessagesState extends State<SendMessages> {
         alignment: Alignment.center,
         width: 60.w,
         decoration: BoxDecoration(
-          color: whiteMode.cardColor,
-          border: Border.all(width: 2, color: whiteMode.abstractColor),
+          color: Theme.of(context).cardColor,
+          border: Border.all(
+              width: 2, color: Theme.of(context).colorScheme.secondary),
           borderRadius: const BorderRadius.all(Radius.circular(10)),
         ),
         child: Column(
           children: [
             Text(message.user_name,
-                style: TextStyle(fontSize: 12, color: whiteMode.textColor),
+                style: TextStyle(
+                    fontSize: 12,
+                    color:
+                        Theme.of(context).textSelectionTheme.selectionColor!),
                 textAlign: TextAlign.center),
             const Divider(),
             Text(message.message_text,
-                style: TextStyle(fontSize: 20.sp, color: whiteMode.textColor),
+                style: TextStyle(
+                    fontSize: 20.sp,
+                    color:
+                        Theme.of(context).textSelectionTheme.selectionColor!),
                 textAlign: TextAlign.center),
             const Divider(),
             Row(
@@ -61,7 +68,10 @@ class _SendMessagesState extends State<SendMessages> {
                     alignment: Alignment.centerLeft,
                     child: Text("Datum: " + message.date,
                         style: TextStyle(
-                            fontSize: 8.sp, color: whiteMode.textColor),
+                            fontSize: 8.sp,
+                            color: Theme.of(context)
+                                .textSelectionTheme
+                                .selectionColor!),
                         textAlign: TextAlign.right),
                   ),
                 ),
@@ -71,7 +81,10 @@ class _SendMessagesState extends State<SendMessages> {
                     alignment: Alignment.centerRight,
                     child: Text("Zeit: " + message.time,
                         style: TextStyle(
-                            fontSize: 8.sp, color: whiteMode.textColor),
+                            fontSize: 8.sp,
+                            color: Theme.of(context)
+                                .textSelectionTheme
+                                .selectionColor!),
                         textAlign: TextAlign.right),
                   ),
                 ),
@@ -134,10 +147,15 @@ class _SendMessagesState extends State<SendMessages> {
                           decoration: InputDecoration(
                             hintText: "...",
                             hintStyle: TextStyle(
-                                color: whiteMode.textColor.withOpacity(0.6)),
+                                color: Theme.of(context)
+                                    .textSelectionTheme
+                                    .selectionColor!
+                                    .withOpacity(0.6)),
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(
-                                color: whiteMode.textColor,
+                                color: Theme.of(context)
+                                    .textSelectionTheme
+                                    .selectionColor!,
                                 width: 1,
                               ),
                               borderRadius: BorderRadius.circular(25.0),
@@ -158,7 +176,9 @@ class _SendMessagesState extends State<SendMessages> {
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(
-                                color: whiteMode.textColor,
+                                color: Theme.of(context)
+                                    .textSelectionTheme
+                                    .selectionColor!,
                                 width: 1,
                               ),
                               borderRadius: BorderRadius.circular(25.0),
@@ -183,7 +203,7 @@ class _SendMessagesState extends State<SendMessages> {
                         },
                         child: Icon(
                           Icons.label_important_rounded,
-                          color: whiteMode.backgroundColor,
+                          color: Theme.of(context).backgroundColor,
                         ),
                       )),
                 ],

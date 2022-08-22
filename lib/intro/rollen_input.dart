@@ -93,10 +93,11 @@ class _RoleInputState extends State<RoleInput> {
 
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: whiteMode.cardColor,
+          backgroundColor: Theme.of(context).cardColor,
           actions: [
             CircleAvatar(
-                backgroundColor: whiteMode.textColor,
+                backgroundColor:
+                    Theme.of(context).textSelectionTheme.selectionColor!,
                 child: IconButton(
                     onPressed: () {
                       Navigator.push(
@@ -106,7 +107,7 @@ class _RoleInputState extends State<RoleInput> {
                     },
                     icon: Icon(
                       Icons.home_filled,
-                      color: whiteMode.cardColor,
+                      color: Theme.of(context).cardColor,
                     ))),
           ],
           automaticallyImplyLeading: false,
@@ -115,7 +116,7 @@ class _RoleInputState extends State<RoleInput> {
               company.company_name,
               style: TextStyle(
                 fontSize: 3.h,
-                color: whiteMode.textColor,
+                color: Theme.of(context).textSelectionTheme.selectionColor!,
               ),
             ),
           ),
@@ -124,7 +125,7 @@ class _RoleInputState extends State<RoleInput> {
           padding: const EdgeInsets.all(10.0),
           width: double.infinity,
           height: double.infinity,
-          color: whiteMode.backgroundColor,
+          color: Theme.of(context).backgroundColor,
           child: Center(
             child: SizedBox(
               width: globalMethods.getSizeOfPage(context) > 400 ? 50.w : 100.w,
@@ -137,14 +138,18 @@ class _RoleInputState extends State<RoleInput> {
                     decoration: InputDecoration(
                       hintText: "User-Code",
                       hintStyle: TextStyle(
-                          color: whiteMode.textColor,
+                          color: Theme.of(context)
+                              .textSelectionTheme
+                              .selectionColor!,
                           fontStyle: FontStyle.italic,
                           fontFeatures: const <FontFeature>[
                             FontFeature.liningFigures()
                           ]),
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: whiteMode.textColor,
+                          color: Theme.of(context)
+                              .textSelectionTheme
+                              .selectionColor!,
                           width: 1,
                         ),
                         borderRadius: BorderRadius.circular(25.0),
@@ -165,7 +170,9 @@ class _RoleInputState extends State<RoleInput> {
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: whiteMode.textColor,
+                          color: Theme.of(context)
+                              .textSelectionTheme
+                              .selectionColor!,
                           width: 1,
                         ),
                         borderRadius: BorderRadius.circular(25.0),
@@ -178,7 +185,9 @@ class _RoleInputState extends State<RoleInput> {
                           pwdVisibility
                               ? Icons.visibility_outlined
                               : Icons.visibility_off_outlined,
-                          color: whiteMode.textColor,
+                          color: Theme.of(context)
+                              .textSelectionTheme
+                              .selectionColor!,
                           size: 18,
                         ),
                       ),

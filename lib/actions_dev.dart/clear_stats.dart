@@ -24,7 +24,7 @@ class _ClearStatState extends State<ClearStat> {
         padding: const EdgeInsets.all(10.0),
         width: 100.w,
         height: 100.h,
-        decoration: BoxDecoration(color: whiteMode.backgroundColor),
+        decoration: BoxDecoration(color: Theme.of(context).backgroundColor),
         child: Column(
           children: [
             SizedBox(height: 80.h),

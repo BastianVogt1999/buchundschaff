@@ -52,8 +52,9 @@ class _RunningProjectsState extends State<RunningProjects> {
                 height: 8.h,
                 padding: EdgeInsets.all(0.5.h),
                 decoration: BoxDecoration(
-                  color: whiteMode.backgroundColor,
-                  border: Border.all(width: 1, color: whiteMode.abstractColor),
+                  color: Theme.of(context).backgroundColor,
+                  border: Border.all(
+                      width: 1, color: Theme.of(context).colorScheme.secondary),
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
                 ),
                 child: Center(
@@ -78,7 +79,8 @@ class _RunningProjectsState extends State<RunningProjects> {
                           decoration: BoxDecoration(
                             color: Colors.green[100],
                             border: Border.all(
-                                width: 1, color: whiteMode.abstractColor),
+                                width: 1,
+                                color: Theme.of(context).colorScheme.secondary),
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(10)),
                           ),
@@ -108,7 +110,8 @@ class _RunningProjectsState extends State<RunningProjects> {
                         decoration: BoxDecoration(
                           color: Colors.red[100],
                           border: Border.all(
-                              width: 1, color: whiteMode.abstractColor),
+                              width: 1,
+                              color: Theme.of(context).colorScheme.secondary),
                           borderRadius:
                               const BorderRadius.all(Radius.circular(10)),
                         ),
@@ -141,17 +144,23 @@ class _RunningProjectsState extends State<RunningProjects> {
                 height: 8.h,
                 padding: EdgeInsets.all(0.5.h),
                 decoration: BoxDecoration(
-                  color: whiteMode.backgroundColor.withOpacity(0.4),
+                  color: Theme.of(context).backgroundColor.withOpacity(0.4),
                   border: Border.all(
                       width: 1,
-                      color: whiteMode.abstractColor.withOpacity(0.4)),
+                      color: Theme.of(context)
+                          .colorScheme
+                          .secondary
+                          .withOpacity(0.4)),
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
                 ),
                 child: Center(
                     child: Text(
                   localStat.stat_name,
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: whiteMode.textColor.withOpacity(0.4)),
+                  style: TextStyle(
+                      color: Theme.of(context)
+                          .textSelectionColor
+                          .withOpacity(0.4)),
                 ))),
             Column(
               children: [
@@ -163,9 +172,10 @@ class _RunningProjectsState extends State<RunningProjects> {
                     height: sizeOfContainer[index] ? 0.h : 18.8.h,
                     padding: EdgeInsets.all(0.5.h),
                     decoration: BoxDecoration(
-                      color: whiteMode.backgroundColor,
-                      border:
-                          Border.all(width: 1, color: whiteMode.abstractColor),
+                      color: Theme.of(context).backgroundColor,
+                      border: Border.all(
+                          width: 1,
+                          color: Theme.of(context).colorScheme.secondary),
                       borderRadius: const BorderRadius.all(Radius.circular(10)),
                     ),
                     child: ListView.separated(
@@ -181,7 +191,7 @@ class _RunningProjectsState extends State<RunningProjects> {
                                 EdgeInsets.fromLTRB(1.h, 0.5.h, 1.h, 0.5.h),
                             height: 5.h,
                             decoration: BoxDecoration(
-                              color: whiteMode.abstractColor,
+                              color: Theme.of(context).colorScheme.secondary,
                               borderRadius:
                                   BorderRadius.all(Radius.circular(4.sp)),
                             ),
@@ -189,17 +199,20 @@ class _RunningProjectsState extends State<RunningProjects> {
                               children: [
                                 CircleAvatar(
                                     radius: 10.sp,
-                                    backgroundColor: whiteMode.backgroundColor,
+                                    backgroundColor:
+                                        Theme.of(context).backgroundColor,
                                     child: Icon(
                                       Icons.person,
-                                      color: whiteMode.abstractColor,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
                                       size: 12.sp,
                                     )),
                                 SizedBox(width: 2.w),
                                 Text(
                                   localStat.user[indexR],
                                   style: TextStyle(
-                                    color: whiteMode.backgroundColor,
+                                    color: Theme.of(context).backgroundColor,
                                     fontSize: 10.sp,
                                   ),
                                 ),
@@ -248,9 +261,10 @@ class _RunningProjectsState extends State<RunningProjects> {
                       height: 22.h,
                       width: 50.w,
                       decoration: BoxDecoration(
-                        color: whiteMode.cardColor,
+                        color: Theme.of(context).cardColor,
                         border: Border.all(
-                            width: 1, color: whiteMode.abstractColor),
+                            width: 1,
+                            color: Theme.of(context).colorScheme.secondary),
                         borderRadius:
                             const BorderRadius.all(Radius.circular(10)),
                       ),

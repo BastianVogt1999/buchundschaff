@@ -55,12 +55,13 @@ class _ContainerAdminState extends State<ContainerAdmin> {
     return Scaffold(
         appBar: AppBar(
             actions: [HomeButton(context, user, company)],
-            foregroundColor: whiteMode.textColor,
-            backgroundColor: whiteMode.cardColor),
+            foregroundColor:
+                Theme.of(context).textSelectionTheme.selectionColor!,
+            backgroundColor: Theme.of(context).cardColor),
         body: Container(
           width: double.infinity,
           height: double.infinity,
-          decoration: BoxDecoration(color: whiteMode.backgroundColor),
+          decoration: BoxDecoration(color: Theme.of(context).backgroundColor),
           child: SizedBox(
               height: MediaQuery.of(context).size.height,
               child: _pages[selectedIndex]),

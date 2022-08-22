@@ -36,7 +36,7 @@ class _nameState extends State<AdminMenu> {
   Widget build(BuildContext context) {
     return Drawer(
       child: Material(
-        color: whiteMode.backgroundColor,
+        color: Theme.of(context).backgroundColor,
         child: ListView(
           children: <Widget>[
             Container(
@@ -69,7 +69,9 @@ class _nameState extends State<AdminMenu> {
                     onClicked: () => onItemTapped(3),
                   ),
                   const SizedBox(height: 8),
-                  Divider(color: whiteMode.textColor),
+                  Divider(
+                      color:
+                          Theme.of(context).textSelectionTheme.selectionColor!),
                   const SizedBox(height: 8),
                   MenuItem(
                     text: 'Nachricht versenden',
@@ -82,7 +84,9 @@ class _nameState extends State<AdminMenu> {
                     icon: Icons.settings,
                     onClicked: () => onItemTapped(5),
                   ),
-                  Divider(color: whiteMode.textColor),
+                  Divider(
+                      color:
+                          Theme.of(context).textSelectionTheme.selectionColor!),
                   const SizedBox(height: 8),
                   MenuItem(
                     text: 'Über uns',
@@ -113,9 +117,12 @@ class MenuItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(icon, color: whiteMode.textColor),
-      title: Text(text, style: TextStyle(color: whiteMode.textColor)),
-      hoverColor: whiteMode.abstractColor,
+      leading: Icon(icon,
+          color: Theme.of(context).textSelectionTheme.selectionColor!),
+      title: Text(text,
+          style: TextStyle(
+              color: Theme.of(context).textSelectionTheme.selectionColor!)),
+      hoverColor: Theme.of(context).colorScheme.secondary,
       onTap: onClicked,
     );
   }

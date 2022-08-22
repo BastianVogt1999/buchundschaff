@@ -51,7 +51,7 @@ class UserMenuState extends State<UserMenu> {
 
     return Drawer(
       child: Material(
-        color: whiteMode.backgroundColor,
+        color: Theme.of(context).backgroundColor,
         child: ListView(
           children: <Widget>[
             Container(
@@ -79,7 +79,9 @@ class UserMenuState extends State<UserMenu> {
                       onClicked: () => onItemTapped(2),
                     ),*/
                   const SizedBox(height: 8),
-                  Divider(color: whiteMode.textColor),
+                  Divider(
+                      color:
+                          Theme.of(context).textSelectionTheme.selectionColor!),
                   const SizedBox(height: 8),
                   MenuItem(
                     text: 'Benachrichtigungen',
@@ -91,7 +93,9 @@ class UserMenuState extends State<UserMenu> {
                     icon: Icons.settings,
                     onClicked: () => onItemTapped(3),
                   ),
-                  Divider(color: whiteMode.textColor),
+                  Divider(
+                      color:
+                          Theme.of(context).textSelectionTheme.selectionColor!),
                   const SizedBox(height: 8),
                   MenuItem(
                     text: 'Über uns',
@@ -122,9 +126,12 @@ class MenuItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(icon, color: whiteMode.textColor),
-      title: Text(text, style: TextStyle(color: whiteMode.textColor)),
-      hoverColor: whiteMode.textColor,
+      leading: Icon(icon,
+          color: Theme.of(context).textSelectionTheme.selectionColor!),
+      title: Text(text,
+          style: TextStyle(
+              color: Theme.of(context).textSelectionTheme.selectionColor!)),
+      hoverColor: Theme.of(context).textSelectionTheme.selectionColor!,
       onTap: onClicked,
     );
   }
