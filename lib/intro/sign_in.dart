@@ -1,15 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:itm_ichtrinkmehr_flutter/actions_admin/send_messages.dart';
 import 'package:itm_ichtrinkmehr_flutter/global_methods.dart';
-import 'package:itm_ichtrinkmehr_flutter/intro/rollen_input.dart';
 import 'package:itm_ichtrinkmehr_flutter/intro/unternehmens_eingabe.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/colors.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
-import 'package:itm_ichtrinkmehr_flutter/values/company_acces.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
-import 'package:itm_ichtrinkmehr_flutter/web_db/insert_statements.dart';
 import 'package:itm_ichtrinkmehr_flutter/web_db/select_statements.dart';
 import 'package:sizer/sizer.dart';
 
@@ -19,7 +15,7 @@ GlobalMethods globalMethods = GlobalMethods();
 WhiteMode whiteMode = WhiteMode();
 
 class SignInPage extends StatefulWidget {
-  SignInPage({Key? key}) : super(key: key);
+  const SignInPage({Key? key}) : super(key: key);
 
   @override
   State<SignInPage> createState() => SignInPage_state();
@@ -39,29 +35,30 @@ class SignInPage_state extends State<SignInPage> {
         TextEditingController textController, String textName) {
       return
           //Input Company-Code
-          Container(
+          SizedBox(
         width: globalMethods.getSizeOfPage(context) > 400.0 ? 30.w : 80.w,
         child: TextFormField(
           controller: textController,
           decoration: InputDecoration(
             hintText: textName,
-            hintStyle: TextStyle(color: whiteMode.textColor),
+            hintStyle: TextStyle(
+                color: Theme.of(context).textSelectionTheme.selectionColor!),
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: whiteMode.textColor,
+                color: Theme.of(context).textSelectionTheme.selectionColor!,
                 width: 1,
               ),
               borderRadius: BorderRadius.circular(25.0),
             ),
             focusedErrorBorder: OutlineInputBorder(
-              borderSide: BorderSide(
+              borderSide: const BorderSide(
                 color: Colors.red,
                 width: 1,
               ),
               borderRadius: BorderRadius.circular(25.0),
             ),
             errorBorder: OutlineInputBorder(
-              borderSide: BorderSide(
+              borderSide: const BorderSide(
                 color: Colors.red,
                 width: 1,
               ),
@@ -69,7 +66,7 @@ class SignInPage_state extends State<SignInPage> {
             ),
             focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: whiteMode.textColor,
+                color: Theme.of(context).textSelectionTheme.selectionColor!,
                 width: 1,
               ),
               borderRadius: BorderRadius.circular(25.0),
@@ -81,11 +78,11 @@ class SignInPage_state extends State<SignInPage> {
 
     return Scaffold(
         floatingActionButton: FloatingActionButton.extended(
-          onPressed: () => Navigator.push(
-              context, MaterialPageRoute(builder: (context) => LoginPage())),
-          backgroundColor: whiteMode.abstractColor,
-          label: Text("Bereits angemeldet?"),
-          icon: Icon(Icons.login),
+          onPressed: () => Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const LoginPage())),
+          backgroundColor: Theme.of(context).cardColor,
+          label: const Text("Bereits angemeldet?"),
+          icon: const Icon(Icons.login),
         ),
         body: Container(
 
@@ -94,28 +91,35 @@ class SignInPage_state extends State<SignInPage> {
             width: 100.w,
             height: 100.h,
             decoration: BoxDecoration(
-              color: whiteMode.backgroundColor,
+              color: Theme.of(context).backgroundColor,
             ),
-            child: Container(
+            child: SizedBox(
                 width: MediaQuery.of(context).size.width > 100 ? 50.w : 80.w,
                 child: Center(
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                       Container(
-                          padding: EdgeInsets.all(15),
+                          padding: const EdgeInsets.all(15),
                           alignment: Alignment.center,
                           width: 80.w,
                           decoration: BoxDecoration(
                             color: Colors.red.withOpacity(0.1),
                             border: Border.all(
-                                width: 1, color: whiteMode.abstractColor),
-                            borderRadius: BorderRadius.all(Radius.circular(25)),
+                                width: 1,
+                                color: Theme.of(context)
+                                    .textSelectionTheme
+                                    .selectionColor!),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(25)),
                           ),
                           child: Text(
                             "Nach Erhalt des Antrags werden Sie freigeschaltet. Wenn der Vorgang abgeschlossen ist, werden Sie per Mail kontaktiert und Ihre Zugangsdaten bereitgestellt",
                             style: TextStyle(
-                                color: whiteMode.textColor, fontSize: 12.sp),
+                                color: Theme.of(context)
+                                    .textSelectionTheme
+                                    .selectionColor!,
+                                fontSize: 12.sp),
                           )), //
                       SizedBox(height: 1.h),
                       textFieldDesign(
@@ -131,7 +135,7 @@ class SignInPage_state extends State<SignInPage> {
                           countOfUserController, "Anzahl an Mitarbeiter"),
                       SizedBox(height: 1.h),
                       //Button weiter
-                      Container(
+                      SizedBox(
                         width: globalMethods.getSizeOfPage(context) > 400.0
                             ? 30.w
                             : 80.w,
@@ -161,17 +165,20 @@ class SignInPage_state extends State<SignInPage> {
                                     style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.w300,
-                                        color: whiteMode.backgroundColor),
+                                        color:
+                                            Theme.of(context).backgroundColor),
                                   ),
                                   Icon(Icons.arrow_forward,
-                                      color: whiteMode.backgroundColor)
+                                      color: Theme.of(context).backgroundColor)
                                 ]),
                             style: OutlinedButton.styleFrom(
-                              backgroundColor: whiteMode.textColor,
+                              backgroundColor: Theme.of(context)
+                                  .textSelectionTheme
+                                  .selectionColor!,
                               shape: const RoundedRectangleBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(40))),
-                              padding: EdgeInsets.symmetric(
+                              padding: const EdgeInsets.symmetric(
                                   vertical: 20, horizontal: 50),
                             )),
                       ),
@@ -200,7 +207,7 @@ class SignInPage_state extends State<SignInPage> {
           .catchError((error) => print("Failed to add user: $error"));
 
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => LoginPage()));
+          context, MaterialPageRoute(builder: (context) => const LoginPage()));
     } else {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         backgroundColor: Colors.red,
