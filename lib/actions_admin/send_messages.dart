@@ -35,24 +35,31 @@ class _SendMessagesState extends State<SendMessages> {
   Widget build(BuildContext context) {
     decoratedTextBox(Message message) {
       return Container(
-        padding: EdgeInsets.all(5),
+        padding: const EdgeInsets.all(5),
         alignment: Alignment.center,
         width: 60.w,
         decoration: BoxDecoration(
-          color: whiteMode.cardColor,
-          border: Border.all(width: 2, color: whiteMode.abstractColor),
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+          color: Theme.of(context).cardColor,
+          border: Border.all(
+              width: 2, color: Theme.of(context).colorScheme.secondary),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
         ),
         child: Column(
           children: [
             Text(message.user_name,
-                style: TextStyle(fontSize: 12, color: whiteMode.textColor),
+                style: TextStyle(
+                    fontSize: 12,
+                    color:
+                        Theme.of(context).textSelectionTheme.selectionColor!),
                 textAlign: TextAlign.center),
-            Divider(),
+            const Divider(),
             Text(message.message_text,
-                style: TextStyle(fontSize: 20.sp, color: whiteMode.textColor),
+                style: TextStyle(
+                    fontSize: 20.sp,
+                    color:
+                        Theme.of(context).textSelectionTheme.selectionColor!),
                 textAlign: TextAlign.center),
-            Divider(),
+            const Divider(),
             Row(
               children: [
                 Flexible(
@@ -61,7 +68,10 @@ class _SendMessagesState extends State<SendMessages> {
                     alignment: Alignment.centerLeft,
                     child: Text("Datum: " + message.date,
                         style: TextStyle(
-                            fontSize: 8.sp, color: whiteMode.textColor),
+                            fontSize: 8.sp,
+                            color: Theme.of(context)
+                                .textSelectionTheme
+                                .selectionColor!),
                         textAlign: TextAlign.right),
                   ),
                 ),
@@ -71,7 +81,10 @@ class _SendMessagesState extends State<SendMessages> {
                     alignment: Alignment.centerRight,
                     child: Text("Zeit: " + message.time,
                         style: TextStyle(
-                            fontSize: 8.sp, color: whiteMode.textColor),
+                            fontSize: 8.sp,
+                            color: Theme.of(context)
+                                .textSelectionTheme
+                                .selectionColor!),
                         textAlign: TextAlign.right),
                   ),
                 ),
@@ -90,14 +103,14 @@ class _SendMessagesState extends State<SendMessages> {
             return globalMethods.loadingScreen(context);
           } else {
             if (dataSnapshot.error != null) {
-              return Center(
+              return const Center(
                 child: Text('An error occured'),
               );
             } else {
               allMessages = dataSnapshot.data as List<Message>;
 
               return Container(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   height: 80.h,
                   child: ListView.builder(
                       itemCount: allMessages.length,
@@ -117,76 +130,86 @@ class _SendMessagesState extends State<SendMessages> {
         });
 
     return Container(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         child: SingleChildScrollView(
-            child: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
-          messagesBuilder,
-          Container(
-            height: MediaQuery.of(context).size.height / 16,
-            child: Row(
-              children: [
-                Container(
-                    width: MediaQuery.of(context).size.width / 1.3,
-                    child: TextFormField(
-                        controller: messageController,
-                        decoration: InputDecoration(
-                          hintText: "...",
-                          hintStyle: TextStyle(
-                              color: whiteMode.textColor.withOpacity(0.6)),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: whiteMode.textColor,
-                              width: 1,
+            child: SizedBox(
+          height: 90.h,
+          child: ListView(children: [
+            messagesBuilder,
+            SizedBox(
+              height: MediaQuery.of(context).size.height / 16,
+              child: Row(
+                children: [
+                  SizedBox(
+                      width: MediaQuery.of(context).size.width / 1.3,
+                      child: TextFormField(
+                          controller: messageController,
+                          decoration: InputDecoration(
+                            hintText: "...",
+                            hintStyle: TextStyle(
+                                color: Theme.of(context)
+                                    .textSelectionTheme
+                                    .selectionColor!
+                                    .withOpacity(0.6)),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Theme.of(context)
+                                    .textSelectionTheme
+                                    .selectionColor!,
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(25.0),
                             ),
-                            borderRadius: BorderRadius.circular(25.0),
-                          ),
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.red,
-                              width: 1,
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                color: Colors.red,
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(25.0),
                             ),
-                            borderRadius: BorderRadius.circular(25.0),
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.red,
-                              width: 1,
+                            errorBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                color: Colors.red,
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(25.0),
                             ),
-                            borderRadius: BorderRadius.circular(25.0),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: whiteMode.textColor,
-                              width: 1,
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Theme.of(context)
+                                    .textSelectionTheme
+                                    .selectionColor!,
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(25.0),
                             ),
-                            borderRadius: BorderRadius.circular(25.0),
-                          ),
-                        ))),
-                Container(
-                    width: MediaQuery.of(context).size.width / 6,
-                    child: FloatingActionButton(
-                      backgroundColor: Colors.green,
-                      onPressed: () {
-                        Message message = Message.empty();
-                        message.message_text = messageController.text;
-                        message.time = _formatter.format(DateTime.now());
-                        message.date = _formatterDate.format(DateTime.now());
-                        message.user_name = user.user_name;
+                          ))),
+                  SizedBox(
+                      width: MediaQuery.of(context).size.width / 6,
+                      child: FloatingActionButton(
+                        backgroundColor: Colors.green,
+                        onPressed: () {
+                          Message message = Message.empty();
+                          message.message_text = messageController.text;
+                          message.time = _formatter.format(DateTime.now());
+                          message.date = _formatterDate.format(DateTime.now());
+                          message.user_name = user.user_name;
 
-                        insertStatements.insertNewMessage(company, message);
+                          insertStatements.insertNewMessage(company, message);
 
-                        messageController.text = "";
+                          messageController.text = "";
 
-                        setState(() {});
-                      },
-                      child: Icon(
-                        Icons.label_important_rounded,
-                        color: whiteMode.backgroundColor,
-                      ),
-                    )),
-              ],
-            ),
-          )
-        ])));
+                          setState(() {});
+                        },
+                        child: Icon(
+                          Icons.label_important_rounded,
+                          color: Theme.of(context).backgroundColor,
+                        ),
+                      )),
+                ],
+              ),
+            )
+          ]),
+        )));
   }
 }

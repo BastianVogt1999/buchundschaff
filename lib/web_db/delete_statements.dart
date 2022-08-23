@@ -49,4 +49,5 @@ class DeleteStatements {
         .delete()
         .catchError((error) => print("Failed to delete Company: $error"));
   }
+
 }

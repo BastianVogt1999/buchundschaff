@@ -56,7 +56,7 @@ class SelectStatements {
     await FirebaseFirestore.instance
         .collection(
             '/AllProjects/' + company.company_name + '/StatisticsInProject')
-        .where('date', isEqualTo: currentDate)
+        .where('isrunning', isEqualTo: "false")
         //  .where('user_name', isEqualTo: user.user_name)
         .get()
         .then((QuerySnapshot querySnapshot) async {
@@ -68,6 +68,7 @@ class SelectStatements {
         value.endTime = doc["endTime"];
         value.countedTime = doc["countedTime"];
         value.isrunning = doc["isrunning"];
+        value.stat_name = doc["stat_name"];
 
         List<String> users = <String>[];
 
@@ -123,6 +124,47 @@ class SelectStatements {
         value.endTime = doc["endTime"];
         value.countedTime = doc["countedTime"];
         value.isrunning = doc["isrunning"];
+        value.stat_name = doc["stat_name"];
+
+        List<String> users = <String>[];
+        FirebaseFirestore.instance
+            .collection('/AllProjects/' +
+                company.company_name +
+                '/StatisticsInProject/' +
+                value.statistic_id +
+                "/User")
+            .get()
+            .then((QuerySnapshot insideSnapshot) {
+          for (var docS in insideSnapshot.docs) {
+            users.add(docS["user_name"]);
+          }
+          value.user = users;
+        });
+        statisticList.add(value);
+      }
+    });
+
+    return statisticList;
+  }
+
+  Future<List<Statistic>> selectAllRunningStats(Company company) async {
+    List<Statistic> statisticList = <Statistic>[];
+
+    await FirebaseFirestore.instance
+        .collection(
+            '/AllProjects/' + company.company_name + '/StatisticsInProject')
+        .where('isrunning', isEqualTo: "true")
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      for (var doc in querySnapshot.docs) {
+        Statistic value = Statistic.empty();
+        value.date = doc["date"];
+        value.statistic_id = doc["statistic_id"];
+        value.startTime = doc["startTime"];
+        value.endTime = doc["endTime"];
+        value.countedTime = doc["countedTime"];
+        value.isrunning = doc["isrunning"];
+        value.stat_name = doc["stat_name"];
 
         List<String> users = <String>[];
         FirebaseFirestore.instance
@@ -162,6 +204,7 @@ class SelectStatements {
         value.endTime = doc["endTime"];
         value.countedTime = doc["countedTime"];
         value.isrunning = doc["isrunning"];
+        value.stat_name = doc["stat_name"];
 
         List<String> users = <String>[];
         FirebaseFirestore.instance

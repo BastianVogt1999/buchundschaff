@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:itm_ichtrinkmehr_flutter/global_methods.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/colors.dart';
@@ -6,8 +8,9 @@ import 'package:itm_ichtrinkmehr_flutter/values/statistic.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
 import 'package:itm_ichtrinkmehr_flutter/web_db/delete_statements.dart';
 import 'package:itm_ichtrinkmehr_flutter/web_db/select_statements.dart';
-
+import 'package:sizer/sizer.dart';
 import '../actions_user/show_stats/stats_main.dart';
+import "package:intl/intl.dart";
 
 SelectStatements selectStatements = SelectStatements();
 DeleteStatements deleteStatements = DeleteStatements();
@@ -23,19 +26,34 @@ class FullStatsAdmin extends StatefulWidget {
 }
 
 class _FullStatsAdminState extends State<FullStatsAdmin> {
+  _FullStatsAdminState(this.user, this.company);
   UserBuS user;
   Company company;
+  bool checkBoxCurrentDateSelected = false;
   List<bool> expandedInfos = [];
+  final _formatterDate = DateFormat('dd:MM:yyyy');
 
-  _FullStatsAdminState(this.user, this.company);
+  late StreamController<List<Statistic>> currentStream =
+      StreamController<List<Statistic>>();
+  Future<void> closeStream() => currentStream.close();
+
+  @override
+  void initState() {
+    super.initState();
+    _getStatsFromServer();
+    currentStream = StreamController<List<Statistic>>();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    closeStream();
+  }
 
   List<Statistic> currentStats = [];
+  List<Statistic> currentStatsCopy =
+      []; //for use by selecting checkbox without having to get data from Server
   Widget widgetBuilded = Container();
-  updateWidget() {
-    setState(() {
-      currentStats = currentStats;
-    });
-  }
 
   List<Category> spaltenNamen = [
     Category("Startzeit", true),
@@ -50,24 +68,42 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
       return Container(
           padding: const EdgeInsets.all(5),
           decoration: BoxDecoration(
-            color: whiteMode.backgroundColor,
-            border: Border.all(width: 1, color: whiteMode.abstractColor),
+            color: Theme.of(context).backgroundColor,
+            border: Border.all(
+                width: 1, color: Theme.of(context).colorScheme.secondary),
             borderRadius: const BorderRadius.all(Radius.circular(10)),
           ),
           child: Row(
             children: [
               Flexible(
-                flex: 1,
-                child: Text(
-                  textName,
-                  style: const TextStyle(fontSize: 10),
+                flex: 5,
+                child: Container(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    textName,
+                    style: TextStyle(fontSize: 9.sp),
+                  ),
                 ),
               ),
               Flexible(
-                flex: 1,
-                child: Text(
-                  textInput,
-                  style: const TextStyle(fontSize: 10),
+                flex: 2,
+                child: Container(
+                  alignment: Alignment.centerRight,
+                  child: textInput != "..."
+                      ? Text(
+                          textInput,
+                          style: TextStyle(fontSize: 9.sp),
+                        )
+                      : CircleAvatar(
+                          radius: 30.sp,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.secondary,
+                          child: Icon(
+                            Icons.play_arrow,
+                            color: Colors.green,
+                            size: 10.sp,
+                          ),
+                        ),
                 ),
               ),
             ],
@@ -76,17 +112,17 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
 
     Widget expandedInfoContainer(Statistic localStat, int index) {
       return SizedBox(
-          height:
-              expandedInfos[index] ? MediaQuery.of(context).size.height / 4 : 0,
+          height: expandedInfos[index] ? 30.h : 0,
           child: Column(
             children: [
               SizedBox(height: MediaQuery.of(context).size.height / 40),
               Container(
                 padding: const EdgeInsets.all(5),
-                height: MediaQuery.of(context).size.height / 5,
+                height: 22.h,
                 decoration: BoxDecoration(
-                  color: whiteMode.backgroundColor,
-                  border: Border.all(width: 2, color: whiteMode.abstractColor),
+                  color: Theme.of(context).cardColor,
+                  border: Border.all(
+                      width: 2, color: Theme.of(context).colorScheme.secondary),
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
                 ),
                 child: Row(
@@ -96,19 +132,23 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
                       child: Column(
                         children: [
                           Flexible(
-                              flex: 1,
+                              flex: 6,
                               child: expandedInfoTextRow(
                                   "Startzeit: ", localStat.startTime)),
-                          SizedBox(
-                              height: MediaQuery.of(context).size.height / 90),
                           Flexible(
-                              flex: 1,
+                            flex: 1,
+                            child: SizedBox(height: 0.5.h),
+                          ),
+                          Flexible(
+                              flex: 6,
                               child: expandedInfoTextRow(
                                   "Stoppzeit: ", localStat.endTime)),
-                          SizedBox(
-                              height: MediaQuery.of(context).size.height / 90),
                           Flexible(
-                              flex: 1,
+                            flex: 1,
+                            child: SizedBox(height: 0.5.h),
+                          ),
+                          Flexible(
+                              flex: 6,
                               child: expandedInfoTextRow(
                                 "Zeitspanne: ",
                                 localStat.countedTime != ""
@@ -116,36 +156,74 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
                                         localStat.countedTime)
                                     : "...",
                               )),
-                          SizedBox(
-                              height: MediaQuery.of(context).size.height / 90),
                           Flexible(
-                              flex: 1,
+                            flex: 1,
+                            child: SizedBox(height: 0.5.h),
+                          ),
+                          Flexible(
+                              flex: 6,
                               child: expandedInfoTextRow(
                                   "Datum: ", localStat.date)),
+                          Flexible(
+                            flex: 1,
+                            child: SizedBox(height: 0.5.h),
+                          ),
+                          Flexible(
+                              flex: 6,
+                              child: expandedInfoTextRow(
+                                  "Name des Eintrags: ", localStat.stat_name)),
                         ],
                       ),
                     ),
-                    const SizedBox(width: 10),
+                    SizedBox(width: 8.sp),
                     Flexible(
                         flex: 1,
                         child: Container(
-                            padding: const EdgeInsets.all(5),
+                            padding: EdgeInsets.all(4.sp),
                             decoration: BoxDecoration(
-                              color: whiteMode.backgroundColor,
+                              color: Theme.of(context).backgroundColor,
                               border: Border.all(
-                                  width: 1, color: whiteMode.abstractColor),
+                                  width: 1,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary),
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(10)),
                             ),
-                            child: ListView.builder(
+                            child: ListView.separated(
+                                separatorBuilder: (context, index) =>
+                                    SizedBox(height: 2.sp),
                                 itemCount: localStat.user.length,
-                                padding: const EdgeInsets.all(5),
                                 itemBuilder: (BuildContext context, int index) {
                                   return Container(
-                                      padding: const EdgeInsets.all(3),
-                                      child: Text(
-                                        localStat.user[index],
-                                        style: const TextStyle(fontSize: 14),
+                                      height: 6.h,
+                                      decoration: BoxDecoration(
+                                        color: Theme.of(context).cardColor,
+                                        border: Border.all(
+                                            width: 2,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .secondary),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(8.sp)),
+                                      ),
+                                      child: ListTile(
+                                        contentPadding: EdgeInsets.symmetric(
+                                            vertical: -4.sp, horizontal: 6.sp),
+                                        dense: true,
+                                        leading: CircleAvatar(
+                                            radius: 12.sp,
+                                            backgroundColor: Theme.of(context)
+                                                .colorScheme
+                                                .secondary,
+                                            child: Icon(
+                                              Icons.person,
+                                              color: Theme.of(context)
+                                                  .backgroundColor,
+                                            )),
+                                        title: Text(
+                                          localStat.user[index],
+                                          style: const TextStyle(fontSize: 14),
+                                        ),
                                       ));
                                 })))
                   ],
@@ -166,8 +244,9 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
       return Container(
           height: MediaQuery.of(context).size.height / 10,
           decoration: BoxDecoration(
-            color: whiteMode.cardColor,
-            border: Border.all(width: 2, color: whiteMode.abstractColor),
+            color: Theme.of(context).cardColor,
+            border: Border.all(
+                width: 2, color: Theme.of(context).colorScheme.secondary),
             borderRadius: const BorderRadius.all(Radius.circular(10)),
           ),
           padding: const EdgeInsets.only(left: 8, right: 8),
@@ -175,24 +254,25 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
             Container(
                 height: MediaQuery.of(context).size.height / 13,
                 decoration: BoxDecoration(
-                  color: whiteMode.backgroundColor,
-                  border: Border.all(width: 2, color: whiteMode.abstractColor),
+                  color: Theme.of(context).backgroundColor,
+                  border: Border.all(
+                      width: 2, color: Theme.of(context).colorScheme.secondary),
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
                 ),
                 width: (MediaQuery.of(context).size.width / 10) * 3,
                 child: Center(
-                    child: Column(children: const [
-                  SizedBox(height: 5),
-                  Text(
+                    child: Column(children: [
+                  SizedBox(height: 0.5.h),
+                  const Text(
                     "Startzeit: ",
                     textScaleFactor: 1,
                   ),
-                  Text(
-                    "Stoppzeit: ",
-                    textScaleFactor: 1,
+                  const Text(
+                    "Name des Eintrags: ",
+                    textScaleFactor: 0.9,
                   ),
-                  Text(
-                    "Zeitspanne: ",
+                  const Text(
+                    "Datum: ",
                     textScaleFactor: 1,
                   )
                 ]))),
@@ -201,8 +281,9 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
                 width: MediaQuery.of(context).size.width / 5,
                 height: MediaQuery.of(context).size.height / 13,
                 decoration: BoxDecoration(
-                  color: whiteMode.backgroundColor,
-                  border: Border.all(width: 2, color: whiteMode.abstractColor),
+                  color: Theme.of(context).backgroundColor,
+                  border: Border.all(
+                      width: 2, color: Theme.of(context).colorScheme.secondary),
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
                 ),
                 child: Center(
@@ -213,13 +294,11 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
                     textScaleFactor: 1,
                   ),
                   Text(
-                    statistic.endTime,
+                    statistic.stat_name,
                     textScaleFactor: 1,
                   ),
                   Text(
-                    statistic.countedTime != ""
-                        ? globalMethods.outputCountedTime(statistic.countedTime)
-                        : "...",
+                    statistic.date,
                     textScaleFactor: 1,
                   )
                 ]))),
@@ -228,9 +307,9 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
                 child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                   CircleAvatar(
                     radius: 20,
-                    backgroundColor: whiteMode.abstractColor,
+                    backgroundColor: Theme.of(context).colorScheme.secondary,
                     child: IconButton(
-                        color: whiteMode.backgroundColor,
+                        color: Theme.of(context).backgroundColor,
                         padding: const EdgeInsets.all(2),
                         iconSize: 20,
                         icon: const Icon(Icons.delete),
@@ -240,15 +319,14 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
 
                           currentStats.removeAt(index);
                           expandedInfos.removeAt(index);
-                          updateWidget();
                         }),
                   ),
                   const SizedBox(width: 10),
                   CircleAvatar(
                     radius: 20,
-                    backgroundColor: whiteMode.abstractColor,
+                    backgroundColor: Theme.of(context).colorScheme.secondary,
                     child: IconButton(
-                        color: whiteMode.backgroundColor,
+                        color: Theme.of(context).backgroundColor,
                         padding: const EdgeInsets.all(2),
                         iconSize: 40,
                         icon: expandedInfos[index] == false
@@ -270,13 +348,12 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
       return Container(
           height: 50,
           color: category.isSelected
-              ? whiteMode.backgroundColor
-              : whiteMode.textColor,
-          width: (MediaQuery.of(context).size.width / spaltenNamen.length) - 6,
+              ? Theme.of(context).backgroundColor
+              : Theme.of(context).textSelectionTheme.selectionColor!,
+          width: 24.w,
           child: OutlinedButton(
             onPressed: () {
-//currentStats.sort((a, b) => a.countedTime.length.compareTo(b.countedTime.length));
-              updateWidget();
+              sortList(category.title);
 
               setState(() {
                 for (int i = 0; i < spaltenNamen.length; i++) {
@@ -290,8 +367,8 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
             child: Text(category.title,
                 style: TextStyle(
                     color: category.isSelected
-                        ? whiteMode.textColor
-                        : whiteMode.backgroundColor)),
+                        ? Theme.of(context).textSelectionTheme.selectionColor!
+                        : Theme.of(context).backgroundColor)),
             style: ButtonStyle(
                 padding: MaterialStateProperty.all(
                     const EdgeInsets.symmetric(vertical: 10, horizontal: 5)),
@@ -300,28 +377,23 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
           ));
     }
 
-    widgetBuilded = FutureBuilder(
-        future: _getStatsFromServer(company, user),
-        builder: (context, dataSnapshot) {
-          List<Widget> children;
-          if (dataSnapshot.connectionState == ConnectionState.waiting) {
-            return globalmethods.loadingScreen(context);
-          } else {
-            if (dataSnapshot.error != null) {
-              return const Center(
-                child: Text('An error occured'),
-              );
-            } else {
-              currentStats = dataSnapshot.data as List<Statistic>;
+//main frontend
 
-              return SizedBox(
+    return widgetBuilded = StreamBuilder(
+        stream: currentStream.stream,
+        builder: (context, snapshot) {
+// Checking if future is resolved
+          return snapshot.hasData
+              ? SizedBox(
                   height: MediaQuery.of(context).size.height,
                   child: Column(
                     children: [
                       Container(
                         padding: const EdgeInsets.only(left: 6, right: 6),
                         height: MediaQuery.of(context).size.height / 12,
-                        color: whiteMode.textColor,
+                        color: Theme.of(context)
+                            .textSelectionTheme
+                            .selectionColor!,
                         child: Row(
                           children: [
                             spaltenCards(spaltenNamen[0]),
@@ -331,48 +403,139 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
                           ],
                         ),
                       ),
+                      Container(
+                        width: 80.w,
+                        height: 8.h,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).cardColor.withOpacity(0.6),
+                          border: Border.all(
+                              width: 1,
+                              color: Theme.of(context).colorScheme.secondary),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10)),
+                        ),
+                        child: ListTile(
+                          onTap: () {
+                            print("today: " +
+                                _formatterDate.format(DateTime.now()));
+                            List<Statistic> copyStats = [];
+                            if (checkBoxCurrentDateSelected == false) {
+                              for (int i = 0; i < currentStats.length; i++) {
+                                if (currentStats[i].date ==
+                                    _formatterDate.format(DateTime.now())) {
+                                  copyStats.add(currentStats[i]);
+                                }
+                              }
+                              setState(() {
+                                currentStats = copyStats;
+                              });
+                            } else {
+                              setState(() {
+                                currentStats = currentStatsCopy;
+                              });
+                            }
+
+                            setState(() {
+                              checkBoxCurrentDateSelected
+                                  ? checkBoxCurrentDateSelected = false
+                                  : checkBoxCurrentDateSelected = true;
+                            });
+                          },
+                          title: const Text(
+                            "Ausschließlich heute",
+                            style: TextStyle(fontSize: 20),
+                          ),
+                          trailing: Icon(checkBoxCurrentDateSelected
+                              ? Icons.check_box
+                              : Icons.crop_square_sharp),
+                        ),
+                      ),
                       SizedBox(
-                        height: MediaQuery.of(context).size.height / 1.25,
+                        height: 70.h,
                         child: Scrollbar(
                             child: ListView.builder(
                                 itemCount: currentStats.length,
                                 padding: const EdgeInsets.all(5),
                                 itemBuilder: (BuildContext context, int index) {
-                                  return Container(
-                                      padding: const EdgeInsets.all(5),
-                                      child: Column(children: [
-                                        CustomListTile(user, company,
-                                            currentStats[index], index),
-                                        AnimatedSize(
-                                            curve: Curves.easeIn,
-                                            duration:
-                                                const Duration(seconds: 1),
-                                            child: expandedInfoContainer(
-                                                currentStats[index], index)),
-                                      ]));
+                                  return AnimatedSize(
+                                      curve: Curves.easeIn,
+                                      duration: const Duration(seconds: 1),
+                                      child: Container(
+                                          height: expandedInfos[index]
+                                              ? 42.h
+                                              : 12.h,
+                                          padding: const EdgeInsets.all(5),
+                                          child: Column(children: [
+                                            CustomListTile(user, company,
+                                                currentStats[index], index),
+                                            expandedInfoContainer(
+                                                currentStats[index], index),
+                                          ])));
                                 })),
                       )
                     ],
-                  ));
-            }
-          }
+                  ))
+              : const Center(
+                  child: CircularProgressIndicator(),
+                );
         });
-
-    return widgetBuilded;
   }
 
-  _getStatsFromServer(
-    Company company,
-    UserBuS user,
-  ) async {
-    try {
-      List<Statistic> allDrinks =
-          await selectStatements.selectAllStats(company);
+  sortList(String sortValue) {
+    switch (sortValue) {
+      case "Startzeit":
+        var copyStats = currentStats;
 
-      for (int i = 0; i < allDrinks.length; i++) {
+        copyStats.sort((b, a) => a.startTime.compareTo(b.startTime));
+
+        setState(() {
+          currentStats = copyStats;
+        });
+        break;
+      case "Endzeit: ":
+        var copyStats = currentStats;
+
+        copyStats.sort((a, b) => a.endTime.compareTo(b.endTime));
+
+        setState(() {
+          currentStats = copyStats;
+        });
+        break;
+      case "Datum":
+        var copyStats = currentStats;
+
+        copyStats.sort((a, b) =>
+            int.parse(a.countedTime).compareTo(int.parse(b.countedTime)));
+
+        setState(() {
+          currentStats = copyStats;
+        });
+        break;
+      case "Zeitspanne":
+        var copyStats = currentStats;
+
+        copyStats.sort((a, b) =>
+            int.parse(a.countedTime).compareTo(int.parse(b.countedTime)));
+
+        setState(() {
+          currentStats = copyStats;
+        });
+
+        break;
+    }
+  }
+
+  _getStatsFromServer() async {
+    try {
+      List<Statistic> allStats =
+          await selectStatements.selectStatsOfUserOnDate(user, company);
+
+      for (int i = 0; i < allStats.length; i++) {
         expandedInfos.add(false);
       }
-      return allDrinks;
+      currentStats = allStats;
+      currentStatsCopy = allStats;
+      currentStream.add(allStats);
     } catch (Exception) {
       print("Error while getting Data");
     }

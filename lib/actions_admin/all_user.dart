@@ -1,12 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:itm_ichtrinkmehr_flutter/actions_admin/UserManagement/user_operations/add_user.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_admin/full_stats_admin.dart';
 import 'package:itm_ichtrinkmehr_flutter/global_methods.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/colors.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
+import 'package:itm_ichtrinkmehr_flutter/web_db/insert_statements.dart';
 import 'package:itm_ichtrinkmehr_flutter/web_db/select_statements.dart';
 import 'package:itm_ichtrinkmehr_flutter/web_db/update_statements.dart';
 import 'package:sizer/sizer.dart';
@@ -14,6 +14,7 @@ import 'package:sizer/sizer.dart';
 SelectStatements selectStatements = SelectStatements();
 GlobalMethods globalmethods = GlobalMethods();
 UpdateStatements updateStatements = UpdateStatements();
+InsertStatements insertStatements = InsertStatements();
 
 WhiteMode whiteMode = WhiteMode();
 List<UserBuS> currentUser = [];
@@ -98,9 +99,12 @@ class _allUserState extends State<allUser> {
                             flex: 7,
                             child: Container(
                                 decoration: BoxDecoration(
-                                  color: whiteMode.cardColor,
+                                  color: Theme.of(context).cardColor,
                                   border: Border.all(
-                                      width: 2, color: whiteMode.abstractColor),
+                                      width: 2,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary),
                                   borderRadius: const BorderRadius.all(
                                       Radius.circular(10)),
                                 ),
@@ -108,10 +112,13 @@ class _allUserState extends State<allUser> {
                                 child: ListTile(
                                   title: CircleAvatar(
                                       radius: 20,
-                                      backgroundColor: whiteMode.abstractColor,
+                                      backgroundColor: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
                                       child: Icon(
                                         Icons.cancel,
-                                        color: whiteMode.backgroundColor,
+                                        color:
+                                            Theme.of(context).backgroundColor,
                                       )),
                                 )),
                           ),
@@ -120,9 +127,12 @@ class _allUserState extends State<allUser> {
                             flex: 7,
                             child: Container(
                                 decoration: BoxDecoration(
-                                  color: whiteMode.cardColor,
+                                  color: Theme.of(context).cardColor,
                                   border: Border.all(
-                                      width: 2, color: whiteMode.abstractColor),
+                                      width: 2,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary),
                                   borderRadius: const BorderRadius.all(
                                       Radius.circular(10)),
                                 ),
@@ -138,10 +148,13 @@ class _allUserState extends State<allUser> {
                                   }),
                                   title: CircleAvatar(
                                       radius: 20,
-                                      backgroundColor: whiteMode.abstractColor,
+                                      backgroundColor: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
                                       child: Icon(
                                         Icons.delete,
-                                        color: whiteMode.backgroundColor,
+                                        color:
+                                            Theme.of(context).backgroundColor,
                                       )),
                                 )),
                           ),
@@ -161,7 +174,7 @@ class _allUserState extends State<allUser> {
             children: [
               Container(
                 width: 80.w,
-                color: whiteMode.cardColor,
+                color: Theme.of(context).cardColor,
                 child: ListTile(
                   title: TextField(
                     controller: controllerUserEdit[index],
@@ -183,23 +196,21 @@ class _allUserState extends State<allUser> {
                     ),
                   ),
                   trailing: CircleAvatar(
-                    backgroundColor: whiteMode.abstractColor,
+                    backgroundColor: Theme.of(context).colorScheme.secondary,
                     child: IconButton(
                         icon: const Icon(Icons.save_as_outlined),
                         iconSize: 20.sp,
-                        color: whiteMode.backgroundColor,
-                        onPressed: () {
+                        color: Theme.of(context).backgroundColor,
+                        onPressed: () async {
                           UserBuS usrCopy = currentUser[index];
                           usrCopy.user_name = controllerUserEdit[index].text;
 
-                          if (usrCopy.user_name !=
-                              currentUser[index].user_name) {
-                            setState(() {
-                              sizeOfDeleteFields[index] = false;
-                              sizeOfUserEditFields[index] = false;
-                            });
-                            updateStatements.updateUser(company, usrCopy);
-                          }
+                          await updateStatements.updateUserName(
+                              company, usrCopy);
+                          setState(() {
+                            sizeOfDeleteFields[index] = false;
+                            sizeOfUserEditFields[index] = false;
+                          });
                         }),
                   ),
                 ),
@@ -207,17 +218,18 @@ class _allUserState extends State<allUser> {
               SizedBox(height: (0.5).h),
               Container(
                   width: 80.w,
-                  color: whiteMode.cardColor,
+                  color: Theme.of(context).cardColor,
                   child: ListTile(
                     title: Text("User-Code: " + currentUser[index].user_code),
                     trailing: CircleAvatar(
-                        backgroundColor: whiteMode.abstractColor,
+                        backgroundColor:
+                            Theme.of(context).colorScheme.secondary,
                         child: IconButton(
                           icon: const Icon(
                             Icons.delete,
                           ),
                           iconSize: 20.sp,
-                          color: whiteMode.redLight,
+                          color: Colors.red,
                           onPressed: () {
                             setState(() {
                               sizeOfUserEditFields[index] = false;
@@ -229,19 +241,19 @@ class _allUserState extends State<allUser> {
               SizedBox(height: (0.5).h),
               Container(
                   width: 80.w,
-                  color: whiteMode.cardColor,
+                  color: Theme.of(context).cardColor,
                   child: ListTile(
                     title: Text("Adminrechte: " +
                         (currentUser[index].is_admin == "true"
                             ? "ja"
                             : "nein")),
                     trailing: CircleAvatar(
-                      backgroundColor: whiteMode.abstractColor,
+                      backgroundColor: Theme.of(context).colorScheme.secondary,
                       child: IconButton(
                           icon: const Icon(Icons.admin_panel_settings),
                           color: currentUser[index].is_admin == "true"
                               ? Colors.green
-                              : whiteMode.redLight,
+                              : Colors.red,
                           iconSize: 20.sp,
                           onPressed: () async {
                             await updateStatements.updateUserAdminRight(
@@ -321,7 +333,7 @@ class _allUserState extends State<allUser> {
           child: Column(children: [
             Container(
               width: 80.w,
-              color: whiteMode.cardColor,
+              color: Theme.of(context).cardColor,
               child: ListTile(
                 onTap: () {
                   setState(() {
@@ -342,7 +354,7 @@ class _allUserState extends State<allUser> {
             SizedBox(height: 1.h),
             Container(
               width: 80.w,
-              color: whiteMode.cardColor,
+              color: Theme.of(context).cardColor,
               child: ListTile(
                 title: TextField(
                   controller: controllerUserName,
@@ -397,7 +409,7 @@ class _allUserState extends State<allUser> {
           curve: Curves.easeIn,
           duration: const Duration(milliseconds: 500),
           child: Container(
-              color: whiteMode.backgroundColor,
+              color: Theme.of(context).backgroundColor,
               height: !shownAddUser ? 60.h : 40.h,
               child: ListView.builder(
                   itemCount: currentUser.length,
@@ -413,10 +425,16 @@ class _allUserState extends State<allUser> {
                             child: Column(
                               children: [
                                 //User Card
-                                Card(
-                                  color: whiteMode.abstractColor,
+                                Container(
+                                  width: 90.w,
+                                  decoration: BoxDecoration(
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(10)),
+                                  ),
                                   child: Padding(
-                                    padding: const EdgeInsets.all(2),
+                                    padding: EdgeInsets.all(2.sp),
                                     child: ListTile(
                                       onTap: () {
                                         setState(() {
@@ -439,10 +457,12 @@ class _allUserState extends State<allUser> {
                                       ),
                                       leading: CircleAvatar(
                                           backgroundColor:
-                                              whiteMode.backgroundColor,
+                                              Theme.of(context).backgroundColor,
                                           child: Icon(
                                             Icons.person,
-                                            color: whiteMode.abstractColor,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .secondary,
                                           )),
                                       trailing: Icon(
                                         !(sizeOfUserEditFields[index] ^
@@ -450,7 +470,8 @@ class _allUserState extends State<allUser> {
                                             ? Icons.mode_edit_outline_outlined
                                             : Icons.arrow_right,
                                         size: 30,
-                                        color: whiteMode.backgroundColor,
+                                        color:
+                                            Theme.of(context).backgroundColor,
                                       ),
                                     ),
                                   ),
@@ -481,9 +502,9 @@ class _allUserState extends State<allUser> {
                   CurrentUserWidget(),
                   Divider(height: 4.h),
                   Container(
-                    color: whiteMode.abstractColor,
+                    color: Theme.of(context).colorScheme.secondary,
                     child: ListTile(
-                      tileColor: whiteMode.abstractColor,
+                      tileColor: Theme.of(context).colorScheme.secondary,
                       onTap: () {
                         setState(
                           () {
@@ -496,11 +517,12 @@ class _allUserState extends State<allUser> {
                       title: Text(
                         !shownAddUser ? "User hinzufügen" : "Abbrechen",
                         style: TextStyle(
-                            fontSize: 20, color: whiteMode.backgroundColor),
+                            fontSize: 20,
+                            color: Theme.of(context).backgroundColor),
                       ),
                       leading: Icon(
                         !shownAddUser ? Icons.add : Icons.close,
-                        color: whiteMode.backgroundColor,
+                        color: Theme.of(context).backgroundColor,
                       ),
                       //trailing: Text("\$ ${stocksList[index].price}"),
                     ),

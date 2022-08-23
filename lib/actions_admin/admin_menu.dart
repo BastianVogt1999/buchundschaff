@@ -8,17 +8,20 @@ import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
 WhiteMode whiteMode = WhiteMode();
 
 class AdminMenu extends StatefulWidget {
-  AdminMenu(this.company, this.user);
-  Company company;
-  UserBuS user;
+  final Company company;
+  final UserBuS user;
+
+  const AdminMenu(this.company, this.user, {Key? key}) : super(key: key);
+
   @override
   State<AdminMenu> createState() => _nameState(company, user);
 }
 
 class _nameState extends State<AdminMenu> {
-  _nameState(this.company, this.user);
   Company company;
   UserBuS user;
+
+  _nameState(this.company, this.user);
 
   onItemTapped(int index) {
     setState(() {
@@ -33,7 +36,7 @@ class _nameState extends State<AdminMenu> {
   Widget build(BuildContext context) {
     return Drawer(
       child: Material(
-        color: whiteMode.backgroundColor,
+        color: Theme.of(context).backgroundColor,
         child: ListView(
           children: <Widget>[
             Container(
@@ -41,11 +44,10 @@ class _nameState extends State<AdminMenu> {
               child: Column(
                 children: [
                   const SizedBox(height: 12),
-                  const SearchFieldDrawer(),
                   const SizedBox(height: 12),
                   MenuItem(
-                    text: 'Tagesstatistik ausgewählter User',
-                    icon: Icons.query_stats,
+                    text: 'Laufende Projekte',
+                    icon: Icons.workspaces,
                     onClicked: () => onItemTapped(0),
                   ),
                   const SizedBox(height: 5),
@@ -54,38 +56,42 @@ class _nameState extends State<AdminMenu> {
                     icon: Icons.timeline,
                     onClicked: () => onItemTapped(1),
                   ),
-                  /* const SizedBox(height: 5),
-                    MenuItem(
-                      text: 'Chat',
-                      icon: Icons.chat_bubble,
-                      onClicked: () => onItemTapped(2),
-                    ),*/
                   const SizedBox(height: 5),
                   MenuItem(
                     text: 'User verwalten',
                     icon: Icons.supervised_user_circle,
                     onClicked: () => onItemTapped(2),
                   ),
+                  const SizedBox(height: 5),
+                  MenuItem(
+                    text: 'Statistiken auslesen',
+                    icon: Icons.table_chart,
+                    onClicked: () => onItemTapped(3),
+                  ),
                   const SizedBox(height: 8),
-                  Divider(color: whiteMode.textColor),
+                  Divider(
+                      color:
+                          Theme.of(context).textSelectionTheme.selectionColor!),
                   const SizedBox(height: 8),
                   MenuItem(
                     text: 'Nachricht versenden',
                     icon: Icons.notification_add,
-                    onClicked: () => onItemTapped(3),
+                    onClicked: () => onItemTapped(4),
                   ),
                   const SizedBox(height: 8),
                   MenuItem(
                     text: 'Einstellungen',
                     icon: Icons.settings,
-                    onClicked: () => onItemTapped(4),
+                    onClicked: () => onItemTapped(5),
                   ),
-                  Divider(color: whiteMode.textColor),
+                  Divider(
+                      color:
+                          Theme.of(context).textSelectionTheme.selectionColor!),
                   const SizedBox(height: 8),
                   MenuItem(
                     text: 'Über uns',
                     icon: Icons.info,
-                    onClicked: () => onItemTapped(5),
+                    onClicked: () => onItemTapped(6),
                   ),
                 ],
               ),
@@ -111,43 +117,13 @@ class MenuItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(icon, color: whiteMode.textColor),
-      title: Text(text, style: TextStyle(color: whiteMode.textColor)),
-      hoverColor: whiteMode.abstractColor,
+      leading: Icon(icon,
+          color: Theme.of(context).textSelectionTheme.selectionColor!),
+      title: Text(text,
+          style: TextStyle(
+              color: Theme.of(context).textSelectionTheme.selectionColor!)),
+      hoverColor: Theme.of(context).colorScheme.secondary,
       onTap: onClicked,
-    );
-  }
-}
-
-class SearchFieldDrawer extends StatelessWidget {
-  const SearchFieldDrawer();
-
-  @override
-  Widget build(BuildContext context) {
-    const color = Colors.white;
-    return TextField(
-      style:
-          TextStyle(color: whiteMode.textColor.withOpacity(0.5), fontSize: 14),
-      decoration: InputDecoration(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-        hintText: 'Suchen',
-        hintStyle: TextStyle(color: whiteMode.textColor.withOpacity(0.5)),
-        prefixIcon: Icon(
-          Icons.search,
-          color: whiteMode.textColor.withOpacity(0.5),
-          size: 20,
-        ),
-        filled: true,
-        fillColor: whiteMode.cardColor,
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
-          borderSide: BorderSide(color: whiteMode.textColor.withOpacity(0.7)),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
-          borderSide: BorderSide(color: whiteMode.textColor.withOpacity(0.7)),
-        ),
-      ),
     );
   }
 }

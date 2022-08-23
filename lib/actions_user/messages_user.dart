@@ -29,28 +29,39 @@ class _MessagesUserState extends State<MessagesUser> {
   Widget build(BuildContext context) {
     decoratedTextBox(Message message) {
       return Container(
-        padding: EdgeInsets.all(5),
+        padding: const EdgeInsets.all(5),
         alignment: Alignment.center,
         width: MediaQuery.of(context).size.width / 1.8,
         decoration: BoxDecoration(
-          color: whiteMode.cardColor,
-          border: Border.all(width: 2, color: whiteMode.abstractColor),
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+          color: Theme.of(context).cardColor,
+          border: Border.all(
+              width: 2,
+              color: Theme.of(context).textSelectionTheme.selectionColor!),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
         ),
         child: Column(
           children: [
             Text(message.user_name,
-                style: TextStyle(fontSize: 12, color: whiteMode.textColor),
+                style: TextStyle(
+                    fontSize: 12,
+                    color:
+                        Theme.of(context).textSelectionTheme.selectionColor!),
                 textAlign: TextAlign.center),
-            Divider(),
+            const Divider(),
             Text(message.message_text,
-                style: TextStyle(fontSize: 25, color: whiteMode.textColor),
+                style: TextStyle(
+                    fontSize: 25,
+                    color:
+                        Theme.of(context).textSelectionTheme.selectionColor!),
                 textAlign: TextAlign.center),
-            Divider(),
+            const Divider(),
             Container(
               alignment: Alignment.centerRight,
               child: Text(message.time,
-                  style: TextStyle(fontSize: 12, color: whiteMode.textColor),
+                  style: TextStyle(
+                      fontSize: 12,
+                      color:
+                          Theme.of(context).textSelectionTheme.selectionColor!),
                   textAlign: TextAlign.right),
             ),
             SizedBox(height: MediaQuery.of(context).size.height / 40)
@@ -67,7 +78,7 @@ class _MessagesUserState extends State<MessagesUser> {
             return globalMethods.loadingScreen(context);
           } else {
             if (dataSnapshot.error != null) {
-              return Center(
+              return const Center(
                 child: Text('An error occured'),
               );
             } else {
@@ -84,7 +95,7 @@ class _MessagesUserState extends State<MessagesUser> {
                                 alignment: Alignment.topRight,
                                 child: decoratedTextBox(allMessages[index]),
                               ),
-                              SizedBox(height: 10),
+                              const SizedBox(height: 10),
                             ]));
                       }));
             }
@@ -92,15 +103,15 @@ class _MessagesUserState extends State<MessagesUser> {
         });
 
     return Container(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         height: MediaQuery.of(context).size.height,
         child: Column(children: [
-          Container(
+          SizedBox(
               child: messagesBuilder,
               height: MediaQuery.of(context).size.height / 1.2),
           Container(
             height: MediaQuery.of(context).size.height / 26,
-            color: whiteMode.abstractColor,
+            color: Theme.of(context).textSelectionTheme.selectionColor!,
           ),
         ]));
   }

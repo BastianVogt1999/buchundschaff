@@ -1,6 +1,6 @@
 import 'dart:async';
+import 'dart:ui';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:itm_ichtrinkmehr_flutter/intro/carrousel_intro.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/colors.dart';
@@ -22,17 +22,21 @@ StreamController<String> streamControllerUserInput = StreamController<String>();
 Stream stream = streamControllerUserInput.stream.asBroadcastStream();
 
 class RoleInput extends StatefulWidget {
-  RoleInput(this.company);
+  const RoleInput(this.company, {Key? key}) : super(key: key);
 
-  Company company;
+  final Company company;
+
   @override
   State<RoleInput> createState() => _RoleInputState(company);
 }
 
 class _RoleInputState extends State<RoleInput> {
   TextEditingController userCodeController = TextEditingController();
+  Future<void> closeStream() => streamControllerUserInput.close();
+  bool valuefirst = false;
 
   Company company;
+
   _RoleInputState(this.company);
 
   @override
@@ -83,48 +87,45 @@ class _RoleInputState extends State<RoleInput> {
     }
   }
 
-  bool valuefirst = false;
-
   @override
   Widget build(BuildContext context) {
     bool pwdVisibility = false;
 
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: whiteMode.cardColor,
+          backgroundColor: Theme.of(context).cardColor,
           actions: [
-            IconButton(
-              icon: Icon(
-                Icons.share,
-                color: whiteMode.textColor,
-              ),
-              onPressed: () {
-                insertStatements.insertNewCompany(Company("12", "asas"));
-              },
-            ),
-            IconButton(
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => LoginPage()));
-                },
-                icon: Icon(
-                  Icons.home_filled,
-                  color: whiteMode.textColor,
-                ))
+            CircleAvatar(
+                backgroundColor:
+                    Theme.of(context).textSelectionTheme.selectionColor!,
+                child: IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const LoginPage()));
+                    },
+                    icon: Icon(
+                      Icons.home_filled,
+                      color: Theme.of(context).cardColor,
+                    ))),
           ],
-          leading: IconButton(
-            icon: Icon(
-              Icons.keyboard_arrow_left,
-              color: whiteMode.textColor,
+          automaticallyImplyLeading: false,
+          title: SizedBox(
+            child: Text(
+              company.company_name,
+              style: TextStyle(
+                fontSize: 3.h,
+                color: Theme.of(context).textSelectionTheme.selectionColor!,
+              ),
             ),
-            onPressed: () {},
           ),
         ),
         body: Container(
           padding: const EdgeInsets.all(10.0),
           width: double.infinity,
           height: double.infinity,
-          color: whiteMode.backgroundColor,
+          color: Theme.of(context).backgroundColor,
           child: Center(
             child: SizedBox(
               width: globalMethods.getSizeOfPage(context) > 400 ? 50.w : 100.w,
@@ -136,10 +137,19 @@ class _RoleInputState extends State<RoleInput> {
                     obscureText: !pwdVisibility,
                     decoration: InputDecoration(
                       hintText: "User-Code",
-                      hintStyle: TextStyle(color: whiteMode.textColor),
+                      hintStyle: TextStyle(
+                          color: Theme.of(context)
+                              .textSelectionTheme
+                              .selectionColor!,
+                          fontStyle: FontStyle.italic,
+                          fontFeatures: const <FontFeature>[
+                            FontFeature.liningFigures()
+                          ]),
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: whiteMode.textColor,
+                          color: Theme.of(context)
+                              .textSelectionTheme
+                              .selectionColor!,
                           width: 1,
                         ),
                         borderRadius: BorderRadius.circular(25.0),
@@ -160,7 +170,9 @@ class _RoleInputState extends State<RoleInput> {
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: whiteMode.textColor,
+                          color: Theme.of(context)
+                              .textSelectionTheme
+                              .selectionColor!,
                           width: 1,
                         ),
                         borderRadius: BorderRadius.circular(25.0),
@@ -173,7 +185,9 @@ class _RoleInputState extends State<RoleInput> {
                           pwdVisibility
                               ? Icons.visibility_outlined
                               : Icons.visibility_off_outlined,
-                          color: whiteMode.textColor,
+                          color: Theme.of(context)
+                              .textSelectionTheme
+                              .selectionColor!,
                           size: 18,
                         ),
                       ),

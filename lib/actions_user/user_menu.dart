@@ -51,15 +51,14 @@ class UserMenuState extends State<UserMenu> {
 
     return Drawer(
       child: Material(
-        color: whiteMode.backgroundColor,
+        color: Theme.of(context).backgroundColor,
         child: ListView(
           children: <Widget>[
             Container(
-              padding: EdgeInsets.all(15.0),
+              padding: const EdgeInsets.all(15.0),
               child: Column(
                 children: [
                   const SizedBox(height: 12),
-                  SearchFieldDrawer(),
                   const SizedBox(height: 12),
                   MenuItem(
                     text: 'Timer starten',
@@ -80,7 +79,9 @@ class UserMenuState extends State<UserMenu> {
                       onClicked: () => onItemTapped(2),
                     ),*/
                   const SizedBox(height: 8),
-                  Divider(color: whiteMode.textColor),
+                  Divider(
+                      color:
+                          Theme.of(context).textSelectionTheme.selectionColor!),
                   const SizedBox(height: 8),
                   MenuItem(
                     text: 'Benachrichtigungen',
@@ -92,7 +93,9 @@ class UserMenuState extends State<UserMenu> {
                     icon: Icons.settings,
                     onClicked: () => onItemTapped(3),
                   ),
-                  Divider(color: whiteMode.textColor),
+                  Divider(
+                      color:
+                          Theme.of(context).textSelectionTheme.selectionColor!),
                   const SizedBox(height: 8),
                   MenuItem(
                     text: 'Über uns',
@@ -123,42 +126,13 @@ class MenuItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(icon, color: whiteMode.textColor),
-      title: Text(text, style: TextStyle(color: whiteMode.textColor)),
-      hoverColor: whiteMode.textColor,
+      leading: Icon(icon,
+          color: Theme.of(context).textSelectionTheme.selectionColor!),
+      title: Text(text,
+          style: TextStyle(
+              color: Theme.of(context).textSelectionTheme.selectionColor!)),
+      hoverColor: Theme.of(context).textSelectionTheme.selectionColor!,
       onTap: onClicked,
-    );
-  }
-}
-
-class SearchFieldDrawer extends StatelessWidget {
-  const SearchFieldDrawer();
-
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      style:
-          TextStyle(color: whiteMode.textColor.withOpacity(0.5), fontSize: 14),
-      decoration: InputDecoration(
-        contentPadding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-        hintText: 'Suchen',
-        hintStyle: TextStyle(color: whiteMode.textColor.withOpacity(0.5)),
-        prefixIcon: Icon(
-          Icons.search,
-          color: whiteMode.textColor.withOpacity(0.5),
-          size: 20,
-        ),
-        filled: true,
-        fillColor: whiteMode.cardColor,
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
-          borderSide: BorderSide(color: whiteMode.textColor.withOpacity(0.7)),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
-          borderSide: BorderSide(color: whiteMode.textColor.withOpacity(0.7)),
-        ),
-      ),
     );
   }
 }

@@ -60,6 +60,7 @@ class InsertStatements {
             'countedTime': statistic.countedTime,
             'date': statistic.date,
             'isrunning': "true",
+            'stat_name': statistic.stat_name,
           },
         )
         .then((value) => print("Stat Added"))
