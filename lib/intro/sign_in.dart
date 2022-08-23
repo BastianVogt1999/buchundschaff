@@ -1,16 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:itm_ichtrinkmehr_flutter/actions_admin/send_messages.dart';
 import 'package:itm_ichtrinkmehr_flutter/global_methods.dart';
 import 'package:itm_ichtrinkmehr_flutter/intro/rollen_input.dart';
 import 'package:itm_ichtrinkmehr_flutter/intro/unternehmens_eingabe.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/colors.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
+import 'package:itm_ichtrinkmehr_flutter/values/company_acces.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
+import 'package:itm_ichtrinkmehr_flutter/web_db/insert_statements.dart';
 import 'package:itm_ichtrinkmehr_flutter/web_db/select_statements.dart';
 import 'package:sizer/sizer.dart';
 
 SelectStatements selectStatements = SelectStatements();
+InsertStatements insertStatements = InsertStatements();
 GlobalMethods globalMethods = GlobalMethods();
 WhiteMode whiteMode = WhiteMode();
 
@@ -109,7 +113,7 @@ class SignInPage_state extends State<SignInPage> {
                             borderRadius: BorderRadius.all(Radius.circular(25)),
                           ),
                           child: Text(
-                            "Dieses Formular stellt keinen verbindlichen Vertrag dar, sondern stellt ausschließlich einen Antrag dar. Wir werden uns zeitnah bei Ihnen melden um Sie freizuschalten",
+                            "Nach Erhalt des Antrags werden Sie freigeschaltet. Wenn der Vorgang abgeschlossen ist, werden Sie per Mail kontaktiert und Ihre Zugangsdaten bereitgestellt",
                             style: TextStyle(
                                 color: whiteMode.textColor, fontSize: 12.sp),
                           )), //
@@ -133,6 +137,19 @@ class SignInPage_state extends State<SignInPage> {
                             : 80.w,
                         child: OutlinedButton(
                             onPressed: () {
+                              CompanyAccess companyAccess = CompanyAccess(
+                                  companyNameController.text,
+                                  nameOfMaController.text,
+                                  mailController.text,
+                                  countOfUserController.text,
+                                  "false");
+                              insertStatements
+                                  .insertNewCompanyAccess(companyAccess);
+
+                              companyNameController.text = "";
+                              nameOfMaController.text = "";
+                              mailController.text = "";
+                              companyNameController.text = "";
                               entered_code(context);
                             },
                             child: Row(
