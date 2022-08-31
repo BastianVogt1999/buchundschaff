@@ -9,19 +9,21 @@ WhiteMode whiteMode = WhiteMode();
 
 class HomeButton extends StatelessWidget {
   final BuildContext context;
-  final UserBuS user;
+
   final Company company;
-  const HomeButton(this.context, this.user, this.company);
+  const HomeButton(this.context, this.company);
 
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton.extended(
       backgroundColor: Theme.of(context).colorScheme.secondary,
       onPressed: () {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => RoleInput(company)));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => RoleInput(company.company_code)));
       },
-      label: const Text("Log-Out"),
+      label: const Text("User-Menü"),
       icon: const Icon(
         Icons.logout,
       ),

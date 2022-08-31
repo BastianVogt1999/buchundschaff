@@ -6,6 +6,7 @@ import 'package:itm_ichtrinkmehr_flutter/intro/sign_in.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/colors.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
 import 'package:itm_ichtrinkmehr_flutter/web_db/select_statements.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:theme_manager/theme_manager.dart';
 
@@ -13,6 +14,7 @@ SelectStatements selectStatements = SelectStatements();
 GlobalMethods globalMethods = GlobalMethods();
 WhiteMode whiteMode = WhiteMode();
 BlackMode blackMode = BlackMode();
+bool beLoggedIn = false;
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -143,7 +145,22 @@ class LoginPage_state extends State<LoginPage> {
                           },
                         ),
                       ),
-
+                      SizedBox(
+                        height: 40,
+                        child: CheckboxListTile(
+                          title: const Text('Angemeldet bleiben'),
+                          value: beLoggedIn,
+                          onChanged: (value) {
+                            setState(() {
+                              if (beLoggedIn) {
+                                beLoggedIn = false;
+                              } else {
+                                beLoggedIn = true;
+                              }
+                            });
+                          },
+                        ),
+                      ),
                       //
                       const SizedBox(height: 30),
 
@@ -192,6 +209,8 @@ class LoginPage_state extends State<LoginPage> {
 }
 
 entered_code(BuildContext context, String companyCode) async {
+  final prefs = await SharedPreferences.getInstance();
+
   if (companyCode == "Bv(9ak723") {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => const DevMenu()));
@@ -205,8 +224,15 @@ entered_code(BuildContext context, String companyCode) async {
   }
 
   if (company.company_name != "") {
+    if (beLoggedIn) {
+      await prefs.setBool('loggedIn', true);
+      await prefs.setString('companyCode', company.company_code);
+      beLoggedIn = false;
+    }
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => RoleInput(company)));
+        context,
+        MaterialPageRoute(
+            builder: (context) => RoleInput(company.company_code)));
   } else {
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
       backgroundColor: Colors.red,

@@ -5,6 +5,7 @@ import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/statistic.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
 
+import '../values/company_access.dart';
 import '../values/message.dart';
 
 class InsertStatements {
@@ -95,6 +96,24 @@ class InsertStatements {
             'message_text': message.message_text,
             'date': message.date,
             'time': message.time,
+          },
+        )
+        .then((value) => print("User Added"))
+        .catchError((error) => print("Failed to add user: $error"));
+  }
+
+  insertNewCompanyAccess(CompanyAccess companyAccess) {
+    var database = FirebaseFirestore.instance.collection('/Company_accesses/');
+
+    database
+        .doc()
+        .set(
+          {
+            'company_name': companyAccess.company_name,
+            'company_connection': companyAccess.company_connection,
+            'mail_address': companyAccess.mail_address,
+            'number_of_user': companyAccess.number_of_user,
+            'is_authentificated': companyAccess.is_authentificated,
           },
         )
         .then((value) => print("User Added"))

@@ -18,18 +18,18 @@ GlobalMethods globalMethods = GlobalMethods();
 
 class SendMessages extends StatefulWidget {
   Company company;
-  UserBuS user;
-  SendMessages(this.company, this.user);
+
+  SendMessages(this.company);
 
   @override
-  State<SendMessages> createState() => _SendMessagesState(company, user);
+  State<SendMessages> createState() => _SendMessagesState(company);
 }
 
 class _SendMessagesState extends State<SendMessages> {
   List<Message> allMessages = [];
-  _SendMessagesState(this.company, this.user);
+  _SendMessagesState(this.company);
   Company company;
-  UserBuS user;
+
   TextEditingController messageController = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -193,7 +193,7 @@ class _SendMessagesState extends State<SendMessages> {
                           message.message_text = messageController.text;
                           message.time = _formatter.format(DateTime.now());
                           message.date = _formatterDate.format(DateTime.now());
-                          message.user_name = user.user_name;
+                          message.user_name = "asas";
 
                           insertStatements.insertNewMessage(company, message);
 

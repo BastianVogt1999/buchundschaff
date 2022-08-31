@@ -1,14 +1,28 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
 
 import 'package:itm_ichtrinkmehr_flutter/web_db/auth.dart';
+import 'package:itm_ichtrinkmehr_flutter/web_db/select_statements.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
+import 'intro/rollen_input.dart';
 import 'intro/unternehmens_eingabe.dart';
 import 'package:theme_manager/theme_manager.dart';
 
+class SPSwitch {
+  bool isLoggedIn;
+  String company_name;
+
+  SPSwitch(this.isLoggedIn, this.company_name);
+
+  SPSwitch.empty() : this(false, "");
+}
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   try {
     await Firebase.initializeApp(
       // Replace with actual values
@@ -68,23 +82,52 @@ class MyApp extends StatelessWidget {
     ),
   );
 
+  getData() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    SPSwitch blankSwitch = SPSwitch.empty();
+    blankSwitch.company_name = prefs.getString('companyCode') ?? "";
+    blankSwitch.isLoggedIn = prefs.getBool('loggedIn')!;
+
+    print("name " + blankSwitch.company_name);
+    return blankSwitch;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ThemeManager(
+    return FutureBuilder(
+        future: getData(),
+        builder: (context, dataSnapshot) {
+          if (dataSnapshot.connectionState == ConnectionState.waiting) {
+            return globalMethods.loadingScreen(context);
+          } else {
+            if (dataSnapshot.error != null) {
+              return const Center(
+                child: Text('An error occured'),
+              );
+            } else {
+              SPSwitch data = dataSnapshot.data as SPSwitch;
 
-        /// WidgetsBinding.instance.window.platformBrightness is used because a
-        /// Material BuildContext will not be available outside of the Material app
-        defaultBrightnessPreference: BrightnessPreference.system,
-        data: (Brightness brightness) => whiteTheme,
-        loadBrightnessOnStart: true,
-        themedWidgetBuilder: (BuildContext context, ThemeData theme) {
-          return Sizer(builder: (context, orientation, deviceType) {
-            return MaterialApp(
-              theme: theme,
-              debugShowCheckedModeBanner: false,
-              home: const LoginPage(),
-            );
-          });
+              return ThemeManager(
+
+                  /// WidgetsBinding.instance.window.platformBrightness is used because a
+                  /// Material BuildContext will not be available outside of the Material app
+                  defaultBrightnessPreference: BrightnessPreference.system,
+                  data: (Brightness brightness) => whiteTheme,
+                  loadBrightnessOnStart: true,
+                  themedWidgetBuilder: (BuildContext context, ThemeData theme) {
+                    return Sizer(builder: (context, orientation, deviceType) {
+                      return MaterialApp(
+                        theme: theme,
+                        debugShowCheckedModeBanner: false,
+                        home: data.isLoggedIn
+                            ? RoleInput(data.company_name)
+                            : const LoginPage(),
+                      );
+                    });
+                  });
+            }
+          }
         });
   }
 }

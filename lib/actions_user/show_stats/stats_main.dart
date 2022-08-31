@@ -22,22 +22,20 @@ DeleteStatements deleteStatements = DeleteStatements();
 GlobalMethods globalMethods = GlobalMethods();
 
 class Stats_main extends StatefulWidget {
-  final UserBuS user;
   final Company company;
-  const Stats_main(this.user, this.company, {Key? key}) : super(key: key);
+  const Stats_main(this.company, {Key? key}) : super(key: key);
 
   @override
-  State<Stats_main> createState() => _Stats_mainState(user, company);
+  State<Stats_main> createState() => _Stats_mainState(company);
 }
 
 class _Stats_mainState extends State<Stats_main> {
-  UserBuS user;
   Company company;
   bool checkBoxCurrentDateSelected = false;
   List<bool> expandedInfos = [];
   final _formatterDate = DateFormat('dd:MM:yyyy');
 
-  _Stats_mainState(this.user, this.company);
+  _Stats_mainState(this.company);
   late StreamController<List<Statistic>> currentStream =
       StreamController<List<Statistic>>();
   Future<void> closeStream() => currentStream.close();
@@ -236,7 +234,6 @@ class _Stats_mainState extends State<Stats_main> {
     }
 
     Widget CustomListTile(
-      UserBuS user,
       Company company,
       Statistic statistic,
       int index,
@@ -316,7 +313,7 @@ class _Stats_mainState extends State<Stats_main> {
                         icon: const Icon(Icons.delete),
                         onPressed: () async {
                           await deleteStatements.deleteStatistic(
-                              company, user, statistic);
+                              company, statistic);
 
                           currentStats.removeAt(index);
                           expandedInfos.removeAt(index);
@@ -467,7 +464,7 @@ class _Stats_mainState extends State<Stats_main> {
                                               : 12.h,
                                           padding: const EdgeInsets.all(5),
                                           child: Column(children: [
-                                            CustomListTile(user, company,
+                                            CustomListTile(company,
                                                 currentStats[index], index),
                                             expandedInfoContainer(
                                                 currentStats[index], index),
@@ -528,8 +525,8 @@ class _Stats_mainState extends State<Stats_main> {
 
   _getStatsFromServer() async {
     try {
-      List<Statistic> allStats =
-          await selectStatements.selectStatsOfUserOnDate(user, company);
+      List<Statistic> allStats = await selectStatements.selectStatsOfUserOnDate(
+          UserBuS.empty(), company);
 
       for (int i = 0; i < allStats.length; i++) {
         if (allStats[i].countedTime != "") {

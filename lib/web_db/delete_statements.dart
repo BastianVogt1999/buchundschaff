@@ -7,7 +7,7 @@ import 'package:itm_ichtrinkmehr_flutter/web_db/select_statements.dart';
 SelectStatements selectStatements = SelectStatements();
 
 class DeleteStatements {
-  deleteStatistic(Company company, UserBuS user, Statistic statistic) async {
+  deleteStatistic(Company company, Statistic statistic) async {
     List<String> allUserInStat = await selectStatements.selectUserOfStat(
         statistic.statistic_id, company);
 
@@ -49,5 +49,4 @@ class DeleteStatements {
         .delete()
         .catchError((error) => print("Failed to delete Company: $error"));
   }
-
 }

@@ -36,9 +36,7 @@ class SelectStatements {
         .then((QuerySnapshot querySnapshot) {
       for (var doc in querySnapshot.docs) {
         company = Company(
-          doc["company_name"],
-          doc["company_code"],
-        );
+            doc["company_name"], doc["company_code"], doc["admin_code"]);
       }
     });
     return company;

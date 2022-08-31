@@ -13,23 +13,21 @@ import '../common_actions/settings.dart';
 WhiteMode whiteMode = WhiteMode();
 
 class ContainerUser extends StatefulWidget {
-  final UserBuS user;
   final Company company;
   final int selectedIndex;
 
-  const ContainerUser(this.user, this.company, this.selectedIndex);
+  const ContainerUser(this.company, this.selectedIndex);
 
   @override
   State<ContainerUser> createState() =>
-      _ContainerUserState(user, company, selectedIndex);
+      _ContainerUserState(company, selectedIndex);
 }
 
 class _ContainerUserState extends State<ContainerUser> {
-  UserBuS user = UserBuS.empty();
   int selectedIndex;
   Company company;
 
-  _ContainerUserState(this.user, this.company, this.selectedIndex);
+  _ContainerUserState(this.company, this.selectedIndex);
 
   onItemTapped(int index) {
     setState(
@@ -42,15 +40,15 @@ class _ContainerUserState extends State<ContainerUser> {
   @override
   Widget build(BuildContext context) {
     final List _pages = [
-      Timer_main(user, company),
-      Stats_main(user, company),
-      MessagesUser(company, user),
-      Settings(user, company),
+      Timer_main(company),
+      Stats_main(company),
+      MessagesUser(company),
+      Settings(company),
     ];
 
     return Scaffold(
       appBar: AppBar(
-          actions: [HomeButton(context, user, company)],
+          actions: [HomeButton(context, company)],
           foregroundColor: Theme.of(context).textSelectionTheme.selectionColor!,
           backgroundColor: Theme.of(context).cardColor),
       body: Container(
@@ -63,7 +61,6 @@ class _ContainerUserState extends State<ContainerUser> {
       ),
       drawer: UserMenu(
         company,
-        user,
       ),
     );
   }

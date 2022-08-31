@@ -50,6 +50,7 @@ dependencies:
 
   image_picker: ^0.8.0+4
 
+  shared_preferences: ^2.0.15
   velocity_x:
   font_awesome_flutter:
   sizer: ^2.0.15
@@ -100,9 +101,9 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-     - family: Fontshare
-       fonts:
-         - asset: assets/fonts/ClashDisplay-Regular.otf
+    - family: Fontshare
+      fonts:
+        - asset: assets/fonts/ClashDisplay-Regular.otf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

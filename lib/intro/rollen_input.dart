@@ -8,6 +8,7 @@ import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
 import 'package:itm_ichtrinkmehr_flutter/web_db/insert_statements.dart';
 import 'package:itm_ichtrinkmehr_flutter/web_db/select_statements.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:sizer/sizer.dart';
 import '../actions_admin/admin_menu.dart';
@@ -24,7 +25,7 @@ Stream stream = streamControllerUserInput.stream.asBroadcastStream();
 class RoleInput extends StatefulWidget {
   const RoleInput(this.company, {Key? key}) : super(key: key);
 
-  final Company company;
+  final String company;
 
   @override
   State<RoleInput> createState() => _RoleInputState(company);
@@ -35,12 +36,13 @@ class _RoleInputState extends State<RoleInput> {
   Future<void> closeStream() => streamControllerUserInput.close();
   bool valuefirst = false;
 
-  Company company;
+  String company_name;
+  Company company = Company.empty();
 
-  _RoleInputState(this.company);
+  _RoleInputState(this.company_name);
 
   @override
-  void initState() {
+  initState() {
     super.initState();
 
     stream.listen((String) {
@@ -49,67 +51,64 @@ class _RoleInputState extends State<RoleInput> {
   }
 
   pressedRole(String adminPressed) async {
-    UserBuS user = await selectStatements.selectOneUserOfCompany(
-        company, userCodeController.text);
+    UserBuS user = UserBuS.empty();
+    user = await SelectStatements().selectOneUserOfCompany(company, "1");
 
-    if (user.user_name != "") {
-      if (adminPressed == "true") {
-        if (user.is_admin == "true") {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => AdminMenu(
-                        company,
-                        user,
-                      )));
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            backgroundColor: Colors.red,
-            content: Text("Du bist kein Admin"),
-            duration: Duration(milliseconds: 2500),
-          ));
-        }
-      } else {
+    if (adminPressed == "true") {
+      if (userCodeController.text == company.admin_code) {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => UserMenu(
+                builder: (context) => AdminMenu(
                       company,
-                      user,
                     )));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          backgroundColor: Colors.red,
+          content: Text("Falscher Code"),
+          duration: Duration(milliseconds: 2500),
+        ));
       }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        backgroundColor: Colors.red,
-        content: Text("User mit angegebenen Code nicht gefunden"),
-        duration: Duration(milliseconds: 2500),
-      ));
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => UserMenu(
+                    company,
+                  )));
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    getCompany() async {
+      company = await SelectStatements().selectCompany(company_name);
+
+      print("name2 " + company.company_code);
+    }
+
     bool pwdVisibility = false;
+    getCompany();
 
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Theme.of(context).cardColor,
           actions: [
-            CircleAvatar(
-                backgroundColor:
-                    Theme.of(context).textSelectionTheme.selectionColor!,
-                child: IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const LoginPage()));
-                    },
-                    icon: Icon(
-                      Icons.home_filled,
-                      color: Theme.of(context).cardColor,
-                    ))),
+            FloatingActionButton.extended(
+              backgroundColor: Theme.of(context).colorScheme.secondary,
+              onPressed: () async {
+                final prefs = await SharedPreferences.getInstance();
+                await prefs.setBool('loggedIn', false);
+                await prefs.setString('companyName', '');
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const LoginPage()));
+              },
+              label: const Text("Log-Out"),
+              icon: const Icon(
+                Icons.logout,
+              ),
+            ),
           ],
+          backgroundColor: Theme.of(context).cardColor,
           automaticallyImplyLeading: false,
           title: SizedBox(
             child: Text(
@@ -136,7 +135,7 @@ class _RoleInputState extends State<RoleInput> {
                     controller: userCodeController,
                     obscureText: !pwdVisibility,
                     decoration: InputDecoration(
-                      hintText: "User-Code",
+                      hintText: "Admin-Code",
                       hintStyle: TextStyle(
                           color: Theme.of(context)
                               .textSelectionTheme
@@ -200,24 +199,6 @@ class _RoleInputState extends State<RoleInput> {
                     },
                   ),
                   const SizedBox(height: 10),
-
-                  /** Checkbox Widget **/
-                  SizedBox(
-                    height: 40,
-                    child: CheckboxListTile(
-                      title: const Text('Angemeldet bleiben'),
-                      value: valuefirst,
-                      onChanged: (value) {
-                        setState(() {
-                          if (valuefirst) {
-                            valuefirst = false;
-                          } else {
-                            valuefirst = true;
-                          }
-                        });
-                      },
-                    ),
-                  ),
                   SizedBox(
                     height: 300,
                     child: cusCar(stream, streamControllerUserInput),

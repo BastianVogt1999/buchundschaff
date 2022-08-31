@@ -35,22 +35,19 @@ class IconValues {
 }
 
 class NewTimer extends StatefulWidget {
-  NewTimer(this.company, this.user, {Key? key}) : super(key: key);
+  NewTimer(this.company, {Key? key}) : super(key: key);
 
   Company company;
-  UserBuS user;
 
   @override
-  State<NewTimer> createState() => _NewTimerState(company, user);
+  State<NewTimer> createState() => _NewTimerState(company);
 }
 
 class _NewTimerState extends State<NewTimer> {
   Company company;
 
-  UserBuS user;
   _NewTimerState(
     this.company,
-    this.user,
   );
 
   bool addUserButtonAble = true;
@@ -107,7 +104,7 @@ class _NewTimerState extends State<NewTimer> {
 
       //final difference = begin.difference(end).inSeconds;
       // statistic.countedTime = difference.toString();
-      updateStatements.updateStatisticState(company, user, statistic);
+      updateStatements.updateStatisticState(company, statistic);
       /*setState(() {
         timerStart = "00:00:00";
         startcopy = "00:00:00";
@@ -194,10 +191,10 @@ class _NewTimerState extends State<NewTimer> {
 
     int _value = 1;
 
-    if (firstStarted) {
+    /* if (firstStarted) {
       currentWorker.add(user);
       firstStarted = false;
-    }
+    }*/
     _StartStopButton(Statistic statistic) {
       //switch button index: 0 (not running)
 
@@ -239,7 +236,7 @@ class _NewTimerState extends State<NewTimer> {
         setTimeAtStart(1, statistic);
 
         currentWorker = [];
-        currentWorker.add(user);
+        // currentWorker.add(user);
         setState(() {
           sizeOfUserFieldFull = 9;
         });
@@ -400,7 +397,7 @@ class _NewTimerState extends State<NewTimer> {
 
     Widget stopWatch() {
       return FutureBuilder(
-          future: _getStatsFromServer(user, company),
+          future: _getStatsFromServer(UserBuS.empty(), company),
           builder: (context, dataSnapshot) {
             if (dataSnapshot.connectionState == ConnectionState.waiting) {
               return Container();

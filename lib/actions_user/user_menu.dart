@@ -15,19 +15,18 @@ import 'package:itm_ichtrinkmehr_flutter/values/user.dart';
 WhiteMode whiteMode = WhiteMode();
 
 class UserMenu extends StatefulWidget {
-  UserMenu(this.company, this.user);
+  UserMenu(this.company);
 
   Company company;
-  UserBuS user;
+
   @override
-  State<UserMenu> createState() => UserMenuState(company, user);
+  State<UserMenu> createState() => UserMenuState(company);
 }
 
 class UserMenuState extends State<UserMenu> {
-  UserMenuState(this.company, this.user);
+  UserMenuState(this.company);
 
   Company company;
-  UserBuS user;
 
   onItemTapped(int index) {
     setState(
@@ -35,7 +34,7 @@ class UserMenuState extends State<UserMenu> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => ContainerUser(user, company, index)));
+                builder: (context) => ContainerUser(company, index)));
       },
     );
   }
@@ -43,10 +42,10 @@ class UserMenuState extends State<UserMenu> {
   @override
   Widget build(BuildContext context) {
     final List _pages = [
-      Timer_main(user, company),
+      Timer_main(company),
       //DayStats(),
-      Stats_main(user, company),
-      MessagesUser(company, user),
+      Stats_main(company),
+      MessagesUser(company),
     ];
 
     return Drawer(

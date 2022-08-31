@@ -31,7 +31,6 @@ class StartStopState extends State<StartStop> {
   int selectedIndex = 0;
 
   switchWidgets(int index) {
-    insertStatements.insertNewCompany(Company("12", "asas"));
     startTimer(index);
     setState(
       () {

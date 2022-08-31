@@ -1,12 +1,11 @@
 class Company {
   String company_name;
   String company_code;
+  String admin_code;
 
-  Company(this.company_name, this.company_code);
+  Company(this.company_name, this.company_code, this.admin_code);
 
-  Company.empty() : this("", "");
-
- 
+  Company.empty() : this("", "", "");
 }
 
 class UserAsMap {

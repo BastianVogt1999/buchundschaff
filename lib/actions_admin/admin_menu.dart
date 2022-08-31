@@ -9,26 +9,24 @@ WhiteMode whiteMode = WhiteMode();
 
 class AdminMenu extends StatefulWidget {
   final Company company;
-  final UserBuS user;
 
-  const AdminMenu(this.company, this.user, {Key? key}) : super(key: key);
+  const AdminMenu(this.company, {Key? key}) : super(key: key);
 
   @override
-  State<AdminMenu> createState() => _nameState(company, user);
+  State<AdminMenu> createState() => _nameState(company);
 }
 
 class _nameState extends State<AdminMenu> {
   Company company;
-  UserBuS user;
 
-  _nameState(this.company, this.user);
+  _nameState(this.company);
 
   onItemTapped(int index) {
     setState(() {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => ContainerAdmin(company, user, index)));
+              builder: (context) => ContainerAdmin(company, index)));
     });
   }
 

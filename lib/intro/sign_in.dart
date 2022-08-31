@@ -6,6 +6,9 @@ import 'package:itm_ichtrinkmehr_flutter/values/colors.dart';
 import 'package:itm_ichtrinkmehr_flutter/web_db/select_statements.dart';
 import 'package:sizer/sizer.dart';
 
+import '../values/company_access.dart';
+import '../web_db/insert_statements.dart';
+
 SelectStatements selectStatements = SelectStatements();
 GlobalMethods globalMethods = GlobalMethods();
 WhiteMode whiteMode = WhiteMode();
@@ -110,7 +113,7 @@ class SignInPage_state extends State<SignInPage> {
                                 const BorderRadius.all(Radius.circular(25)),
                           ),
                           child: Text(
-                            "Dieses Formular stellt keinen verbindlichen Vertrag dar, sondern stellt ausschließlich einen Antrag dar. Wir werden uns zeitnah bei Ihnen melden um Sie freizuschalten",
+                            "Mit diesem Formular stellen Sie den Antrag der Freischaltung. Wenn Sie freigeschaltet sind, werden Sie per Mail benachrichtigt",
                             style: TextStyle(
                                 color: Theme.of(context)
                                     .textSelectionTheme
@@ -137,6 +140,19 @@ class SignInPage_state extends State<SignInPage> {
                             : 80.w,
                         child: OutlinedButton(
                             onPressed: () {
+                              CompanyAccess companyAccess = CompanyAccess(
+                                  companyNameController.text,
+                                  nameOfMaController.text,
+                                  mailController.text,
+                                  countOfUserController.text,
+                                  "false");
+                              InsertStatements()
+                                  .insertNewCompanyAccess(companyAccess);
+
+                              companyNameController.text = "";
+                              nameOfMaController.text = "";
+                              mailController.text = "";
+                              companyNameController.text = "";
                               entered_code(context);
                             },
                             child: Row(

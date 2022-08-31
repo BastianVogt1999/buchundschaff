@@ -258,22 +258,19 @@ class _RunningProjectsState extends State<RunningProjects> {
                 itemCount: currentStats.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Container(
-                      height: 22.h,
-                      width: 50.w,
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).cardColor,
-                        border: Border.all(
-                            width: 1,
-                            color: Theme.of(context).colorScheme.secondary),
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(10)),
-                      ),
-                      child: Column(
-                        children: [
-                          decoratedBox(currentStats[index], index),
-                          moreUserBox(currentStats[index], index),
-                        ],
-                      ));
+                    height: 22.h,
+                    width: 50.w,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).cardColor,
+                      border: Border.all(
+                          width: 1,
+                          color: Theme.of(context).colorScheme.secondary),
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    ),
+                    child: sizeOfContainer[index]
+                        ? decoratedBox(currentStats[index], index)
+                        : moreUserBox(currentStats[index], index),
+                  );
                 }),
           );
         });

@@ -18,16 +18,16 @@ GlobalMethods globalmethods = GlobalMethods();
 WhiteMode whiteMode = WhiteMode();
 
 class FullStatsAdmin extends StatefulWidget {
-  FullStatsAdmin(this.user, this.company);
-  UserBuS user;
+  FullStatsAdmin(this.company);
+
   Company company;
   @override
-  State<FullStatsAdmin> createState() => _FullStatsAdminState(user, company);
+  State<FullStatsAdmin> createState() => _FullStatsAdminState(company);
 }
 
 class _FullStatsAdminState extends State<FullStatsAdmin> {
-  _FullStatsAdminState(this.user, this.company);
-  UserBuS user;
+  _FullStatsAdminState(this.company);
+
   Company company;
   bool checkBoxCurrentDateSelected = false;
   List<bool> expandedInfos = [];
@@ -235,7 +235,6 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
     }
 
     Widget CustomListTile(
-      UserBuS user,
       Company company,
       Statistic statistic,
       int index,
@@ -315,7 +314,7 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
                         icon: const Icon(Icons.delete),
                         onPressed: () async {
                           await deleteStatements.deleteStatistic(
-                              company, user, statistic);
+                              company, statistic);
 
                           currentStats.removeAt(index);
                           expandedInfos.removeAt(index);
@@ -466,7 +465,7 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
                                               : 12.h,
                                           padding: const EdgeInsets.all(5),
                                           child: Column(children: [
-                                            CustomListTile(user, company,
+                                            CustomListTile(company,
                                                 currentStats[index], index),
                                             expandedInfoContainer(
                                                 currentStats[index], index),
@@ -527,8 +526,10 @@ class _FullStatsAdminState extends State<FullStatsAdmin> {
 
   _getStatsFromServer() async {
     try {
-      List<Statistic> allStats =
-          await selectStatements.selectStatsOfUserOnDate(user, company);
+      List<Statistic> allStats = await selectStatements.selectStatsOfUserOnDate(
+        UserBuS.empty(),
+        company,
+      );
 
       for (int i = 0; i < allStats.length; i++) {
         expandedInfos.add(false);

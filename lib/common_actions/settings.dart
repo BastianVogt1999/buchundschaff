@@ -7,20 +7,19 @@ import '../values/company.dart';
 WhiteMode whiteMode = WhiteMode();
 
 class Settings extends StatefulWidget {
-  Settings(this.user, this.company, {Key? key}) : super(key: key);
-  UserBuS user;
+  Settings(this.company, {Key? key}) : super(key: key);
+
   Company company;
   @override
-  State<Settings> createState() => _SettingsState(user, company);
+  State<Settings> createState() => _SettingsState(company);
 }
 
 class _SettingsState extends State<Settings> {
   bool blackMode = false;
-  UserBuS user;
+
   Company company;
 
   _SettingsState(
-    this.user,
     this.company,
   );
 

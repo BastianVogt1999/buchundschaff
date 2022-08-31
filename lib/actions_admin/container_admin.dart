@@ -17,21 +17,20 @@ WhiteMode whiteMode = WhiteMode();
 
 class ContainerAdmin extends StatefulWidget {
   Company company;
-  UserBuS user;
+
   int selectedIndex;
-  ContainerAdmin(this.company, this.user, this.selectedIndex, {Key? key})
+  ContainerAdmin(this.company, this.selectedIndex, {Key? key})
       : super(key: key);
 
   @override
   State<ContainerAdmin> createState() =>
-      _ContainerAdminState(company, user, selectedIndex);
+      _ContainerAdminState(company, selectedIndex);
 }
 
 class _ContainerAdminState extends State<ContainerAdmin> {
-  UserBuS user;
   Company company;
   int selectedIndex;
-  _ContainerAdminState(this.company, this.user, this.selectedIndex);
+  _ContainerAdminState(this.company, this.selectedIndex);
 
   onItemTapped(int index) {
     setState(
@@ -45,16 +44,16 @@ class _ContainerAdminState extends State<ContainerAdmin> {
   Widget build(BuildContext context) {
     final List _pages = [
       RunningProjects(company),
-      FullStatsAdmin(user, company),
+      FullStatsAdmin(company),
       allUser(company),
       RebaseStats(company),
-      SendMessages(company, user),
-      Settings(user, company)
+      SendMessages(company),
+      Settings(company)
     ];
 
     return Scaffold(
         appBar: AppBar(
-            actions: [HomeButton(context, user, company)],
+            actions: [HomeButton(context, company)],
             foregroundColor:
                 Theme.of(context).textSelectionTheme.selectionColor!,
             backgroundColor: Theme.of(context).cardColor),
@@ -66,6 +65,6 @@ class _ContainerAdminState extends State<ContainerAdmin> {
               height: MediaQuery.of(context).size.height,
               child: _pages[selectedIndex]),
         ),
-        drawer: AdminMenu(company, user));
+        drawer: AdminMenu(company));
   }
 }
