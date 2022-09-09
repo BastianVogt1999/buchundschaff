@@ -23,19 +23,21 @@ GlobalMethods globalMethods = GlobalMethods();
 
 class Stats_main extends StatefulWidget {
   final Company company;
-  const Stats_main(this.company, {Key? key}) : super(key: key);
+  final UserBuS user;
+  const Stats_main(this.company, this.user, {Key? key}) : super(key: key);
 
   @override
-  State<Stats_main> createState() => _Stats_mainState(company);
+  State<Stats_main> createState() => _Stats_mainState(user, company);
 }
 
 class _Stats_mainState extends State<Stats_main> {
   Company company;
   bool checkBoxCurrentDateSelected = false;
+  final UserBuS user;
   List<bool> expandedInfos = [];
   final _formatterDate = DateFormat('dd:MM:yyyy');
 
-  _Stats_mainState(this.company);
+  _Stats_mainState(this.user, this.company);
   late StreamController<List<Statistic>> currentStream =
       StreamController<List<Statistic>>();
   Future<void> closeStream() => currentStream.close();
@@ -525,8 +527,8 @@ class _Stats_mainState extends State<Stats_main> {
 
   _getStatsFromServer() async {
     try {
-      List<Statistic> allStats = await selectStatements.selectStatsOfUserOnDate(
-          UserBuS.empty(), company);
+      List<Statistic> allStats =
+          await selectStatements.selectStatsOfUserOnDate(user, company);
 
       for (int i = 0; i < allStats.length; i++) {
         if (allStats[i].countedTime != "") {

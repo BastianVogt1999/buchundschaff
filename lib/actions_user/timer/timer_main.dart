@@ -107,7 +107,7 @@ class _Timer_mainState extends State<Timer_main>
                       borderRadius: BorderRadius.circular(
                         2.h,
                       ),
-                      color: const Color(0xFFFF8527),
+                      color: Theme.of(context).backgroundColor,
                     ),
                     labelColor: Colors.white,
                     unselectedLabelColor: Colors.black,

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_user/messages_user.dart';
+import 'package:itm_ichtrinkmehr_flutter/actions_user/show_stats/pick_user.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_user/show_stats/stats_main.dart';
+import 'package:itm_ichtrinkmehr_flutter/actions_user/show_stats/stats_user_switcher.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_user/timer/timer_main.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_user/user_menu.dart';
 import 'package:itm_ichtrinkmehr_flutter/common_actions/home_button.dart';
@@ -41,7 +43,7 @@ class _ContainerUserState extends State<ContainerUser> {
   Widget build(BuildContext context) {
     final List _pages = [
       Timer_main(company),
-      Stats_main(company),
+      StateUserSwitcher(company),
       MessagesUser(company),
       Settings(company),
     ];

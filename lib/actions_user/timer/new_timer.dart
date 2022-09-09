@@ -231,7 +231,6 @@ class _NewTimerState extends State<NewTimer> {
         });
         _stopWatchTimer.onExecute.add(StopWatchExecute.stop);
         _stopWatchTimer.onExecute.add(StopWatchExecute.reset);
-        _stopWatchTimer.dispose();
 
         setTimeAtStart(1, statistic);
 

@@ -113,7 +113,7 @@ class CardFb1 extends StatelessWidget {
         height: 28.h,
         padding: const EdgeInsets.all(30.0),
         decoration: BoxDecoration(
-          color: Theme.of(context).textSelectionTheme.selectionColor!,
+          color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(12.5),
           boxShadow: [
             BoxShadow(

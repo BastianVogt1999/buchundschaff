@@ -50,6 +50,12 @@ class _RoleInputState extends State<RoleInput> {
     });
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    closeStream();
+  }
+
   pressedRole(String adminPressed) async {
     UserBuS user = UserBuS.empty();
     user = await SelectStatements().selectOneUserOfCompany(company, "1");

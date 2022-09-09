@@ -5,7 +5,9 @@ import 'package:itm_ichtrinkmehr_flutter/actions_admin/container_admin.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_admin/send_messages.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_user/container_user.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_user/messages_user.dart';
+import 'package:itm_ichtrinkmehr_flutter/actions_user/show_stats/pick_user.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_user/show_stats/stats_main.dart';
+import 'package:itm_ichtrinkmehr_flutter/actions_user/show_stats/stats_user_switcher.dart';
 import 'package:itm_ichtrinkmehr_flutter/actions_user/timer/timer_main.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/colors.dart';
 import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
@@ -44,7 +46,7 @@ class UserMenuState extends State<UserMenu> {
     final List _pages = [
       Timer_main(company),
       //DayStats(),
-      Stats_main(company),
+      StateUserSwitcher(company),
       MessagesUser(company),
     ];
 

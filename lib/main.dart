@@ -13,9 +13,9 @@ import 'package:theme_manager/theme_manager.dart';
 
 class SPSwitch {
   bool isLoggedIn;
-  String company_name;
+  String company_code;
 
-  SPSwitch(this.isLoggedIn, this.company_name);
+  SPSwitch(this.isLoggedIn, this.company_code);
 
   SPSwitch.empty() : this(false, "");
 }
@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
     // UI
     brightness: Brightness.light,
     backgroundColor: const Color.fromARGB(255, 245, 248, 227),
-    cardColor: const Color.fromARGB(255, 173, 173, 173),
+    cardColor: Color.fromRGBO(186, 140, 99, 100),
     secondaryHeaderColor: Colors.deepOrangeAccent,
 
     // font
@@ -63,7 +63,7 @@ class MyApp extends StatelessWidget {
     textSelectionTheme:
         const TextSelectionThemeData(selectionColor: Color(0xff2f2f2f)),
     colorScheme: ColorScheme.fromSwatch()
-        .copyWith(secondary: const Color.fromARGB(255, 107, 109, 108)),
+        .copyWith(secondary: const Color.fromRGBO(99, 102, 186, 100)),
   );
 
   ThemeData blackTheme = ThemeData(
@@ -86,10 +86,14 @@ class MyApp extends StatelessWidget {
     final prefs = await SharedPreferences.getInstance();
 
     SPSwitch blankSwitch = SPSwitch.empty();
-    blankSwitch.company_name = prefs.getString('companyCode') ?? "";
+    blankSwitch.company_code = prefs.getString('companyCode') ?? "";
     blankSwitch.isLoggedIn = prefs.getBool('loggedIn')!;
 
-    print("name " + blankSwitch.company_name);
+    print("name " + blankSwitch.company_code);
+
+    if (blankSwitch.company_code == "") {
+      blankSwitch.isLoggedIn = false;
+    }
     return blankSwitch;
   }
 
@@ -121,7 +125,7 @@ class MyApp extends StatelessWidget {
                         theme: theme,
                         debugShowCheckedModeBanner: false,
                         home: data.isLoggedIn
-                            ? RoleInput(data.company_name)
+                            ? RoleInput(data.company_code)
                             : const LoginPage(),
                       );
                     });
