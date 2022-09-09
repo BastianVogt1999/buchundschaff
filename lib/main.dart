@@ -1,10 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:itm_ichtrinkmehr_flutter/values/company.dart';
 
 import 'package:itm_ichtrinkmehr_flutter/web_db/auth.dart';
-import 'package:itm_ichtrinkmehr_flutter/web_db/select_statements.dart';
+import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'intro/rollen_input.dart';
@@ -82,12 +81,17 @@ class MyApp extends StatelessWidget {
     ),
   );
 
+  MyApp({Key? key}) : super(key: key);
+
   getData() async {
     final prefs = await SharedPreferences.getInstance();
 
     SPSwitch blankSwitch = SPSwitch.empty();
-    blankSwitch.company_name = prefs.getString('companyCode') ?? "";
-    blankSwitch.isLoggedIn = prefs.getBool('loggedIn')!;
+
+    try {
+      blankSwitch.company_name = prefs.getString('companyCode') ?? "";
+      blankSwitch.isLoggedIn = prefs.getBool('loggedIn')!;
+    } catch (Exception) {}
 
     print("name " + blankSwitch.company_name);
     return blankSwitch;
@@ -99,12 +103,44 @@ class MyApp extends StatelessWidget {
         future: getData(),
         builder: (context, dataSnapshot) {
           if (dataSnapshot.connectionState == ConnectionState.waiting) {
-            return globalMethods.loadingScreen(context);
+            return ThemeManager(
+
+                /// WidgetsBinding.instance.window.platformBrightness is used because a
+                /// Material BuildContext will not be available outside of the Material app
+                defaultBrightnessPreference: BrightnessPreference.system,
+                data: (Brightness brightness) => whiteTheme,
+                loadBrightnessOnStart: true,
+                themedWidgetBuilder: (BuildContext context, ThemeData theme) {
+                  return Sizer(builder: (context, orientation, deviceType) {
+                    return MaterialApp(
+                        theme: theme,
+                        debugShowCheckedModeBanner: false,
+                        home: Padding(
+                          padding: const EdgeInsets.only(top: 16),
+                          child: Center(
+                            child: Lottie.asset("assets/worker.json"),
+                          ),
+                        ));
+                  });
+                });
           } else {
             if (dataSnapshot.error != null) {
-              return const Center(
-                child: Text('An error occured'),
-              );
+              return ThemeManager(
+
+                  /// WidgetsBinding.instance.window.platformBrightness is used because a
+                  /// Material BuildContext will not be available outside of the Material app
+                  defaultBrightnessPreference: BrightnessPreference.system,
+                  data: (Brightness brightness) => whiteTheme,
+                  loadBrightnessOnStart: true,
+                  themedWidgetBuilder: (BuildContext context, ThemeData theme) {
+                    return Sizer(builder: (context, orientation, deviceType) {
+                      return MaterialApp(
+                        theme: theme,
+                        debugShowCheckedModeBanner: false,
+                        home: const LoginPage(),
+                      );
+                    });
+                  });
             } else {
               SPSwitch data = dataSnapshot.data as SPSwitch;
 
