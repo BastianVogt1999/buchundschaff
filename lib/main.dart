@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
     // UI
     brightness: Brightness.light,
     backgroundColor: const Color.fromARGB(255, 245, 248, 227),
-    cardColor: Color.fromRGBO(186, 140, 99, 100),
+    cardColor: const Color.fromRGBO(186, 140, 99, 100),
     secondaryHeaderColor: Colors.deepOrangeAccent,
 
     // font
@@ -62,7 +62,7 @@ class MyApp extends StatelessWidget {
     textSelectionTheme:
         const TextSelectionThemeData(selectionColor: Color(0xff2f2f2f)),
     colorScheme: ColorScheme.fromSwatch()
-        .copyWith(secondary: const Color.fromRGBO(99, 102, 186, 100)),
+        .copyWith(secondary: const Color.fromARGB(156, 28, 30, 110)),
   );
 
   ThemeData blackTheme = ThemeData(
