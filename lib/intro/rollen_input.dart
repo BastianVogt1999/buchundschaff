@@ -116,12 +116,27 @@ class _RoleInputState extends State<RoleInput> {
           ],
           backgroundColor: Theme.of(context).cardColor,
           automaticallyImplyLeading: false,
-          title: SizedBox(
-            child: Text(
-              company.company_name,
-              style: TextStyle(
-                fontSize: 3.h,
-                color: Theme.of(context).textSelectionTheme.selectionColor!,
+          title: ClipRRect(
+            borderRadius: BorderRadius.circular(1.h),
+            child: Container(
+              padding: EdgeInsets.all(1.h),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5.0),
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey,
+                    offset: Offset(0.0, 1.0), //(x,y)
+                    blurRadius: 6.0,
+                  ),
+                ],
+              ),
+              child: Text(
+                "Buchundschaff",
+                style: TextStyle(
+                  fontSize: 3.h,
+                  color: Theme.of(context).textSelectionTheme.selectionColor!,
+                ),
               ),
             ),
           ),

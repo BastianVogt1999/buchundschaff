@@ -9,6 +9,8 @@ import '../../values/company.dart';
 
 import 'package:sizer/sizer.dart';
 
+
+
 class PickUser extends StatefulWidget {
   Company company;
   Stream stream;
@@ -25,6 +27,7 @@ class PickUser extends StatefulWidget {
 class _PickUserState extends State<PickUser> {
   Company company;
   Stream stream;
+  bool firstGot = true;
 
   StreamController streamController;
 
@@ -32,17 +35,28 @@ class _PickUserState extends State<PickUser> {
 
   List<Widget> cards = [];
 
+  List<Widget> cardsOne = [];
+  List<Widget> cardTwo = [];
+  List<Widget> cardsThree = [];
+
   final double carouselItemMargin = 16;
 
-  late PageController _pageController;
-  int _position = 0;
+  late PageController _pageControllerOne;
+  late PageController _pageControllerTwo;
+  late PageController _pageControllerThree;
+  int _positionOne = 0;
+  int _positionTwo = 0;
+  int _positionThree = 0;
 
   List<UserBuS> allUser = [];
 
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(initialPage: 3, viewportFraction: 0.5);
+    _pageControllerOne = PageController(initialPage: 1, viewportFraction: 0.5);
+    _pageControllerTwo = PageController(initialPage: 1, viewportFraction: 0.5);
+    _pageControllerThree =
+        PageController(initialPage: 1, viewportFraction: 0.5);
   }
 
   @override
@@ -60,7 +74,7 @@ class _PickUserState extends State<PickUser> {
           streamController.add(user);
         },
         child: Container(
-          width: 20.h,
+          width: 25.h,
           height: 18.h,
           padding: EdgeInsets.all(2.h),
           decoration: BoxDecoration(
@@ -95,20 +109,70 @@ class _PickUserState extends State<PickUser> {
     getUser() async {
       allUser = await SelectStatements().selectAllUserOfCompany(company);
 
-      for (int i = 0; i < allUser.length; i++) {
-        cards.add(CardFb(
-          allUser[i].user_name,
-          Icons.supervised_user_circle,
-          allUser[i],
-          company,
-        ));
+      if (firstGot) {
+        if (allUser.length == 1) {
+          cardsOne.add(CardFb(
+            allUser[0].user_name,
+            Icons.supervised_user_circle,
+            allUser[0],
+            company,
+          ));
+        } else if (allUser.length == 2) {
+          cardsOne.add(CardFb(
+            allUser[0].user_name,
+            Icons.supervised_user_circle,
+            allUser[0],
+            company,
+          ));
+          cardTwo.add(CardFb(
+            allUser[1].user_name,
+            Icons.supervised_user_circle,
+            allUser[1],
+            company,
+          ));
+        } else if (allUser.length > 2) {
+          int runner = 0;
+          for (int i = 0; i < allUser.length; i++) {
+           
+           
+            if (runner == 0) {
+              cardsOne.add(CardFb(
+                allUser[i].user_name,
+                Icons.supervised_user_circle,
+                allUser[i],
+                company,
+              ));
+
+              runner++;
+            } else if (runner == 1) {
+              cardTwo.add(CardFb(
+                allUser[i].user_name,
+                Icons.supervised_user_circle,
+                allUser[i],
+                company,
+              ));
+              runner++;
+            } else {
+              cardsThree.add(CardFb(
+                allUser[i].user_name,
+                Icons.supervised_user_circle,
+                allUser[i],
+                company,
+              ));
+
+              runner = 0;
+            }
+          }
+        }
+
+        setState(() {});
+        firstGot = false;
       }
-      setState(() {});
     }
 
-    Widget imageSlider(int position, var cards) {
+    Widget imageSlider(int position, var cards, PageController pageController) {
       return AnimatedBuilder(
-        animation: _pageController,
+        animation: pageController,
         builder: (BuildContext context, widget) {
           return Container(
             margin: EdgeInsets.all(carouselItemMargin),
@@ -121,24 +185,32 @@ class _PickUserState extends State<PickUser> {
       );
     }
 
-    pickUser() {
-      return PageView.builder(
-          controller: _pageController,
-          itemCount: cards.length,
-          onPageChanged: (int position) {
-            setState(() {
-              _position = position;
-            });
-          },
-          itemBuilder: (BuildContext context, int position) {
-            return imageSlider(position, cards);
-          });
+    pickUser(PageController pageController, List<Widget> cards, int positionR) {
+      return Container(
+        height: 20.h,
+        
+        child: PageView.builder(
+            controller: pageController,
+            itemCount: cards.length,
+            onPageChanged: (int position) {
+              setState(() {
+                positionR = position;
+              });
+            },
+            itemBuilder: (BuildContext context, int position) {
+              return imageSlider(position, cards, pageController);
+            }),
+      );
     }
 
     getUser();
 
     return Container(
-      child: pickUser(),
+      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        pickUser(_pageControllerOne, cardsOne, _positionOne),
+        pickUser(_pageControllerTwo, cardTwo, _positionTwo),
+        pickUser(_pageControllerThree, cardsThree, _positionThree),
+      ]),
     );
   }
 }

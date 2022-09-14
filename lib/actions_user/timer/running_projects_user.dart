@@ -345,7 +345,7 @@ class _RunningProjectsState extends State<RunningProjects> {
                                                 style: TextStyle(
                                                     color: Theme.of(context)
                                                         .colorScheme
-                                                        .secondary,
+                                                        .primary,
                                                     fontSize: 2.h),
                                               ),
                                               const Spacer(),
@@ -359,7 +359,7 @@ class _RunningProjectsState extends State<RunningProjects> {
                                                 style: TextStyle(
                                                     color: Theme.of(context)
                                                         .colorScheme
-                                                        .secondary,
+                                                        .primary,
                                                     fontSize: 2.h),
                                               ),
                                               const Spacer(),
@@ -371,7 +371,7 @@ class _RunningProjectsState extends State<RunningProjects> {
                                                     size: 4.h,
                                                     color: Theme.of(context)
                                                         .colorScheme
-                                                        .secondary),
+                                                        .primary),
                                                 onTap: () {
                                                   setState(() {
                                                     projectExpanded[index] =

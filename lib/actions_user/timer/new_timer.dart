@@ -254,7 +254,15 @@ class _NewTimerState extends State<NewTimer> {
             onTap: () {
               if (controllerStatName.text != "" &&
                   _formKey.currentState!.validate()) {
-                _StartStopButton(statistic);
+                if (currentWorker.length > 0) {
+                  _StartStopButton(statistic);
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    backgroundColor: Colors.red,
+                    content: Text("Keine User eingetragen"),
+                    duration: Duration(milliseconds: 2500),
+                  ));
+                }
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                   backgroundColor: Colors.red,

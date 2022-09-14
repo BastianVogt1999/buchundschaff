@@ -91,7 +91,7 @@ class _Timer_mainState extends State<Timer_main>
           children: [
             // give the tab bar a height [can change height to preferred height]
             Container(
-              height: 5.h,
+              height: 7.h,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(
@@ -107,10 +107,10 @@ class _Timer_mainState extends State<Timer_main>
                       borderRadius: BorderRadius.circular(
                         2.h,
                       ),
-                      color: Theme.of(context).backgroundColor,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
-                    labelColor: Colors.white,
-                    unselectedLabelColor: Colors.black,
+                    labelColor: Colors.white70,
+                    unselectedLabelColor: Theme.of(context).colorScheme.primary,
                     tabs: TabPairs.map((tabPair) => tabPair.tab).toList()),
               ),
             ),
